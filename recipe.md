@@ -2,6 +2,13 @@
 
 # Exercise vs working mapping template
 
+There are two RMarkdown files in `./src`:
+
+1. an exercise, `exercise.Rmd`
+2. a working mapping template, `dwc_mapping.Rmd`
+
+You can use the template as a kind of cheatsheet to solve the exercise. Eventually you can run the entire `dwc_mapping.Rmd` to go through all mapping steps (`Ctrl` + `Alt` + `R`).
+
 # Mapping steps
 
 # Different types of mapping
