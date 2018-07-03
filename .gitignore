@@ -36,5 +36,8 @@ vignettes/*.pdf
 rsconnect/
 .Rproj.user
 
+# Preview html in root
+*.html
+
 # Mac OS X
 .DS_Store
