@@ -64,8 +64,21 @@ raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scie
 ```
 
 
-
 # Create taxon core
+
+## Pre-processing
+
+Check for duplicates:
+
+```{r}
+duplicates <- raw_data %>%  
+  slice(which(duplicated(raw_data $ scientific_name) == "TRUE")) %>% 
+  select(scientific_name)
+```
+
+```{r, echo=FALSE}
+duplicates
+```
 
 ## Term mapping
  
