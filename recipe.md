@@ -79,7 +79,7 @@ Even though `raw_data` contains all necessary information in a single data frame
 
 The mapping process is **sequential**: we add the Darwin Core terms step by step. The Darwin Core terms for each core/extension file can be found on the [GBIF Resources page](http://rs.gbif.org/):
 
-[![rs.gbif.org](static/images/darwin_core_taxon.png)](http://rs.gbif.org)
+[![rs.gbif.org](src/static/images/darwin_core_taxon.png)](http://rs.gbif.org)
 
 It is good practice to inspect the Darwin Core terms on this webpage one by one to see whether a particular term can be used in your checklist. It's good practice to respect the order of the terms as they listed on the GBIF resource page.
 
