@@ -102,11 +102,11 @@ There are manily three different types of mapping:
 2. Mapping fields as is (unaltereted values)
 3. Recoding fields (altered valus)
 
-### Mapping static fields
+## Mapping static fields
 
 Static values are used for Darwin Core terms that need the same value for all records. Most often, they are absent in `raw_data`. This mostly concerns metadata fields in the taxon core file as _dataset name_, _language_, _license_ and _rights holder_. 
 
-### Mapping fields as is
+## Mapping fields as is
 
 Unaltered values are used for Darwin Core terms for which the content is an exact copy of the corresponding field in `raw_data`. Before deciding whether or not some basic processing is required, it is useful to screen the variables in `raw_data` for their specific content. `distinct()` is a useful function to show the unique values for a field:
 
@@ -120,19 +120,19 @@ An example:
 taxon %<>% mutate(scientificName = raw_species)
 ```
 
-### Recoding fields
+## Recoding fields
 
 Altered values are used for Darwin Core terms for which the content in `raw_data` is used as a basis, but it needs to be standardized. This applies to Darwin Core terms for which we use a [vocabulary](http://rs.gbif.org/vocabulary/gbif/) or where we want to transform for clarity or to correct obvious mistakes. 
 
 The main functions we use for these are: `mutate()` + `recode()` or  `mutate()` + `case_when()`.
 
-#### `mutate()` + `recode()`
+### `mutate()` + `recode()`
 
 In this case, we aim to replace specific information in `raw_data` by new information specified in the code.
 
 _Add basic example based on example!!!_
 
-#### `mutate()` + `case_when()`
+### `mutate()` + `case_when()`
 
 `case_when` is often used together with `mutate()` when you want to make a new column (or change an existing one) based on the content of other existing variables.
 
