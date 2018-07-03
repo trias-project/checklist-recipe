@@ -79,10 +79,12 @@ Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24
 taxon %<>% mutate(scientificName = raw_scientific_name) 
 ```
 
-
-### classification information
+### Add classification information
 
 ```{r}
-request_species_information()
+gbif_species_name_match(raw_data, name_col = "scientific_name", 
+                                        gbif_terms = c('usageKey', 'scientificName', 'rank', 'matchType', 
+                                                       'kingdom', 'phylum', 'class', 'order', 'family', 
+                                                       'genus', 'confidence', 'synonym', 'status'))
 ```
 
