@@ -42,6 +42,13 @@ library(assertthat)
 library(assertable)
 ```
 
+Vectorize digest function to generate `taxonID`:
+
+```{r}
+vdigest <- Vectorize(digest)
+```
+
+
 # Read and pre-process raw data
 
 Create a data frame `raw_data` from the source data:
@@ -49,6 +56,13 @@ Create a data frame `raw_data` from the source data:
 ```{r}
 raw_data <- read_excel(path = "../data/raw/checklist.xlsx") 
 ```
+
+Generate taxon_ID:
+
+```{r}
+raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scientific_name, algo="md5"), sep=":"))
+```
+
 
 
 # Create taxon core
