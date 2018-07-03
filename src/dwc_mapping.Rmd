@@ -18,6 +18,12 @@ Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24
 
 ### taxonID
 
+### scientificName
+
+```{r}
+taxon %<>% mutate(scientificName = raw_scientific_name) 
+```
+
 
 ### classification information
 
