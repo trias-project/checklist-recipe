@@ -16,3 +16,8 @@ You can do it within RStudio: [hands-on session within RStudio](https://inbo-tut
 
 # Examples
 
+Based on this recipe we were able to publish several checklists on GBIF:
+
+1. [Checklist of non-native freshwater fishes in Flanders](https://trias-project.github.io/alien-fishes-checklist/)
+2. [Inventory of alien macroinvertebrates in Flanders, Belgium](https://github.com/trias-project/alien-macroinvertebrates)
+3. [Catalogue of the Rust Fungi of Belgium](https://github.com/trias-project/uredinales-belgium-checklist)
