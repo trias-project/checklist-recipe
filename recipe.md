@@ -14,6 +14,8 @@ You can do it within RStudio: [hands-on session within RStudio](https://inbo-tut
 
 # Using IPT to publish
 
+GBIF provides an Integrated Publishing Toolkit (IPT) in order to check your checklist and eventualy publish it on GBIF. Follow the guideline as provided by GBIF: [How To Prepare Your IPT Server](https://github.com/gbif/ipt/wiki/IPTServerPreparation.wiki). You will likely have to install a servlet as Tomcat and setup a virtual host name. If you are memeber of an organization, contact first the IT group.
+
 # Examples
 
 Based on this recipe we were able to publish several checklists on GBIF:
