@@ -94,15 +94,7 @@ Many checklists contain information related to species distribution. The Darwin 
 - Threat status as defined by IUCN, `threatStatus` (e.g. _EX_, _EW_, _CR_)
 - Description whether the organism occurs natively, is introduced or cultivated, `esatblishmentMeans` (e.g. _introduced_)
 
-## Mapping
-
-We use a **copy** of `raw_data` as the starting point for the mapping. This is because `raw_data` needs to be untouched each time we start the mapping process.
-
-```{r}
-taxon <- raw_data # Generate taxon by making a copy of raw_data
-```
-
-## Different types of mapping
+# Different types of mapping
 
 There are manily three different types of mapping:
 
