@@ -1,0 +1,27 @@
+
+# Setup
+
+```{r}
+library('rgbif')
+library('dplyr')
+library('assertthat')
+library('assertable')
+```
+
+
+
+# Create taxon core
+
+## Term mapping
+ 
+Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
+
+### taxonID
+
+
+### classification information
+
+```{r}
+request_species_information()
+```
+
