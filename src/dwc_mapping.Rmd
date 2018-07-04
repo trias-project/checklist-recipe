@@ -13,14 +13,13 @@ output:
     number_sections: true
 ---
 
-# Setup
+# General setup 
 
 ```{r setup, echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 Use UTF-8 character encoding:
-
 LR: Hier verschillende codering voor verschillende OS geven:
 
 ```{r}
@@ -174,7 +173,7 @@ taxon %<>% mutate(datasetName = "")
 ### taxonID
 
 ```{r}
-raw_data %<>% mutate(taxonID = raw_taxon_id) 
+taxon %<>% mutate(taxonID = raw_taxon_id) 
 ```
 
 ### scientificName
@@ -225,7 +224,26 @@ taxon %>% mutate(genus = raw_genus)
 taxon %<>% mutate(taxonRank = str_to_lower(raw_rank))
 ```
 
-### taxonRemarks
+## Post-processing
+
+Remove the original columns:
+
+```{r}
+taxon %<>% select(-starts_with("raw_"))
+```
+
+Preview data:
+
+```{r}
+taxon %>% head()
+```
+
+Save to CSV:
+
+```{r}
+write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+```
+
 
 
 
