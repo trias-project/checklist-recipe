@@ -28,6 +28,9 @@ LR: Hier verschillende codering voor verschillende OS geven:
 Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 ```
 
+Install all required packages:
+LR: dit klopt waarschijnlijk nog niet
+
 Load libraries:
 
 ```{r}
@@ -58,12 +61,15 @@ raw_data <- read_excel(path = "../data/raw/checklist.xlsx")
 ```
 
 Generate taxon_ID:
+LR: zal er vanaf hangen of er een taxonID nodig is of niet --> houden we hier rekening mee?
 
 ```{r}
 raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scientific_name, algo="md5"), sep=":"))
 ```
 
 Add classification information
+LR: eventueel de mogelijkheid geven om classificatie info te kiezen? Maar dan kom je wel in de problemen met de mapping. 
+Bottleneck hier is dat je dus enige voorkennis nodig hebt van R om selectief informatie toe te voegen, of je guidance document moet sterk genoeg zijn. 
 
 ```{r}
 raw_data %<>% gbif_species_name_match(name_col = "scientific_name", 
