@@ -1,0 +1,8 @@
+"taxonID","locality","countryCode","occurrenceStatus","threatStatus","source","occurrenceRemarks"
+"dataset_shortname:taxon:1d9517278d5ecf9b55858b0882abe588","Flanders","BE","present",,"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.",
+"dataset_shortname:taxon:4a336e19746e64d7a353b3c28e8ce42b","Walloon region","BE","present",,"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.",
+"dataset_shortname:taxon:4a336e19746e64d7a353b3c28e8ce42b","French region","BE","present",,"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.",
+"dataset_shortname:taxon:fbda5cdf4d93ad477e4e7d5fc2bdc0b8",,"FR","present",,"https://doi.org/10.1007/s10530-016-1278-z",
+"dataset_shortname:taxon:7c42121719f76b84eb5a719e9fd8ccd1","Flanders","BE","present","endangered","Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout",
+"dataset_shortname:taxon:27b8e57cb3b54f689a42c18729ef1ea9",,"MK","present","vulnerable",,"Absent according to Rudi Verovnik"
+"dataset_shortname:taxon:2bf6755a5f7e77869db97dad642ced0d",,"NL","doubtful",,"https://doi.org/10.3897/neobiota.23.5665","data based solely on DAISIE portal"

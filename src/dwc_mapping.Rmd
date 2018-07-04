@@ -244,6 +244,79 @@ Save to CSV:
 write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
 
+# Create distribution extension
+
+```{r}
+distribution <- raw_data
+```
+
+## Term mapping 
+
+Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
+
+### taxonID
+
+```{r}
+distribution %<>% mutate(taxonID = raw_taxon_id) 
+```
+
+### locality
+
+```{r}
+distribution %<>% mutate(locality = raw_locality)
+```
+
+### countryCode
+
+```{r}
+distribution %<>% mutate(countryCode = raw_country_code) 
+```
+
+### occurrenceStatus
+
+```{r}
+distribution %<>% mutate(occurrenceStatus = raw_occurrence_status) 
+```
+
+### threatStatus
+
+LR: hier eventueel een recode waar de volledige waarden worden vertaald naar de afkortingen?
+
+```{r}
+distribution %<>% mutate(threatStatus = raw_threat_status) 
+```
+
+### source
+
+```{r}
+distribution %<>% mutate(source = raw_source) 
+```
+
+### occurrenceRemarks
+
+```{r}
+distribution %<>% mutate(occurrenceRemarks = raw_remarks) 
+```
+
+## Post-processing
+
+Remove the original columns:
+
+```{r}
+taxon %<>% select(-starts_with("raw_"))
+```
+
+Preview data:
+
+```{r}
+taxon %>% head()
+```
+
+Save to CSV:
+
+```{r}
+write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+```
 
 
 
