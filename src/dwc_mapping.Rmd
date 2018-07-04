@@ -13,7 +13,6 @@ output:
     number_sections: true
 ---
 
-
 # Setup
 
 ```{r setup, echo = FALSE}
@@ -64,6 +63,19 @@ Generate taxon_ID:
 raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scientific_name, algo="md5"), sep=":"))
 ```
 
+Add classification information
+
+```{r}
+raw_data %<>% gbif_species_name_match(name_col = "scientific_name", 
+                                      gbif_terms = c('kingdom', 'phylum', 'class', 'order', 'family', 'genus', 
+                                                     'confidence', 'synonym', 'status', 'rank'))
+```
+
+Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
+
+```{r}
+colnames(raw_data) <- paste0("raw_", colnames(raw_data))
+```
 
 # Create taxon core
 
@@ -72,9 +84,8 @@ raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scie
 Check for duplicates:
 
 ```{r}
-duplicates <- raw_data %>%  
-  slice(which(duplicated(raw_data $ scientific_name) == "TRUE")) %>% 
-  select(scientific_name)
+duplicates <- taxon %>%  
+  slice(which(duplicated(taxon $ raw_scientific_name) == "TRUE")) %>% 
 ```
 
 ```{r, echo=FALSE}
@@ -85,15 +96,14 @@ Should contain zero rows.
 If not: inspect dataset for more information on these species:
 
 ```{r}
-raw_data %>% filter(scientific_name %in% duplicates $ scientific_name)
+taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
 ```
 
 The difference should be in the `locality` information.
-
 Remove duplicated rows:
 
 ```{r}
-raw_data %<>% filter(duplicated(raw_data $ scientific_name)==FALSE)
+taxon %<>% slice(which(duplicated(taxon $ raw_scientific_name)==FALSE))
 ```
 
 LR: wat als er andere informatie verschilt, i.e. in het geval van hemihomonymen? Dan eventueel een combinatie maken van de taxon naam en de factor waar beiden in verschillen. Dit ofwel integreren in de begeleidende tekst ofwel in een afzonderlijk script
@@ -113,9 +123,5 @@ taxon %<>% mutate(scientificName = raw_scientific_name)
 ### Add classification information
 
 ```{r}
-gbif_species_name_match(raw_data, name_col = "scientific_name", 
-                                        gbif_terms = c('usageKey', 'scientificName', 'rank', 'matchType', 
-                                                       'kingdom', 'phylum', 'class', 'order', 'family', 
-                                                       'genus', 'confidence', 'synonym', 'status'))
 ```
 
