@@ -79,6 +79,10 @@ colnames(raw_data) <- paste0("raw_", colnames(raw_data))
 
 # Create taxon core
 
+```{r}
+taxon <- raw_data
+```
+
 ## Pre-processing
 
 Check for duplicates:
@@ -86,6 +90,7 @@ Check for duplicates:
 ```{r}
 duplicates <- taxon %>%  
   slice(which(duplicated(taxon $ raw_scientific_name) == "TRUE")) %>% 
+  select(raw_scientific_name) 
 ```
 
 ```{r, echo=FALSE}
@@ -108,11 +113,64 @@ taxon %<>% slice(which(duplicated(taxon $ raw_scientific_name)==FALSE))
 
 LR: wat als er andere informatie verschilt, i.e. in het geval van hemihomonymen? Dan eventueel een combinatie maken van de taxon naam en de factor waar beiden in verschillen. Dit ofwel integreren in de begeleidende tekst ofwel in een afzonderlijk script
 
+
 ## Term mapping
  
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
+### language
+
+```{r}
+taxon %<>% mutate(language = "") 
+```
+
+### license
+
+```{r}
+taxon %<>% mutate(license = "") 
+```
+
+### rightsHolder
+
+```{r}
+taxon %<>% mutate(rightsHolder = "") 
+```
+
+### accessRights
+
+```{r}
+taxon %<>% mutate(accessRights = "") 
+```
+
+### references
+
+```{r}
+taxon %<>% mutate(references = raw_source) 
+```
+
+### datasetID
+
+```{r}
+taxon %<>% mutate(datasetID = "") 
+```
+
+### institutionCode
+
+```{r}
+taxon %<>% mutate(institutionCode = "")
+```
+
+### datasetName
+
+```{r}
+taxon %<>% mutate(datasetName = "") 
+```
+
 ### taxonID
+
+```{r}
+raw_data %<>% mutate(taxonID = raw_taxon_id) 
+```
 
 ### scientificName
 
@@ -120,8 +178,50 @@ Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24
 taxon %<>% mutate(scientificName = raw_scientific_name) 
 ```
 
-### Add classification information
+### kingdom
 
 ```{r}
+taxon %<>% mutate(kingdom = raw_kingdom) 
 ```
+
+### phylum
+
+```{r}
+taxon %<>% mutate(phylum = raw_phylum) 
+```
+
+### class
+
+```{r}
+taxon %<>% mutate(class = raw_class) 
+```
+
+### order
+
+```{r}
+taxon %<>% mutate(order = raw_order) 
+```
+
+### family
+
+```{r}
+taxon %<>% mutate(family = raw_family) 
+```
+
+### genus
+
+```{r}
+taxon %>% mutate(genus = raw_genus)
+```
+
+### taxonRank
+
+```{r}
+taxon %<>% mutate(taxonRank = str_to_lower(raw_rank))
+```
+
+### taxonRemarks
+
+
+
 
