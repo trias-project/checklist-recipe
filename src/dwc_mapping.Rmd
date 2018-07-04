@@ -43,6 +43,7 @@ library(assertable)
 ```
 
 Vectorize digest function to generate `taxonID`:
+LR: dit eventueel onzichtbaar zetten
 
 ```{r}
 vdigest <- Vectorize(digest)
@@ -79,6 +80,23 @@ duplicates <- raw_data %>%
 ```{r, echo=FALSE}
 duplicates
 ```
+
+Should contain zero rows.
+If not: inspect dataset for more information on these species:
+
+```{r}
+raw_data %>% filter(scientific_name %in% duplicates $ scientific_name)
+```
+
+The difference should be in the `locality` information.
+
+Remove duplicated rows:
+
+```{r}
+raw_data %<>% filter(duplicated(raw_data $ scientific_name)==FALSE)
+```
+
+LR: wat als er andere informatie verschilt, i.e. in het geval van hemihomonymen? Dan eventueel een combinatie maken van de taxon naam en de factor waar beiden in verschillen. Dit ofwel integreren in de begeleidende tekst ofwel in een afzonderlijk script
 
 ## Term mapping
  
