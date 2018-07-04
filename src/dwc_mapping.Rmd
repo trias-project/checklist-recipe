@@ -39,9 +39,8 @@ library(magrittr)        # For %<>% pipes
 library(readxl)          # To read Excel files
 library(digest)          # To generate hashes
 library(rgbif)
-library(inborutils)     
-library(assertthat)
-library(assertable)
+library(inborutils) 
+library(stringi)
 ```
 
 Vectorize digest function to generate `taxonID`:
