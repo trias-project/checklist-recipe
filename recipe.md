@@ -15,9 +15,9 @@ output:
 
 # Getting started
 
-- First, be sure to get an invitation link repository _checklist-recipe_ via an invitation link. By clicking on the link GitHub will copy _checklist-recipe_  on your account as *checklist-recipe-your_github_username* and you will be automatically redirected to the home page of this repository. 
+- First, click on this [invitation link](https://classroom.github.com/a/eXxaGERa) in order to copy _checklist-recipe_  on your account as *checklist-recipe-your_github_username*. You will be automatically redirected to the home page of this repository. 
 - Clone the repository locally
-- Open `./src/src.Rproj` in R studio
+- Open `./src/src.Rproj` in RStudio
 
 # Exercise vs working mapping template
 
