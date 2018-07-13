@@ -201,28 +201,41 @@ taxon %<>% mutate(scientificName = raw_scientific_name)
 taxon %<>% mutate(kingdom = raw_kingdom) 
 ```
 
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
-
-```{r}
-```
-
 ### taxonRank
+
+Add taxonRank information
+LR: Opgelet, parsenames werkt puur op syntactical rules --> zie issue, beetje riskant mss?
+
+```{r}
+parsenames(taxon $ raw_scientific_name)
+```
+
+Add taxonRank information in rankmarker to dataset:
+
+```{r}
+taxon %<>% left_join(
+  select(parsenames(taxon $ scientificName), c(scientificname, rankmarker)),
+  by = c("scientificName" = "scientificname"))
+```
+
+Inspect information in taxonRank:
+
+```{r}
+taxon %>% distinct(rankmarker)
+```
+
+Recode rankmarker information into `taxonRank`:
+
+```{r}
+taxon %<>% mutate(taxonRank = recode(rankmarker,
+   "sp." = "species",
+   "var." = "variety",
+   "infrasp." = "infraspecies")) 
+```
+
 ### nomenclaturalCode
 
 ```{r}
-taxon %<>% mutate(taxonRank = str_to_lower(raw_rank))
 taxon %<>% mutate(nomenclaturalCode = "") 
 ```
 
