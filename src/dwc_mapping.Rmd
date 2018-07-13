@@ -15,6 +15,8 @@ output:
 
 # General setup 
 
+LR: dit zijn stappen waaraan de gebruiker niets moet veranderen
+
 ```{r setup, echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
@@ -28,7 +30,11 @@ Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 ```
 
 Install all required packages:
-LR: dit klopt waarschijnlijk nog niet
+LR: dit staat hier eigenlijk niet goed, telkens als het script opnieuw wordt ingelezen worden deze packages ook geladen. Zou op een andere plek moeten komen.
+
+```{r eval = FALSE}
+install.packages(c("tidyverse", "magrittr", "readxl", "digest", "rgbif", "inborutils", "stringi"))
+```
 
 Load libraries:
 
@@ -39,7 +45,6 @@ library(janitor)         # To clean input data
 library(readxl)          # To read Excel files
 library(digest)          # To generate hashes
 library(rgbif)
-library(inborutils) 
 library(stringi)
 ```
 
@@ -53,19 +58,19 @@ vdigest <- Vectorize(digest)
 
 # Read and pre-process raw data
 
-Create a data frame `raw_data` from the source data:
+Create a data frame `raw_data` from the source data `checklist.xlsx`:
 
 ```{r}
 raw_data <- read_excel(path = "../data/raw/checklist.xlsx") 
 ```
 
-Generate taxon_ID:
-LR: zal er vanaf hangen of er een taxonID nodig is of niet --> houden we hier rekening mee?
+Inspect first five rows in `raw_data`:
 
 ```{r}
-raw_data %<>% mutate(taxon_id = paste("dataset_shortname", "taxon", vdigest(scientific_name, algo="md5"), sep=":"))
+raw_data %>% head(n = 5)
 ```
 
+LR: eventueel ook tonen dat de datasets ten allertijde volledig kan worden opgevraagd in een nieuw venster:
 
 ```{r}
 raw_data %>% View()
@@ -82,6 +87,10 @@ raw_data %<>%
 
 Andere tools aan te rijken: eventueel verwijderen van dubbele spaties?
 
+
+Generate taxon_ID:
+LR: zal er vanaf hangen of er een taxonID nodig is of niet --> houden we hier rekening mee?.
+Ook: Uitleggen in richlijnen waar informatie kan worden ingevuld
 
 ```{r}
 raw_data %<>% mutate(taxon_id = paste(
@@ -106,6 +115,8 @@ taxon <- raw_data
 
 ## Pre-processing
 
+LR: Uitleggen in richtlijnen dat elk taxon in de taxon core uniek moet zijn. Er mogen dus geen duplicaten inzitten. Dit is echter niet altijd het geval. ZO kan er voor 1 taxon meerdere distributie records aanwezig zijn. Of hemi-homonymen. Het is dus nodig om de dataset te inspecteren op homonymen.
+
 Check for duplicates:
 
 ```{r}
@@ -125,7 +136,6 @@ If not: inspect dataset for more information on these species:
 taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
 ```
 
-The difference should be in the `locality` information.
 LR: Wanneer de gedupliceerde scientific names verschillen in hun taxonomische/classificatie informatie: beiden worden gehouden in de taxon core. De taxonID moet wel verschillen tussen beide taxa, maar daarmee werd rekening gehouden bij het genereren van de taxonID (is op basis van scientific name en kingdom). Als de gedupliceerde taxa enkel verschillen in hun distributie informatie, dan kunnen we 1 van die records verwijderen in de taxon core.  
 
 Remove duplicated rows:
@@ -134,12 +144,11 @@ Remove duplicated rows:
 taxon %<>% slice(which(duplicated(taxon $ raw_scientific_name)==FALSE))
 ```
 
-LR: wat als er andere informatie verschilt, i.e. in het geval van hemihomonymen? Dan eventueel een combinatie maken van de taxon naam en de factor waar beiden in verschillen. Dit ofwel integreren in de begeleidende tekst ofwel in een afzonderlijk script
-
-
 ## Term mapping
  
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
+
+LR: aangeven dat dit de record-level terms zijn. Eventueel enkele voorbeelden aanrijken.
 
 ### language
 
@@ -181,6 +190,20 @@ taxon %<>% mutate(institutionCode = "")
 
 ```{r}
 taxon %<>% mutate(datasetName = "") 
+```
+
+LR: aangeven dat dit de termen zijn die specifiek zijn voor de taxon core / taxon informatie:
+
+Eventueel tools aanrijken voor inspectie van de data:
+
+```{r}
+taxon %>% distinct(raw_kingdom)
+```
+
+LR: of als je wilt weten hoeveel waarnemingen er zijn voor een specifieke groep:
+
+```{r}
+taxon %>% select(raw_kingdom) %>% group_by_all() %>% summarize(records = n())
 ```
 
 ### taxonID
