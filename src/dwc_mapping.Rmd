@@ -35,6 +35,7 @@ Load libraries:
 ```{r}
 library(tidyverse)       # To transform data
 library(magrittr)        # For %<>% pipes
+library(janitor)         # To clean input data
 library(readxl)          # To read Excel files
 library(digest)          # To generate hashes
 library(rgbif)
@@ -73,6 +74,21 @@ Bottleneck hier is dat je dus enige voorkennis nodig hebt van R om selectief inf
 raw_data %<>% gbif_species_name_match(name_col = "scientific_name", 
                                       gbif_terms = c('kingdom', 'phylum', 'class', 'order', 'family', 'genus', 
                                                      'confidence', 'synonym', 'status', 'rank'))
+raw_data %>% View()
+```
+
+Basic cleaning steps:
+LR: uitleggen in richtlijnen dat deze stap een extra cleaning step is, maar dat je basisdata in de template dus eigenlijk al clean moet zijn. 
+
+```{r}
+raw_data %<>%
+  remove_empty("rows") %>%       # Remove empty rows
+  clean_names()                  # Have sensible (lowercase) column names
+```
+
+Andere tools aan te rijken: eventueel verwijderen van dubbele spaties?
+
+
 ```{r}
 raw_data %<>% mutate(taxon_id = paste(
   "dataset_shortname", 
