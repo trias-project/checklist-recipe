@@ -73,6 +73,13 @@ Bottleneck hier is dat je dus enige voorkennis nodig hebt van R om selectief inf
 raw_data %<>% gbif_species_name_match(name_col = "scientific_name", 
                                       gbif_terms = c('kingdom', 'phylum', 'class', 'order', 'family', 'genus', 
                                                      'confidence', 'synonym', 'status', 'rank'))
+```{r}
+raw_data %<>% mutate(taxon_id = paste(
+  "dataset_shortname", 
+  "taxon", 
+  vdigest(paste(
+    scientific_name, kingdom),  
+  algo="md5"), sep=":"))
 ```
 
 Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
@@ -109,6 +116,8 @@ taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
 ```
 
 The difference should be in the `locality` information.
+LR: Wanneer de gedupliceerde scientific names verschillen in hun taxonomische/classificatie informatie: beiden worden gehouden in de taxon core. De taxonID moet wel verschillen tussen beide taxa, maar daarmee werd rekening gehouden bij het genereren van de taxonID (is op basis van scientific name en kingdom). Als de gedupliceerde taxa enkel verschillen in hun distributie informatie, dan kunnen we 1 van die records verwijderen in de taxon core.  
+
 Remove duplicated rows:
 
 ```{r}
@@ -144,12 +153,6 @@ taxon %<>% mutate(rightsHolder = "")
 
 ```{r}
 taxon %<>% mutate(accessRights = "") 
-```
-
-### references
-
-```{r}
-taxon %<>% mutate(references = raw_source) 
 ```
 
 ### datasetID
@@ -188,40 +191,29 @@ taxon %<>% mutate(scientificName = raw_scientific_name)
 taxon %<>% mutate(kingdom = raw_kingdom) 
 ```
 
-### phylum
+
 
 ```{r}
-taxon %<>% mutate(phylum = raw_phylum) 
 ```
 
-### class
 
 ```{r}
-taxon %<>% mutate(class = raw_class) 
 ```
 
-### order
 
 ```{r}
-taxon %<>% mutate(order = raw_order) 
 ```
 
-### family
 
 ```{r}
-taxon %<>% mutate(family = raw_family) 
-```
-
-### genus
-
-```{r}
-taxon %>% mutate(genus = raw_genus)
 ```
 
 ### taxonRank
+### nomenclaturalCode
 
 ```{r}
 taxon %<>% mutate(taxonRank = str_to_lower(raw_rank))
+taxon %<>% mutate(nomenclaturalCode = "") 
 ```
 
 ## Post-processing
