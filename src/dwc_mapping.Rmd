@@ -300,8 +300,34 @@ distribution %<>% mutate(taxonID = raw_taxon_id)
 
 ### locality
 
+Inspect values:
+
 ```{r}
-distribution %<>% mutate(locality = raw_locality)
+distribution %>% 
+  select(raw_locality, raw_country_code) %>% 
+  group_by_all() %>% 
+  summarize(records = n())
+```
+
+Use `case_when` in this case.
+When `raw_locality` is empty, use country as a locality:
+
+```{r}
+distribution %<>% mutate(locality = case_when(
+  is.na(raw_locality) & raw_country_code == "BE" ~ "Belgium",
+  is.na(raw_locality) & raw_country_code == "FR" ~ "France",
+  is.na(raw_locality) & raw_country_code == "MK" ~ "Macedonia",
+  is.na(raw_locality) & raw_country_code == "NL" ~ "The Netherlands",
+  TRUE ~ raw_locality))
+```
+
+LR: eventueel de optie geven om nieuw gemapte waarden te inspecteren:
+
+```{r}
+distribution %>% 
+  select(raw_locality, raw_country_code, locality) %>% 
+  group_by_all() %>% 
+  summarize(records = n())
 ```
 
 ### countryCode
@@ -318,10 +344,12 @@ distribution %<>% mutate(occurrenceStatus = raw_occurrence_status)
 
 ### threatStatus
 
-LR: hier eventueel een recode waar de volledige waarden worden vertaald naar de afkortingen?
+recode threatStatus:
 
 ```{r}
-distribution %<>% mutate(threatStatus = raw_threat_status) 
+distribution %<>% mutate(threatStatus = recode(raw_threat_status,
+  "endangered" = "EN",
+  "vulnerable" = "VU"))
 ```
 
 ### source
@@ -341,13 +369,13 @@ distribution %<>% mutate(occurrenceRemarks = raw_remarks)
 Remove the original columns:
 
 ```{r}
-taxon %<>% select(-starts_with("raw_"))
+distribution %<>% select(-starts_with("raw_"))
 ```
 
 Preview data:
 
 ```{r}
-taxon %>% head()
+distribution %>% head()
 ```
 
 Save to CSV:
