@@ -26,7 +26,7 @@ There are two RMarkdown files in `./src`:
 1. an exercise, `exercise.Rmd`
 2. a working mapping template, `dwc_mapping.Rmd`
 
-You can use the template as a kind of cheatsheet to solve the exercise. Eventually you can run the entire `dwc_mapping.Rmd` to go through all mapping steps (`Ctrl` + `Alt` + `R`) at once or one by one (`Ctrl`+ `Shift` + `Enter`).
+You can use the template as a kind of _cheatsheet_ to solve the exercise. Eventually you can run the entire `dwc_mapping.Rmd` to go through all mapping steps at once (`Ctrl` + `Alt` + `R`) or one by one (`Ctrl`+ `Shift` + `Enter`).
 
 # Mapping steps
 
