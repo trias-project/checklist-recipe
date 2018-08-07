@@ -52,15 +52,16 @@ raw_data <- read_excel("../data/raw/checklist.xls", sheet = "checklist")
 
 ### Inspect data
 
-The simplest way for a quick overview of the raw data is by using the functions `str()` and `head()`: 
-
-```{r}
-str(raw_data) 
-```
+The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
 
 ```{r}
 head(raw_data) # Displays the first 6 lines of the dataframe
 ```
+
+```{r}
+str(raw_data) # Displays the structure of the dataframe
+```
+
 
 During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in `raw_data` and the added Darwin Core columns, we add the prefix `raw_` to the column names of `raw_data`:
 
