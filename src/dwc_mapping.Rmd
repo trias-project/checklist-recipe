@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 Use UTF-8 character encoding:
-LR: Hier verschillende codering voor verschillende OS geven:
+LR: Hier verschillende codering voor verschillende OS geven in handleiding:
 
 ```{r}
 # This works on Mac OS X, might not work on other OS
@@ -64,6 +64,14 @@ Create a data frame `raw_data` from the source data `checklist.xlsx`:
 raw_data <- read_excel(path = "../data/raw/checklist.xlsx") 
 ```
 
+Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
+
+```{r}
+colnames(raw_data) <- paste0("raw_", colnames(raw_data))
+```
+
+# General quality check
+
 Inspect first five rows in `raw_data`:
 
 ```{r}
@@ -87,13 +95,17 @@ raw_data %<>%
 
 Andere tools aan te rijken: eventueel verwijderen van dubbele spaties?
 
+# Darwin Core mapping
 
-Generate taxon_ID:
+## Generate taxon_ID:
+
 LR: zal er vanaf hangen of er een taxonID nodig is of niet --> houden we hier rekening mee?.
-Ook: Uitleggen in richlijnen waar informatie kan worden ingevuld
+Ook: Uitleggen in richlijnen waar informatie kan worden ingevuld. 
+
+TaxonId moet gegenereerd worden op basis van een combinatie van de scientificname en kingdom om probleem met hemihomonymen te voorkomen.
 
 ```{r}
-raw_data %<>% mutate(taxon_id = paste(
+raw_data %<>% mutate(raw_taxon_id = paste(
   "dataset_shortname", 
   "taxon", 
   vdigest(paste(
@@ -101,11 +113,6 @@ raw_data %<>% mutate(taxon_id = paste(
   algo="md5"), sep=":"))
 ```
 
-Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
-
-```{r}
-colnames(raw_data) <- paste0("raw_", colnames(raw_data))
-```
 
 # Create taxon core
 
@@ -137,6 +144,7 @@ taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
 ```
 
 LR: Wanneer de gedupliceerde scientific names verschillen in hun taxonomische/classificatie informatie: beiden worden gehouden in de taxon core. De taxonID moet wel verschillen tussen beide taxa, maar daarmee werd rekening gehouden bij het genereren van de taxonID (is op basis van scientific name en kingdom). Als de gedupliceerde taxa enkel verschillen in hun distributie informatie, dan kunnen we 1 van die records verwijderen in de taxon core.  
+(zou je eventueel ook kunnen doen door bekijken van de taxonID's)
 
 Remove duplicated rows:
 
