@@ -62,7 +62,6 @@ head(raw_data) # Displays the first 6 lines of the dataframe
 str(raw_data) # Displays the structure of the dataframe
 ```
 
-
 During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in `raw_data` and the added Darwin Core columns, we add the prefix `raw_` to the column names of `raw_data`:
 
 ```{r}
@@ -131,17 +130,17 @@ The main functions we use for these are: `mutate()` + `recode()` or  `mutate()` 
 
 In this case, we aim to replace specific information in `raw_data` by new information specified in the code.
 
-_Add basic example based on example!!!_
+_Add basic example based on template!!!_
 
 ### `mutate()` + `case_when()`
 
 `case_when` is often used together with `mutate()` when you want to make a new column (or change an existing one) based on the content of other existing variables.
 
-_Add basic example based on example!!!_
+_Add basic example based on template!!_
 
 # Push changes to GitHub
 
-You would eventually like to _save_ your mapping not only locally on your computer, but remotely on GitHub too. You have then to _commit_ your work and eventually  _push_ it to GitHub. Doing so, you will sync the GitHub repository with the most updated version on your local machine.
+You would eventually like to _save_ your mapping not only locally on your computer, but remotely on GitHub too. You have then to _commit_ your work and  _push_ it to GitHub. Doing so, you will sync the GitHub repository with the most updated version on your local machine.
 
 You can do it within RStudio: [hands-on session within RStudio](https://inbo-tutorials.netlify.com/git/rstudio/#/), or you can alternatively use GitHub Desktop: [hands-on session with GitHub Desktop](https://inbo-tutorials.netlify.com/git/desktop/#/).
 
@@ -156,3 +155,5 @@ Based on this recipe we were able to publish several checklists on GBIF. Some ex
 1. [Checklist of non-native freshwater fishes in Flanders](https://trias-project.github.io/alien-fishes-checklist/)
 2. [Inventory of alien macroinvertebrates in Flanders, Belgium](https://github.com/trias-project/alien-macroinvertebrates)
 3. [Catalogue of the Rust Fungi of Belgium](https://github.com/trias-project/uredinales-belgium-checklist)
+
+Feel free to use the provided documentation as additional learning material.
