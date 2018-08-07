@@ -47,7 +47,7 @@ Our raw dataset is an Excel file (`./data/raw/checklist.xlsx`). The import speci
 5. Click `Import` to generate the dataframe
 
 ```{r, echo = FALSE}
-raw_data <- read_excel("../data/raw/checklist.xls", sheet = "checklist")
+raw_data <- read_excel("../data/raw/checklist.xlsx", sheet = "checklist")
 ```
 
 ### Inspect data
