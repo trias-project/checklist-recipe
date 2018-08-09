@@ -283,8 +283,10 @@ write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALS
 
 # Create distribution extension
 
+Create a dataframe with all data:
+
 ```{r}
-distribution <- raw_data
+distribution <- input_data
 ```
 
 ## Term mapping 
@@ -294,7 +296,7 @@ Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/dis
 ### taxonID
 
 ```{r}
-distribution %<>% mutate(taxonID = raw_taxon_id) 
+distribution %<>% mutate(taxonID = input_taxon_id)
 ```
 
 ### locality
@@ -302,65 +304,123 @@ distribution %<>% mutate(taxonID = raw_taxon_id)
 Inspect values:
 
 ```{r}
-distribution %>% 
-  select(raw_locality, raw_country_code) %>% 
-  group_by_all() %>% 
-  summarize(records = n())
+distribution %>%
+  group_by(input_country_code, input_locality) %>%
+  count()
 ```
 
-Use `case_when` in this case.
-When `raw_locality` is empty, use country as a locality:
+Map values to `input_locality` if provided, otherwise use the country name:
 
 ```{r}
 distribution %<>% mutate(locality = case_when(
-  is.na(raw_locality) & raw_country_code == "BE" ~ "Belgium",
-  is.na(raw_locality) & raw_country_code == "FR" ~ "France",
-  is.na(raw_locality) & raw_country_code == "MK" ~ "Macedonia",
-  is.na(raw_locality) & raw_country_code == "NL" ~ "The Netherlands",
-  TRUE ~ raw_locality))
+  !is.na(input_locality) ~ input_locality,
+  input_country_code == "BE" ~ "Belgium",
+  input_country_code == "GB" ~ "United Kingdom",
+  input_country_code == "MK" ~ "Macedonia",
+  input_country_code == "NL" ~ "The Netherlands",
+  TRUE ~ "" # In other cases leave empty
+))
 ```
 
 Inspect mapped values: 
 
 ```{r}
-distribution %>% 
-  select(raw_locality, raw_country_code, locality) %>% 
-  group_by_all() %>% 
-  summarize(records = n())
+distribution %>%
+  group_by(input_country_code, input_locality, locality) %>%
+  count()
 ```
 
 ### countryCode
 
+Inspect values:
+
 ```{r}
-distribution %<>% mutate(countryCode = raw_country_code) 
+distribution %>%
+  group_by(input_country_code) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(countryCode = input_country_code) 
 ```
 
 ### occurrenceStatus
 
+Inspect values:
+
 ```{r}
-distribution %<>% mutate(occurrenceStatus = raw_occurrence_status) 
+distribution %>%
+  group_by(input_occurrence_status) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(occurrenceStatus = input_occurrence_status) 
 ```
 
 ### threatStatus
 
-recode threatStatus:
+Inspect values:
 
 ```{r}
-distribution %<>% mutate(threatStatus = recode(raw_threat_status,
+distribution %>%
+  group_by(input_threat_status) %>%
+  count()
+```
+
+Map values by recoding to the [IUCN threat status vocabulary](http://rs.gbif.org/vocabulary/iucn/threat_status.xml):
+
+```{r}
+distribution %<>% mutate(threatStatus = recode(input_threat_status,
   "endangered" = "EN",
-  "vulnerable" = "VU"))
+  "vulnerable" = "VU"
+))
+```
+
+Inspect mapped values: 
+
+```{r}
+distribution %>%
+  group_by(input_threat_status, threatStatus) %>%
+  count()
 ```
 
 ### source
 
+Inspect values:
+
 ```{r}
-distribution %<>% mutate(source = raw_source) 
+distribution %>%
+  group_by(input_source) %>%
+  count() %>%
+  head() # Remove to show all values
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(source = input_source) 
 ```
 
 ### occurrenceRemarks
 
+Inspect values:
+
 ```{r}
-distribution %<>% mutate(occurrenceRemarks = raw_remarks) 
+distribution %>%
+  group_by(input_remarks) %>%
+  count() %>%
+  head() # Remove to show all values
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(occurrenceRemarks = input_remarks) 
 ```
 
 ## Post-processing
@@ -368,7 +428,7 @@ distribution %<>% mutate(occurrenceRemarks = raw_remarks)
 Remove the original columns:
 
 ```{r}
-distribution %<>% select(-starts_with("raw_"))
+distribution %<>% select(-starts_with("input_"))
 ```
 
 Preview data:
@@ -380,9 +440,5 @@ distribution %>% head()
 Save to CSV:
 
 ```{r}
-write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(distribution, file = "../data/processed/distribution.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
-
-
-
-
