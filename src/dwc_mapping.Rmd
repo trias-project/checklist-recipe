@@ -15,14 +15,11 @@ output:
 
 # General setup 
 
-LR: dit zijn stappen waaraan de gebruiker niets moet veranderen
-
 ```{r setup, echo = FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 Use UTF-8 character encoding:
-LR: Hier verschillende codering voor verschillende OS geven in handleiding:
 
 ```{r}
 # This works on Mac OS X, might not work on other OS
@@ -30,7 +27,6 @@ Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
 ```
 
 Install all required packages:
-LR: dit staat hier eigenlijk niet goed, telkens als het script opnieuw wordt ingelezen worden deze packages ook geladen. Zou op een andere plek moeten komen.
 
 ```{r eval = FALSE}
 install.packages(c("tidyverse", "magrittr", "readxl", "digest", "rgbif", "inborutils", "stringi"))
@@ -49,7 +45,6 @@ library(stringi)
 ```
 
 Vectorize digest function to generate `taxonID`:
-LR: dit eventueel onzichtbaar zetten
 
 ```{r}
 vdigest <- Vectorize(digest)
@@ -78,14 +73,12 @@ Inspect first five rows in `raw_data`:
 raw_data %>% head(n = 5)
 ```
 
-LR: eventueel ook tonen dat de datasets ten allertijde volledig kan worden opgevraagd in een nieuw venster:
 
 ```{r}
 raw_data %>% View()
 ```
 
 Basic cleaning steps:
-LR: uitleggen in richtlijnen dat deze stap een extra cleaning step is, maar dat je basisdata in de template dus eigenlijk al clean moet zijn. 
 
 ```{r}
 raw_data %<>%
@@ -93,16 +86,12 @@ raw_data %<>%
   clean_names()                  # Have sensible (lowercase) column names
 ```
 
-Andere tools aan te rijken: eventueel verwijderen van dubbele spaties?
 
 # Darwin Core mapping
 
 ## Generate taxon_ID:
 
-LR: zal er vanaf hangen of er een taxonID nodig is of niet --> houden we hier rekening mee?.
-Ook: Uitleggen in richlijnen waar informatie kan worden ingevuld. 
 
-TaxonId moet gegenereerd worden op basis van een combinatie van de scientificname en kingdom om probleem met hemihomonymen te voorkomen.
 
 ```{r}
 raw_data %<>% mutate(raw_taxon_id = paste(
@@ -122,7 +111,6 @@ taxon <- raw_data
 
 ## Pre-processing
 
-LR: Uitleggen in richtlijnen dat elk taxon in de taxon core uniek moet zijn. Er mogen dus geen duplicaten inzitten. Dit is echter niet altijd het geval. ZO kan er voor 1 taxon meerdere distributie records aanwezig zijn. Of hemi-homonymen. Het is dus nodig om de dataset te inspecteren op homonymen.
 
 Check for duplicates:
 
@@ -143,8 +131,6 @@ If not: inspect dataset for more information on these species:
 taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
 ```
 
-LR: Wanneer de gedupliceerde scientific names verschillen in hun taxonomische/classificatie informatie: beiden worden gehouden in de taxon core. De taxonID moet wel verschillen tussen beide taxa, maar daarmee werd rekening gehouden bij het genereren van de taxonID (is op basis van scientific name en kingdom). Als de gedupliceerde taxa enkel verschillen in hun distributie informatie, dan kunnen we 1 van die records verwijderen in de taxon core.  
-(zou je eventueel ook kunnen doen door bekijken van de taxonID's)
 
 Remove duplicated rows:
 
@@ -156,7 +142,6 @@ taxon %<>% slice(which(duplicated(taxon $ raw_scientific_name)==FALSE))
  
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
-LR: aangeven dat dit de record-level terms zijn. Eventueel enkele voorbeelden aanrijken.
 
 ### language
 
@@ -200,16 +185,10 @@ taxon %<>% mutate(institutionCode = "")
 taxon %<>% mutate(datasetName = "") 
 ```
 
-LR: aangeven dat dit de termen zijn die specifiek zijn voor de taxon core / taxon informatie:
-
-Eventueel tools aanrijken voor inspectie van de data:
 
 ```{r}
 taxon %>% distinct(raw_kingdom)
 ```
-
-LR: of als je wilt weten hoeveel waarnemingen er zijn voor een specifieke groep:
-
 ```{r}
 taxon %>% select(raw_kingdom) %>% group_by_all() %>% summarize(records = n())
 ```
@@ -235,7 +214,6 @@ taxon %<>% mutate(kingdom = raw_kingdom)
 ### taxonRank
 
 Add taxonRank information
-LR: Opgelet, parsenames werkt puur op syntactical rules --> zie issue, beetje riskant mss?
 
 ```{r}
 parsenames(taxon $ raw_scientific_name)
@@ -329,7 +307,6 @@ distribution %<>% mutate(locality = case_when(
   TRUE ~ raw_locality))
 ```
 
-LR: eventueel de optie geven om nieuw gemapte waarden te inspecteren:
 
 ```{r}
 distribution %>% 
