@@ -19,19 +19,6 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-Use UTF-8 character encoding:
-
-```{r}
-# This works on Mac OS X, might not work on other OS
-Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
-```
-
-Install all required packages:
-
-```{r eval = FALSE}
-install.packages(c("tidyverse", "magrittr", "readxl", "digest", "rgbif", "inborutils", "stringi"))
-```
-
 Load libraries:
 
 ```{r}
