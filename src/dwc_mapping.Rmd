@@ -1,6 +1,6 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "For: Checklist title"
+subtitle: "For: my_datasetName"
 author:
 - author_1
 - author_2
