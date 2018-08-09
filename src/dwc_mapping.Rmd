@@ -107,40 +107,22 @@ raw_data %<>% mutate(raw_taxon_id = paste(
   algo="md5"), sep=":"))
 ```
 
+### Preview data
+
+** Needs to be completed**
+
+```{r}
+raw_data %>% select(raw_kingdom, raw_rankmarker, raw_scientific_name) %>% 
+  group_by_all() %>% 
+  count(raw_scientific_name)
+```
 
 # Create taxon core
 
-```{r}
-taxon <- raw_data
-```
-
-## Pre-processing
-
-
-Check for duplicates:
+Remove duplicated taxa and save as a new dataframe `taxon`:
 
 ```{r}
-duplicates <- taxon %>%  
-  slice(which(duplicated(taxon $ raw_scientific_name) == "TRUE")) %>% 
-  select(raw_scientific_name) 
-```
-
-```{r, echo=FALSE}
-duplicates
-```
-
-Should contain zero rows.
-If not: inspect dataset for more information on these species:
-
-```{r}
-taxon %>% filter(raw_scientific_name %in% duplicates $ raw_scientific_name)
-```
-
-
-Remove duplicated rows:
-
-```{r}
-taxon %<>% slice(which(duplicated(taxon $ raw_scientific_name)==FALSE))
+taxon <- raw_data %>% slice(which(duplicated(raw_data $ raw_taxon_id) == "FALSE")) 
 ```
 
 ## Term mapping
