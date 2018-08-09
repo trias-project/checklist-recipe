@@ -31,12 +31,12 @@ library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
 ```
 
-# Read raw data
+# Read source data
 
-Create a data frame `raw_data` from the source data:
+Create a data frame `input_data` from the source data:
 
 ```{r}
-raw_data <- read_excel(path = "../data/raw/checklist.xlsx") 
+input_data <- read_excel(path = "../data/raw/checklist.xlsx") 
 ```
 
 # Process raw data
@@ -46,21 +46,18 @@ raw_data <- read_excel(path = "../data/raw/checklist.xlsx")
 Clean data somewhat:
 
 ```{r}
-raw_data %<>%
+input_data %<>%
   remove_empty("rows") %>%  # Remove empty rows
   clean_names()             # Have sensible (lowercase) column names
 ```
 
-Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
-
-```{r}
-colnames(raw_data) <- paste0("raw_", colnames(raw_data))
-```
 
 ## Preview data
+Add prefix `input_` to all column names to avoid name clashes with Darwin Core terms:
 
 ```{r}
 raw_data %>% head(n = 5)
+colnames(input_data) <- paste0("input_", colnames(input_data))
 ```
 
 ## Scientific names
@@ -70,7 +67,7 @@ raw_data %>% head(n = 5)
 Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
 
 ```{r}
-parsed_names <- rgbif::parsenames(unique(raw_data$raw_scientific_name))
+parsed_names <- rgbif::parsenames(unique(input_data$input_scientific_name))
 ```
 
 Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
@@ -84,11 +81,11 @@ parsed_names %>%
 Correct names and reparse:
 
 ```{r}
-raw_data %<>% mutate(raw_scientific_name = recode(raw_scientific_name,
+input_data %<>% mutate(input_scientific_name = recode(input_scientific_name,
   "AseroÙ rubra" = "Asero rubra"
 ))
 
-parsed_names <- rgbif::parsenames(unique(raw_data$raw_scientific_name))
+parsed_names <- rgbif::parsenames(unique(input_data$input_scientific_name))
 parsed_names %>%
   select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
@@ -99,10 +96,10 @@ parsed_names %>%
 The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
 
 ```{r}
-raw_data %<>% left_join(
+input_data %<>% left_join(
   select(parsed_names, scientificname, rankmarker),
-  by = c("raw_scientific_name" = "scientificname")) %>%
-  rename(raw_rankmarker = rankmarker)
+  by = c("input_scientific_name" = "scientificname")) %>%
+  rename(input_rankmarker = rankmarker)
 ```
 
 ### Generate taxonID
@@ -111,10 +108,10 @@ To link taxa with information in the extension(s), each taxon needs a unique and
 
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
-raw_data %<>% mutate(raw_taxon_id = paste(
   "dataset_shortname", # Update with your dataset shortname
+input_data %<>% mutate(input_taxon_id = paste(
   "taxon",
-  vdigest(paste(raw_scientific_name, raw_kingdom), algo = "md5"),
+  vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
   sep = ":"
 ))
 ```
@@ -124,10 +121,10 @@ raw_data %<>% mutate(raw_taxon_id = paste(
 Show the number of taxa and distributions per kingdom and rank:
 
 ```{r}
-raw_data %>%
-  group_by(raw_kingdom, raw_rankmarker) %>%
+input_data %>%
+  group_by(input_kingdom, input_rankmarker) %>%
   summarize(
-    `# taxa` = n_distinct(raw_taxon_id),
+    `# taxa` = n_distinct(input_taxon_id),
     `# distributions` = n()
   )
 ```
