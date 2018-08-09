@@ -31,17 +31,22 @@ library(rgbif)
 library(stringi)
 ```
 
-
-```{r}
-```
-
-
-# Read and pre-process raw data
+# Read raw data
 
 Create a data frame `raw_data` from the source data `checklist.xlsx`:
 
 ```{r}
 raw_data <- read_excel(path = "../data/raw/checklist.xlsx") 
+```
+
+# Preprocess raw data
+
+## Data structure
+
+```{r}
+raw_data %<>%
+  remove_empty("rows") %>%       # Remove empty rows
+  clean_names()                  # Have sensible (lowercase) column names
 ```
 
 Add prefix `raw_` to all column names to avoid name clashes with Darwin Core terms:
@@ -50,25 +55,19 @@ Add prefix `raw_` to all column names to avoid name clashes with Darwin Core ter
 colnames(raw_data) <- paste0("raw_", colnames(raw_data))
 ```
 
-# General quality check
-
-Inspect first five rows in `raw_data`:
+## Preview data
 
 ```{r}
 raw_data %>% head(n = 5)
 ```
 
+## Scientific names
 
 ```{r}
-raw_data %>% View()
 ```
 
-Basic cleaning steps:
 
 ```{r}
-raw_data %<>%
-  remove_empty("rows") %>%       # Remove empty rows
-  clean_names()                  # Have sensible (lowercase) column names
 ```
 
 
