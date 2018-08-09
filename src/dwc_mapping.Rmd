@@ -109,12 +109,14 @@ raw_data %<>% mutate(raw_taxon_id = paste(
 
 ### Preview data
 
-** Needs to be completed**
-
 ```{r}
-raw_data %>% select(raw_kingdom, raw_rankmarker, raw_scientific_name) %>% 
-  group_by_all() %>% 
-  count(raw_scientific_name)
+raw_data %>%
+  select(raw_kingdom, raw_rankmarker, raw_scientific_name) %>% 
+  group_by(raw_kingdom, raw_rankmarker) %>% 
+  mutate(species = n_distinct(raw_scientific_name)) %>% 
+  mutate(distribution = n()) %>% 
+  slice(1L) %>% 
+  select(-(raw_scientific_name))
 ```
 
 # Create taxon core
