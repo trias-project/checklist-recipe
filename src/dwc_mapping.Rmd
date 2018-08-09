@@ -63,17 +63,35 @@ raw_data %>% head(n = 5)
 
 ## Scientific names
 
-```{r}
-```
-
+### Apply nameparser
 
 ```{r}
+parsed_names <- rgbif::parsenames(unique(raw_data $ raw_scientific_name)) 
 ```
 
+One criterium for clean scientific names is that:
+- type = SCIENTIFIC
+- parsed = TRUE
+- parsedpartially = FALSE
 
-# Darwin Core mapping
+```{r}
+parsed_names %>%
+  select(scientificname, type, parsed, parsedpartially, rankmarker) %>% 
+  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE")) 
+```
 
+So those scientific names require some inspection. It is important to notice that some unclean scientific names could be traced using the nameparser and not all the listed scientific names above are wrong. This is just a method 
 
+### Add taxonRank information
+
+The nameparser function also provides information about the rank of the taxon (in `rankmarker`). We extract this information here and add it to the checklist. These names need some cleaning but this will be done further in the Taxon Core mapping.
+
+```{r}
+raw_data %<>% left_join(
+  select(parsed_names, scientificname, rankmarker),
+  by = c("raw_scientific_name" = "scientificname")) %>% 
+  rename(raw_rankmarker = rankmarker)
+```
 
 ### Generate taxonID
 
