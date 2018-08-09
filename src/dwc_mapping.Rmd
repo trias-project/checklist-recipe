@@ -129,56 +129,50 @@ taxon <- raw_data %>% slice(which(duplicated(raw_data $ raw_taxon_id) == "FALSE"
  
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
+The following terms are record-level terms (i.e. metadata):
 
 ### language
 
 ```{r}
-taxon %<>% mutate(language = "") 
+taxon %<>% mutate(language = "this_is_a_language") 
 ```
 
 ### license
 
 ```{r}
-taxon %<>% mutate(license = "") 
+taxon %<>% mutate(license = "this_is_the_license") 
 ```
 
 ### rightsHolder
 
 ```{r}
-taxon %<>% mutate(rightsHolder = "") 
+taxon %<>% mutate(rightsHolder = "this_is_the_rightsHOlder") 
 ```
 
 ### accessRights
 
 ```{r}
-taxon %<>% mutate(accessRights = "") 
+taxon %<>% mutate(accessRights = "these_are_the_accessRights") 
 ```
 
 ### datasetID
 
 ```{r}
-taxon %<>% mutate(datasetID = "") 
+taxon %<>% mutate(datasetID = "this_is_the_datasetID") 
 ```
 
 ### institutionCode
 
 ```{r}
-taxon %<>% mutate(institutionCode = "")
+taxon %<>% mutate(institutionCode = "this_is_the_institutionCode")
 ```
 
 ### datasetName
 
 ```{r}
-taxon %<>% mutate(datasetName = "") 
+taxon %<>% mutate(datasetName = "this_is_the_datasetName") 
 ```
 
-
-```{r}
-taxon %>% distinct(raw_kingdom)
-```
-```{r}
-taxon %>% select(raw_kingdom) %>% group_by_all() %>% summarize(records = n())
-```
 
 ### taxonID
 
