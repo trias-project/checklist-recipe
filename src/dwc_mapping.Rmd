@@ -31,10 +31,8 @@ library(rgbif)
 library(stringi)
 ```
 
-Vectorize digest function to generate `taxonID`:
 
 ```{r}
-vdigest <- Vectorize(digest)
 ```
 
 
@@ -76,16 +74,19 @@ raw_data %<>%
 
 # Darwin Core mapping
 
-## Generate taxon_ID:
 
 
+### Generate taxonID
 
 ```{r}
+
+vdigest <- Vectorize(digest)  # Vectorize digest function to generate `taxonID`:
+
 raw_data %<>% mutate(raw_taxon_id = paste(
   "dataset_shortname", 
   "taxon", 
   vdigest(paste(
-    scientific_name, kingdom),  
+    raw_scientific_name, raw_kingdom),  
   algo="md5"), sep=":"))
 ```
 
