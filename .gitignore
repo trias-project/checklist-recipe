@@ -36,5 +36,9 @@ vignettes/*.pdf
 rsconnect/
 .Rproj.user
 
+# Files in src created by R markdown
+src/*.html
+src/*.pdf
+
 # Mac OS X
 .DS_Store
