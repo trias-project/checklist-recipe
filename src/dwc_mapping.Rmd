@@ -194,33 +194,24 @@ taxon %<>% mutate(kingdom = raw_kingdom)
 
 ### taxonRank
 
-Add taxonRank information
+Overview of the content of `raw_rankmarker`:
 
 ```{r}
-parsenames(taxon $ raw_scientific_name)
+taxon %>% 
+  select(raw_rankmarker) %>% 
+  group_by_all() %>% 
+  summarize(records =  n())
 ```
 
-Add taxonRank information in rankmarker to dataset:
+Recode rankmarker information to match GBIF vocabulary:
 
 ```{r}
-taxon %<>% left_join(
-  select(parsenames(taxon $ scientificName), c(scientificname, rankmarker)),
-  by = c("scientificName" = "scientificname"))
-```
-
-Inspect information in taxonRank:
-
-```{r}
-taxon %>% distinct(rankmarker)
-```
-
-Recode rankmarker information into `taxonRank`:
-
-```{r}
-taxon %<>% mutate(taxonRank = recode(rankmarker,
-   "sp." = "species",
-   "var." = "variety",
-   "infrasp." = "infraspecies")) 
+taxon %<>% mutate(taxonRank = recode(raw_rankmarker,
+  "agg." = "speciesAggregate",
+  "infrasp." = "infraspecificname",
+  "sp." = "species",
+  "var." = "variety",
+  .missing = ""))
 ```
 
 ### nomenclaturalCode
