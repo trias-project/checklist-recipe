@@ -70,7 +70,10 @@ colnames(input_data) <- paste0("input_", colnames(input_data))
 Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
 
 ```{r}
-parsed_names <- rgbif::parsenames(unique(input_data$input_scientific_name))
+parsed_names <- input_data %>%
+  distinct(input_scientific_name) %>%
+  pull() %>% # Create vector from dataframe
+  parsenames() # An rgbif function
 ```
 
 Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
@@ -88,7 +91,13 @@ input_data %<>% mutate(input_scientific_name = recode(input_scientific_name,
   "AseroÙ rubra" = "Asero rubra"
 ))
 
-parsed_names <- rgbif::parsenames(unique(input_data$input_scientific_name))
+# Redo parsing
+parsed_names <- input_data %>%
+  distinct(input_scientific_name) %>%
+  pull() %>%
+  parsenames()
+
+# Show names with nomenclatural issues again
 parsed_names %>%
   select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
