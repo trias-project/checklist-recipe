@@ -39,7 +39,13 @@ Create a data frame `input_data` from the source data:
 input_data <- read_excel(path = "../data/raw/checklist.xlsx") 
 ```
 
-# Process raw data
+Preview data:
+
+```{r}
+input_data %>% head(n = 5)
+```
+
+# Process source data
 
 ## Rows and columns
 
@@ -51,12 +57,9 @@ input_data %<>%
   clean_names()             # Have sensible (lowercase) column names
 ```
 
-
-## Preview data
 Add prefix `input_` to all column names to avoid name clashes with Darwin Core terms:
 
 ```{r}
-raw_data %>% head(n = 5)
 colnames(input_data) <- paste0("input_", colnames(input_data))
 ```
 
@@ -127,6 +130,11 @@ input_data %>%
     `# taxa` = n_distinct(input_taxon_id),
     `# distributions` = n()
   )
+
+## Preview data
+
+```{r}
+input_data %>% head()
 ```
 
 # Create taxon core
