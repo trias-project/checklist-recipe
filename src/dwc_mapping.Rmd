@@ -111,8 +111,8 @@ To link taxa with information in the extension(s), each taxon needs a unique and
 
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
-  "dataset_shortname", # Update with your dataset shortname
 input_data %<>% mutate(input_taxon_id = paste(
+  "my_dataset_shortname", # Update with your dataset shortname
   "taxon",
   vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
   sep = ":"
@@ -141,106 +141,124 @@ input_data %>% head()
 
 # Create taxon core
 
-Remove duplicated taxa and save as a new dataframe `taxon`:
+Create a dataframe with unique taxa only (ignoring multiple distribution rows):
 
 ```{r}
 taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
 ```
 
 ## Term mapping
- 
+
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
-The following terms are record-level terms (i.e. metadata):
+Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
 
 ### language
 
 ```{r}
-taxon %<>% mutate(language = "this_is_a_language") 
+taxon %<>% mutate(language = "my_language")
 ```
 
 ### license
 
 ```{r}
-taxon %<>% mutate(license = "this_is_the_license") 
+taxon %<>% mutate(license = "my_license")
 ```
 
 ### rightsHolder
 
 ```{r}
-taxon %<>% mutate(rightsHolder = "this_is_the_rightsHOlder") 
+taxon %<>% mutate(rightsHolder = "my_rightsHolder")
 ```
 
 ### accessRights
 
 ```{r}
-taxon %<>% mutate(accessRights = "these_are_the_accessRights") 
+taxon %<>% mutate(accessRights = "my_accessRights")
 ```
 
 ### datasetID
 
 ```{r}
-taxon %<>% mutate(datasetID = "this_is_the_datasetID") 
+taxon %<>% mutate(datasetID = "my_datasetID")
 ```
 
 ### institutionCode
 
 ```{r}
-taxon %<>% mutate(institutionCode = "this_is_the_institutionCode")
+taxon %<>% mutate(institutionCode = "my_institutionCode")
 ```
 
 ### datasetName
 
 ```{r}
-taxon %<>% mutate(datasetName = "this_is_the_datasetName") 
+taxon %<>% mutate(datasetName = "my_datasetName")
 ```
 
-The following terms are specific for the taxon information:
+The following terms contain information about the taxon:
 
 ### taxonID
 
 ```{r}
-taxon %<>% mutate(taxonID = raw_taxon_id) 
+taxon %<>% mutate(taxonID = input_taxon_id)
 ```
 
 ### scientificName
 
 ```{r}
-taxon %<>% mutate(scientificName = raw_scientific_name) 
+taxon %<>% mutate(scientificName = input_scientific_name)
 ```
 
 ### kingdom
 
+Inspect values:
+
 ```{r}
-taxon %<>% mutate(kingdom = raw_kingdom) 
+taxon %>%
+  group_by(input_kingdom) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+taxon %<>% mutate(kingdom = input_kingdom)
 ```
 
 ### taxonRank
 
-Overview of the content of `raw_rankmarker`:
+Inspect values:
 
 ```{r}
-taxon %>% 
-  select(raw_rankmarker) %>% 
-  group_by_all() %>% 
-  summarize(records =  n())
+taxon %>%
+  group_by(input_rankmarker) %>%
+  count()
 ```
 
-Recode rankmarker information to match GBIF vocabulary:
+Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
 
 ```{r}
-taxon %<>% mutate(taxonRank = recode(raw_rankmarker,
-  "agg." = "speciesAggregate",
-  "infrasp." = "infraspecificname",
-  "sp." = "species",
-  "var." = "variety",
-  .missing = ""))
+taxon %<>% mutate(taxonRank = recode(input_rankmarker,
+  "agg."      = "speciesAggregate",
+  "infrasp."  = "infraspecificname",
+  "sp."       = "species",
+  "var."      = "variety",
+  .missing    = ""
+))
+```
+
+Inspect mapped values: 
+
+```{r}
+taxon %>%
+  group_by(input_rankmarker, taxonRank) %>%
+  count()
 ```
 
 ### nomenclaturalCode
 
 ```{r}
-taxon %<>% mutate(nomenclaturalCode = "this_is_the_nomenclaturalCode") 
+taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode")
 ```
 
 ## Post-processing
@@ -248,7 +266,7 @@ taxon %<>% mutate(nomenclaturalCode = "this_is_the_nomenclaturalCode")
 Remove the original columns:
 
 ```{r}
-taxon %<>% select(-starts_with("raw_"))
+taxon %<>% select(-starts_with("input_"))
 ```
 
 Preview data:
