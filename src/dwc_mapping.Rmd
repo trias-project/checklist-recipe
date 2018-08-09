@@ -173,6 +173,7 @@ taxon %<>% mutate(institutionCode = "this_is_the_institutionCode")
 taxon %<>% mutate(datasetName = "this_is_the_datasetName") 
 ```
 
+The following terms are specific for the taxon information:
 
 ### taxonID
 
@@ -217,7 +218,7 @@ taxon %<>% mutate(taxonRank = recode(raw_rankmarker,
 ### nomenclaturalCode
 
 ```{r}
-taxon %<>% mutate(nomenclaturalCode = "") 
+taxon %<>% mutate(nomenclaturalCode = "this_is_the_nomenclaturalCode") 
 ```
 
 ## Post-processing
@@ -279,6 +280,7 @@ distribution %<>% mutate(locality = case_when(
   TRUE ~ raw_locality))
 ```
 
+Inspect mapped values: 
 
 ```{r}
 distribution %>% 
