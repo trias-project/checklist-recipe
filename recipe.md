@@ -1,8 +1,8 @@
 ---
 title: "Checklist recipe"
 author: 
-- Peter Desmet
 - Damiano Oldoni
+- Peter Desmet
 - Lien Reyserhove
 date: "`r Sys.Date()`"
 output:
@@ -34,13 +34,13 @@ You can use the template as a kind of _cheatsheet_ to solve the exercise. Eventu
 
 Install packages:
 
-```{r}
+```r
 install.packages("tidyverse")
 ```
 
 Load packages:
 
-```{r}
+```r
 library(tidyverse)
 ```
 
@@ -60,7 +60,7 @@ Our raw dataset is an Excel file (`./data/raw/checklist.xlsx`). The import speci
 4. Click on `Data preview` to verify if everything looks OK
 5. Click `Import` to generate the dataframe
 
-```{r, echo = FALSE}
+```r
 raw_data <- read_excel("../data/raw/checklist.xlsx", sheet = "checklist")
 ```
 
@@ -68,22 +68,21 @@ raw_data <- read_excel("../data/raw/checklist.xlsx", sheet = "checklist")
 
 The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
 
-```{r}
+```r
 head(raw_data) # Displays the first 6 lines of the dataframe
 ```
 
-```{r}
+```r
 str(raw_data) # Displays the structure of the dataframe
 ```
 
 During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in `raw_data` and the added Darwin Core columns, we add the prefix `raw_` to the column names of `raw_data`:
 
-```{r}
-# Add prefix `raw_` to the column names of `raw_data`.
+```r
 colnames(raw_data) <- paste0("raw_", colnames(raw_data))
 ```
 
-```{r, echo = FALSE}
+```r
 colnames(raw_data)
 ```
 
@@ -124,13 +123,13 @@ Static values are used for Darwin Core terms that need the same value for all re
 
 Unaltered values are used for Darwin Core terms for which the content is an exact copy of the corresponding field in `raw_data`. Before deciding whether or not some basic processing is required, it is useful to screen the variables in `raw_data` for their specific content. `distinct()` is a useful function to show the unique values for a field:
 
-```{r}
+```r
 taxon %>% distinct(raw_kingdom)
 ```
 
 An example:
 
-```{r}
+```r
 taxon %<>% mutate(scientificName = raw_species)
 ```
 
