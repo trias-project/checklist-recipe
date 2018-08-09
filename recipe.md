@@ -16,8 +16,13 @@ output:
 # Getting started
 
 - First, click on this [invitation link](https://classroom.github.com/a/eXxaGERa) in order to copy _checklist-recipe_  on your account as *checklist-recipe-your_github_username*. You will be automatically redirected to the home page of this repository. 
-- Clone the repository locally
-- Open `./src/src.Rproj` in RStudio
+- Open RStudio
+- Click on tab `File` -> `New Project`
+- Choose `Version Control` -> `Git`
+- Fill `Repository URL` in with the URL of the just created repository. It should be something like this `https://github.com/username/checklist-username` where `username` stays for your GitHub username. The `Project directory name` will be authomatically filled in as `checklist-yourusername` 
+- Choose the folder where you would like to create the subfolder containing the project's folder
+
+![Setup a new RStudio project linked to GitHub repository](http://wiesmann.codiferes.net/share/bitmaps/test_pattern.svg)
 
 # Exercise vs working mapping template
 
