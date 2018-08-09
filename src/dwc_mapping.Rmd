@@ -144,7 +144,7 @@ input_data %>% head()
 Remove duplicated taxa and save as a new dataframe `taxon`:
 
 ```{r}
-taxon <- raw_data %>% slice(which(duplicated(raw_data $ raw_taxon_id) == "FALSE")) 
+taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
 ```
 
 ## Term mapping
