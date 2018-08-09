@@ -30,6 +30,20 @@ You can use the template as a kind of _cheatsheet_ to solve the exercise. Eventu
 
 # Mapping steps
 
+## Setup
+
+Install packages:
+
+```{r}
+install.packages("tidyverse")
+```
+
+Load packages:
+
+```{r}
+library(tidyverse)
+```
+
 ## Read and inspect data
 
 ### Read data
