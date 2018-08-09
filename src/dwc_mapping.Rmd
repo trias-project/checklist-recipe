@@ -129,7 +129,9 @@ input_data %>%
   summarize(
     `# taxa` = n_distinct(input_taxon_id),
     `# distributions` = n()
-  )
+  ) %>%
+  adorn_totals("row")
+```
 
 ## Preview data
 
