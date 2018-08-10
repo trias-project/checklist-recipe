@@ -90,6 +90,50 @@ input_data %<>% remove_empty("rows")
 More cleaning steps could be necessary, but are out of scope for this checklist recipe. 
 LR: refer to some good tutorials/websites here?
 
+## Scientific names
+
+The full scientific name of a species could be lengthy (e.g. `Bassia laniflora (S.G. Gmel.) A.J. Scott`). Mistakes could easily be made when entering the names in the template. One way to screen for potential errors is by using the [GBIF nameparser](https://www.gbif.org/tools/name-parser). It disects the scientific name in its different components and checks them against the taxonomic backbone used by GBIF. 
+![Output nameparser](src/static/images/output_nameparser.png)
+
+The following information returned by the nameparser function indicates that the scientific name could be correct:
+
+- type = "SCIENTIFIC" AND
+- parsed = "TRUE" AND
+- parsedpartially = "FALSE"
+
+Information deviating from these criteria could imply that the scientific name is incorrect. 
+
+The "type" field indicates whether or not the scientific name is truly scientific (type = "SCIENTIFIC") or e.g. whether it is not a scientificname of any kind (type = `NO_NAME`). Important to note is that the nameparser not necessarily detects all incorrect scientific names, it just gives you a good idea about which ones could be wrong. 
+
+The `parsed` and `parsedpartially` field indicates whether or not the name parser has parsed the full scientific name, which is not alwas the case. This could be due to spelling errors or when taxonomic, nomenclatural or identification notes are added to the end of the name. In these cases the name will only be parsed partially (parsedpartially = "TRUE") or not at all (parsed = "FALSE").
+When a scientific name was not parsed at all
+
+In the checklist recipe, we apply the nameparser function to `input_scientific_names` and screen for possbile errors. We specifically select the scientific names deviating from the abovementioned criteria by using the following filtering function:
+
+```
+filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
+```
+
+This renders the following output:
+
+![Output nameparser exercise](src/static/images/output_nameparser_exercise.png)
+
+Here, the output indicates that `Acmella agg.` is a scientific name with some informal addition (type = "INFORMAL"). The decision whether or not to implement changes for this name is up to the author of the checklist. In this example, we decided to leave the scientific name unchanged.
+In the case of the species `AseroÙ rubra`, the nameparser indicates that it was parsed only partially. This is due to a spelling error, i.e. the species name should be `Asero rubra`. There are two options to correct the scientific name in this case: 
+
+- COrrect the scientific name in the raw data file (recommended)
+- apply a cleaning function in R
+
+Although we recommend to clean the scientific name in the [raw data file](), we here provide an [example] on how to clean the scientifc name by applying the recode() function provided by the package `dplyr`.
+
+```
+input_data %<>% mutate(variable = recode(variable,
+  "scientific_name_after_cleaning" = "scientific_name_before_cleaning"
+))
+```
+
+In this example, the variable is `input_scientific_name`, the scientific_name_before_cleaning is `"AseroÙ rubra"`, the scientific_name_before_cleaning is `"Asero rubra"`.
+
 
 The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
 

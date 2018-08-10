@@ -85,7 +85,7 @@ parsed_names %>%
 
 Correct names and reparse:
 
-```{r}
+```{r correct and reparse}
 input_data %<>% mutate(input_scientific_name = recode(input_scientific_name,
   "AseroÙ rubra" = "Asero rubra"
 ))
