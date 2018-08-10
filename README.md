@@ -31,6 +31,7 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 ```
 ├── README.md           : Description of this repository
 ├── LICENSE             : Repository license
+├── project_name.Rproj  : RStudio project file
 ├── .gitignore          : Files and directories to be ignored by git
 │
 ├── data
@@ -41,7 +42,8 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 │
 └── src
     ├── dwc_mapping.Rmd : Darwin Core mapping script, core functionality of this repository
-    └── src.Rproj       : RStudio project file
+    ├── _site.yml       : Settings to build website in /docs
+    └── index.Rmd       : Template for website homepage
 ```
 
 ## Installation
