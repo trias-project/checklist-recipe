@@ -1,6 +1,6 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "For: Checklist title"
+subtitle: "For: my_datasetName"
 author:
 - author_1
 - author_2
@@ -25,6 +25,7 @@ Load libraries:
 ```{r}
 library(tidyverse)      # To transform data
 library(magrittr)       # To use %<>% pipes
+library(here)           # To find files
 library(janitor)        # To clean input data
 library(readxl)         # To read Excel files
 library(digest)         # To generate hashes
@@ -36,7 +37,7 @@ library(rgbif)          # To use GBIF services
 Create a data frame `input_data` from the source data:
 
 ```{r}
-input_data <- read_excel(path = "../data/raw/checklist.xlsx") 
+input_data <- read_excel(path = here("data", "raw", "checklist.xlsx")) 
 ```
 
 Preview data:
@@ -287,7 +288,7 @@ taxon %>% head()
 Save to CSV:
 
 ```{r}
-write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(taxon, file = here("data", "processed", "taxon.csv"), na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
 
 # Create distribution extension
@@ -449,5 +450,5 @@ distribution %>% head()
 Save to CSV:
 
 ```{r}
-write.csv(distribution, file = "../data/processed/distribution.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(distribution, file = here("data", "processed", "distribution.csv"), na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
