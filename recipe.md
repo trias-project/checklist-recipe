@@ -49,7 +49,7 @@ Load packages:
 library(tidyverse)
 ```
 
-## Read source data
+# Read source data
 
 The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we use Excel here as this format is often used to manage datasets. To import Excel files, you can use the `read_excel()` function from the package readxl(), where you specify the path to the xlsx file. **maybe some more information about how to define the path here**. The raw data file is imported as the dataframe `input_data`.
 
@@ -90,7 +90,9 @@ input_data %<>% remove_empty("rows")
 More cleaning steps could be necessary, but are out of scope for this checklist recipe. 
 LR: refer to some good tutorials/websites here?
 
-## Scientific names
+During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in raw_data and the added Darwin Core columns, we add the prefix `input_` to the column names of raw_data (LR: integrate link)
+
+### Retrieve nomenclatural information
 
 The full scientific name of a species could be lengthy (e.g. `Bassia laniflora (S.G. Gmel.) A.J. Scott`). Mistakes could easily be made when entering the names in the template. One way to screen for potential errors is by using the [GBIF nameparser](https://www.gbif.org/tools/name-parser). It disects the scientific name in its different components and checks them against the taxonomic backbone used by GBIF. 
 ![Output nameparser](src/static/images/output_nameparser.png)
