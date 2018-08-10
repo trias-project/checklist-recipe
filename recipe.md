@@ -53,11 +53,16 @@ library(tidyverse)
 
 The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we use Excel here as this format is often used to manage datasets. To import Excel files, you can use the `read_excel()` function from the package readxl(), where you specify the path to the xlsx file. **maybe some more information about how to define the path here**. The raw data file is imported as the dataframe `input_data`.
 
-```r
+```
 input_data <- read_excel(path)
 ```
 
-### Inspect data
+The very first step is to inspect whether the checklist has been imported correctly. The function `head()` returns the first lines of the dataframe. In this example the code returns the first five lines.
+
+```
+input_data %>% head(n = 5)
+```
+
 
 The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
 
