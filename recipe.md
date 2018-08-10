@@ -49,24 +49,12 @@ Load packages:
 library(tidyverse)
 ```
 
-## Read and inspect data
+## Read source data
 
-### Read data
-
-Our raw dataset is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we think it's useful to use Excel as a format in this exercise as this is often used to manage datasets.
-
-1. Go to `Environment` panel: `Import dataset > From Excel...`
-2. For `File/URL`, click `Browse` and select `checklist.xls`
-3. Specify the `Import Options`:
-    * `Name`: `raw_data`
-    * `Sheet`: `checklist`
-    * `NA`: `NA` or leave empty
-    * `First Row as Names`: check
-4. Click on `Data preview` to verify if everything looks OK
-5. Click `Import` to generate the dataframe
+The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we use Excel here as this format is often used to manage datasets. To import Excel files, you can use the `read_excel()` function from the package readxl(), where you specify the path to the xlsx file. **maybe some more information about how to define the path here**. The raw data file is imported as the dataframe `input_data`.
 
 ```r
-raw_data <- read_excel("../data/raw/checklist.xlsx", sheet = "checklist")
+input_data <- read_excel(path)
 ```
 
 ### Inspect data
