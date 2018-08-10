@@ -1,0 +1,453 @@
+---
+title: "Darwin Core mapping"
+subtitle: "For: Checklist title"
+author:
+- author_1
+- author_2
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    df_print: paged
+---
+
+# Setup 
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Load libraries:
+
+```{r}
+library(tidyverse)      # To transform data
+library(magrittr)       # To use %<>% pipes
+library(janitor)        # To clean input data
+library(readxl)         # To read Excel files
+library(digest)         # To generate hashes
+library(rgbif)          # To use GBIF services
+```
+
+# Read source data
+
+Create a data frame `input_data` from the source data:
+
+```{r}
+input_data <- read_excel(path = "../data/raw/checklist.xlsx") 
+```
+
+Preview data:
+
+```{r}
+input_data %>% head(n = 5)
+```
+
+# Process source data
+
+## Rows and columns
+
+Clean data somewhat:
+
+```{r}
+input_data %<>%
+  remove_empty("rows") %>%  # Remove empty rows
+  clean_names()             # Have sensible (lowercase) column names
+```
+
+Add prefix `input_` to all column names to avoid name clashes with Darwin Core terms:
+
+```{r}
+colnames(input_data) <- paste0("input_", colnames(input_data))
+```
+
+## Scientific names
+
+### Retrieve nomenclatural information
+
+Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
+
+```{r}
+parsed_names <- input_data %>%
+  distinct(input_scientific_name) %>%
+  pull() %>% # Create vector from dataframe
+  parsenames() # An rgbif function
+```
+
+Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
+
+```{r}
+parsed_names %>%
+  select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
+  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
+```
+
+Correct names and reparse:
+
+```{r}
+input_data %<>% mutate(input_scientific_name = recode(input_scientific_name,
+  "AseroÙ rubra" = "Asero rubra"
+))
+
+# Redo parsing
+parsed_names <- input_data %>%
+  distinct(input_scientific_name) %>%
+  pull() %>%
+  parsenames()
+
+# Show names with nomenclatural issues again
+parsed_names %>%
+  select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
+  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
+```
+
+### Add taxonRank information
+
+The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
+
+```{r}
+input_data %<>% left_join(
+  select(parsed_names, scientificname, rankmarker),
+  by = c("input_scientific_name" = "scientificname")) %>%
+  rename(input_rankmarker = rankmarker)
+```
+
+### Generate taxonID
+
+To link taxa with information in the extension(s), each taxon needs a unique and relatively stable taxonID. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
+
+```{r}
+vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
+input_data %<>% mutate(input_taxon_id = paste(
+  "my_dataset_shortname", # Update with your dataset shortname
+  "taxon",
+  vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
+  sep = ":"
+))
+```
+
+### Show summary
+
+Show the number of taxa and distributions per kingdom and rank:
+
+```{r}
+input_data %>%
+  group_by(input_kingdom, input_rankmarker) %>%
+  summarize(
+    `# taxa` = n_distinct(input_taxon_id),
+    `# distributions` = n()
+  ) %>%
+  adorn_totals("row")
+```
+
+## Preview data
+
+```{r}
+input_data %>% head()
+```
+
+# Create taxon core
+
+Create a dataframe with unique taxa only (ignoring multiple distribution rows):
+
+```{r}
+taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
+```
+
+## Term mapping
+
+Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
+
+Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
+
+### language
+
+```{r}
+taxon %<>% mutate(language = "my_language")
+```
+
+### license
+
+```{r}
+taxon %<>% mutate(license = "my_license")
+```
+
+### rightsHolder
+
+```{r}
+taxon %<>% mutate(rightsHolder = "my_rightsHolder")
+```
+
+### accessRights
+
+```{r}
+taxon %<>% mutate(accessRights = "my_accessRights")
+```
+
+### datasetID
+
+```{r}
+taxon %<>% mutate(datasetID = "my_datasetID")
+```
+
+### institutionCode
+
+```{r}
+taxon %<>% mutate(institutionCode = "my_institutionCode")
+```
+
+### datasetName
+
+```{r}
+taxon %<>% mutate(datasetName = "my_datasetName")
+```
+
+The following terms contain information about the taxon:
+
+### taxonID
+
+```{r}
+taxon %<>% mutate(taxonID = input_taxon_id)
+```
+
+### scientificName
+
+```{r}
+taxon %<>% mutate(scientificName = input_scientific_name)
+```
+
+### kingdom
+
+Inspect values:
+
+```{r}
+taxon %>%
+  group_by(input_kingdom) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+taxon %<>% mutate(kingdom = input_kingdom)
+```
+
+### taxonRank
+
+Inspect values:
+
+```{r}
+taxon %>%
+  group_by(input_rankmarker) %>%
+  count()
+```
+
+Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
+
+```{r}
+taxon %<>% mutate(taxonRank = recode(input_rankmarker,
+  "agg."      = "speciesAggregate",
+  "infrasp."  = "infraspecificname",
+  "sp."       = "species",
+  "var."      = "variety",
+  .missing    = ""
+))
+```
+
+Inspect mapped values: 
+
+```{r}
+taxon %>%
+  group_by(input_rankmarker, taxonRank) %>%
+  count()
+```
+
+### nomenclaturalCode
+
+```{r}
+taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode")
+```
+
+## Post-processing
+
+Remove the original columns:
+
+```{r}
+taxon %<>% select(-starts_with("input_"))
+```
+
+Preview data:
+
+```{r}
+taxon %>% head()
+```
+
+Save to CSV:
+
+```{r}
+write.csv(taxon, file = "../data/processed/taxon.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+```
+
+# Create distribution extension
+
+Create a dataframe with all data:
+
+```{r}
+distribution <- input_data
+```
+
+## Term mapping 
+
+Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
+
+### taxonID
+
+```{r}
+distribution %<>% mutate(taxonID = input_taxon_id)
+```
+
+### locality
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_country_code, input_locality) %>%
+  count()
+```
+
+Map values to `input_locality` if provided, otherwise use the country name:
+
+```{r}
+distribution %<>% mutate(locality = case_when(
+  !is.na(input_locality) ~ input_locality,
+  input_country_code == "BE" ~ "Belgium",
+  input_country_code == "GB" ~ "United Kingdom",
+  input_country_code == "MK" ~ "Macedonia",
+  input_country_code == "NL" ~ "The Netherlands",
+  TRUE ~ "" # In other cases leave empty
+))
+```
+
+Inspect mapped values: 
+
+```{r}
+distribution %>%
+  group_by(input_country_code, input_locality, locality) %>%
+  count()
+```
+
+### countryCode
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_country_code) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(countryCode = input_country_code) 
+```
+
+### occurrenceStatus
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_occurrence_status) %>%
+  count()
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(occurrenceStatus = input_occurrence_status) 
+```
+
+### threatStatus
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_threat_status) %>%
+  count()
+```
+
+Map values by recoding to the [IUCN threat status vocabulary](http://rs.gbif.org/vocabulary/iucn/threat_status.xml):
+
+```{r}
+distribution %<>% mutate(threatStatus = recode(input_threat_status,
+  "endangered" = "EN",
+  "vulnerable" = "VU"
+))
+```
+
+Inspect mapped values: 
+
+```{r}
+distribution %>%
+  group_by(input_threat_status, threatStatus) %>%
+  count()
+```
+
+### source
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_source) %>%
+  count() %>%
+  head() # Remove to show all values
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(source = input_source) 
+```
+
+### occurrenceRemarks
+
+Inspect values:
+
+```{r}
+distribution %>%
+  group_by(input_remarks) %>%
+  count() %>%
+  head() # Remove to show all values
+```
+
+Map values:
+
+```{r}
+distribution %<>% mutate(occurrenceRemarks = input_remarks) 
+```
+
+## Post-processing
+
+Remove the original columns:
+
+```{r}
+distribution %<>% select(-starts_with("input_"))
+```
+
+Preview data:
+
+```{r}
+distribution %>% head()
+```
+
+Save to CSV:
+
+```{r}
+write.csv(distribution, file = "../data/processed/distribution.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+```
