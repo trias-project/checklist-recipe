@@ -57,11 +57,38 @@ The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The impor
 input_data <- read_excel(path)
 ```
 
-The very first step is to inspect whether the checklist has been imported correctly. The function `head()` returns the first lines of the dataframe. In this example the code returns the first five lines.
+The very first step is to inspect whether the checklist has been imported correctly. The function `head()` returns the first lines of the dataframe. In this example the code returns the first five lines:
 
 ```
 input_data %>% head(n = 5)
 ```
+
+# Process source data
+
+Befor we start mapping to Darwin Core, `input_data` needs to be cleaned and transformed somewhat. This recipe includes the following steps:
+
+- Clean rows and columns
+- Screen all scientific names for potential errors using the [GBIF nameparser](https://www.gbif.org/tools/name-parser)
+- Retrieve and add nomenclatural information
+- Add taxonRank information
+- Generate taxonID
+
+## Rows and columns
+
+Your checklist should be tidy. Concretely, this implies that:
+
+1. Each variable forms a column.
+2. Each observation forms a row.
+3. Each type of observational unit forms a table.
+
+The provided checklist template is a good example of a tidy dataset. For more information on tidy datasets, click [here](http://vita.had.co.nz/papers/tidy-data.html). Starting with untidy data will make the mapping script a lot more complex, with many preparatory steps before you can even start mapping. In a tidy dataset, you should be able to start the mapping immediately. However, in some cases, some small cleaning steps could be required, such as removing empty rows. For this, we use the function `remove_empty()` from the package janitor. It removes all rows from the dataframe that are composed entirely of empty values.
+
+```
+input_data %<>% remove_empty("rows")
+```
+
+More cleaning steps could be necessary, but are out of scope for this checklist recipe. 
+LR: refer to some good tutorials/websites here?
 
 
 The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
