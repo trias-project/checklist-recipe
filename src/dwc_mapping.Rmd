@@ -450,5 +450,5 @@ distribution %>% head()
 Save to CSV:
 
 ```{r}
-write.csv(distribution, file = "../data/processed/distribution.csv", na = "", row.names = FALSE, fileEncoding = "UTF-8")
+write.csv(distribution, file = here("data", "processed", "distribution.csv"), na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
