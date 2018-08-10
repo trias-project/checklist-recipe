@@ -95,6 +95,7 @@ During the mapping, we will sequentially add new Darwin Core terms (see further)
 ### Retrieve nomenclatural information
 
 The full scientific name of a species could be lengthy (e.g. `Bassia laniflora (S.G. Gmel.) A.J. Scott`). Mistakes could easily be made when entering the names in the template. One way to screen for potential errors is by using the [GBIF nameparser](https://www.gbif.org/tools/name-parser). It disects the scientific name in its different components and checks them against the taxonomic backbone used by GBIF. 
+
 ![Output nameparser](src/static/images/output_nameparser.png)
 
 The following information returned by the nameparser function indicates that the scientific name could be correct:
@@ -136,26 +137,18 @@ input_data %<>% mutate(variable = recode(variable,
 
 In this example, the variable is `input_scientific_name`, the scientific_name_before_cleaning is `"AseroÙ rubra"`, the scientific_name_before_cleaning is `"Asero rubra"`.
 
+### Add taxonRank information
 
-The simplest way for a quick overview of the raw data is by using the functions `head()` and `str()`: 
+Another advantage of the nameparser function is that it provides the taxon rank information for the taxa listed in the checklist (link). We can retrieve this information and attach it to `input_data` (link to code). 
+This field needs some recoding though, which will be specified under the taxonRank mapping in the taxon core.
 
-```r
-head(raw_data) # Displays the first 6 lines of the dataframe
-```
+### Generate taxonID
 
-```r
-str(raw_data) # Displays the structure of the dataframe
-```
 
-During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in `raw_data` and the added Darwin Core columns, we add the prefix `raw_` to the column names of `raw_data`:
 
-```r
-colnames(raw_data) <- paste0("raw_", colnames(raw_data))
-```
 
-```r
-colnames(raw_data)
-```
+
+
 
 ## Create taxon core
 
