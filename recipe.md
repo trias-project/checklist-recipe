@@ -146,17 +146,33 @@ This field needs some recoding though, which will be specified under the taxonRa
 
 taxonID is a required field in both the taxon core and the distribution extension. Because we need this in both processed files, we add it here to `input_data`. TaxonID is defined as an _identifier for the set of taxon information (data associated with the Taxon class)_. We strongly advise to use a global unique identifier or an identifier specific to the data set. SUch a unique identifier can be generated in R by applying a hash function (using the digest() function provided by the digest package). Essentially, this function generates a randomized code of fixed size, linked to the scientific name. When the scientific names remains the same, the taxonID will remain unchanged as well. 
 
-## Create taxon core
+## Mapping
 
-Even though `raw_data` contains all necessary information in a single data frame, a Darwin Core Archive might consist of multiple files, e.g. a core and extensions. We recommend to create the core file first and then the extensions.
-
-The mapping process is **sequential**: we add the Darwin Core terms step by step. The Darwin Core terms for each core/extension file can be found on the [GBIF Resources page](http://rs.gbif.org/):
+Even though `input_data` contains all necessary information in a single data frame, a Darwin Core Archive might consist of multiple files, e.g. a core and extensions. We recommend to create the core file first and then the extensions. The mapping process is **sequential**: we add the Darwin Core terms step by step. The Darwin Core terms for each core/extension file can be found on the [GBIF Resources page](http://rs.gbif.org/):
 
 [![rs.gbif.org](src/static/images/darwin_core_taxon.png)](http://rs.gbif.org)
 
 It is good practice to inspect the Darwin Core terms on this webpage one by one to see whether a particular term can be used in your checklist. It's good practice to respect the order of the terms as they listed on the GBIF resource page.
 
-The Darwin Core terms for the taxon core can be found on the [GBIF Resources Taxon Core page](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml). Typical terms are: `scientificName`, `kingdom` and `taxonRank`.
+### Create taxon core 
+
+The Darwin Core terms for the taxon core can be found on the [GBIF Resources Taxon Core page](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml). 
+The following terms are required for publication on GBIF: `scientificName`, `taxonID` and `taxonRank`.
+
+Mapping of the taxon core generally starts with the addition of the record level terms which contain metadata about the dataset (which is generally the same for all records). For this, we use the dplyr function mutate() as specified under the section xxxx.
+
+We suggest to use the following record-level terms:
+
+record-level term | definition | example
+--- | --- | ---
+[language](http://rs.tdwg.org/dwc/terms/#language) |
+[license](http://rs.tdwg.org/dwc/terms/#license) |
+[rightsHolder](http://rs.tdwg.org/dwc/terms/#rightsHolder) |
+[accessRights](http://rs.tdwg.org/dwc/terms/#accessRights) |
+[datasetID](http://rs.tdwg.org/dwc/terms/#datasetID) |
+[institutionCode](http://rs.tdwg.org/dwc/terms/#institutionCode) |
+[datasetName](http://rs.tdwg.org/dwc/terms/#datasetName) |
+
 
 ## Create distribution extension
 
