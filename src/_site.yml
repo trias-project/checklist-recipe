@@ -1,0 +1,14 @@
+name: "my_dataset_title"
+output_dir: "../docs"
+navbar:
+  title: "my_dataset_shortname"
+  left:
+    - text: "Darwin Core mapping"
+      href: dwc_mapping.html
+  right:
+    - icon: fa-github fa-lg
+      href: my_dataset_repository
+output:
+  html_document:
+    theme: yeti
+    df_print: paged
