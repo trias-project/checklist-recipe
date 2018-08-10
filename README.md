@@ -55,7 +55,7 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 3. Open the `dwc_mapping.Rmd` [R Markdown file](https://rmarkdown.rstudio.com/) in RStudio
 4. Install any required packages
 5. Click `Run > Run All` to generate the processed data
-6. Alternatively, click `Build > Build website` to generate the processed data and build the website in `/docs`
+6. Alternatively, click `Build > Build website` to generate the processed data and build the website in `/docs` (advanced)
 
 ## Contributors
 
