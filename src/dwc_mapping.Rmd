@@ -53,9 +53,7 @@ input_data %>% head(n = 5)
 Clean data somewhat:
 
 ```{r}
-input_data %<>%
-  remove_empty("rows") %>%  # Remove empty rows
-  clean_names()             # Have sensible (lowercase) column names
+input_data %<>% remove_empty("rows")
 ```
 
 Add prefix `input_` to all column names to avoid name clashes with Darwin Core terms:
