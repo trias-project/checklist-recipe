@@ -139,7 +139,7 @@ In this example, the variable is `input_scientific_name`, the scientific_name_be
 
 ### Add taxonRank information
 
-Another advantage of the nameparser function is that it provides the taxon rank information for the taxa listed in the checklist (link). We can retrieve this information and attach it to `input_data` (link to code). 
+Another advantage of the nameparser function is that it provides the [taxonRank](http://rs.tdwg.org/dwc/terms/#taxonRank) information for the taxa listed in the checklist (link). We can retrieve this information and attach it to `input_data` (link to code). 
 This field needs some recoding though, which will be specified under the taxonRank mapping in the taxon core.
 
 ### Generate taxonID
