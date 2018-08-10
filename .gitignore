@@ -36,14 +36,9 @@ vignettes/*.pdf
 rsconnect/
 .Rproj.user
 
-<<<<<<< HEAD
-# Preview html in root
-*.html
-=======
 # Files in src created by R markdown
 src/*.html
 src/*.pdf
->>>>>>> ef49473741554577888a9eaa260bdb2f4c6cba3c
 
 # Mac OS X
 .DS_Store
