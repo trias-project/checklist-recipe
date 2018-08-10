@@ -178,11 +178,6 @@ taxon %<>% mutate(license = "my_license") # e.g. "http://creativecommons.org/pub
 ### rightsHolder
 
 ```{r}
-
-### accessRights
-
-```{r}
-taxon %<>% mutate(accessRights = "my_accessRights")
 taxon %<>% mutate(rightsHolder = "my_rightsHolder") # e.g. "INBO"
 ```
 
