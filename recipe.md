@@ -144,11 +144,7 @@ This field needs some recoding though, which will be specified under the taxonRa
 
 ### Generate taxonID
 
-
-
-
-
-
+taxonID is a required field in both the taxon core and the distribution extension. Because we need this in both processed files, we add it here to `input_data`. TaxonID is defined as an _identifier for the set of taxon information (data associated with the Taxon class)_. We strongly advise to use a global unique identifier or an identifier specific to the data set. SUch a unique identifier can be generated in R by applying a hash function (using the digest() function provided by the digest package). Essentially, this function generates a randomized code of fixed size, linked to the scientific name. When the scientific names remains the same, the taxonID will remain unchanged as well. 
 
 ## Create taxon core
 
