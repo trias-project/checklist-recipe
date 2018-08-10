@@ -166,12 +166,12 @@ We suggest to use the following record-level terms:
 record-level term | defenition | example
 --- | --- | ---
 [language](http://rs.tdwg.org/dwc/terms/#dcterms:language) |
-[license](http://rs.tdwg.org/dwc/terms/#license) |
-[rightsHolder](http://rs.tdwg.org/dwc/terms/#rightsHolder) |
-[accessRights](http://rs.tdwg.org/dwc/terms/#accessRights) |
-[datasetID](http://rs.tdwg.org/dwc/terms/#datasetID) |
-[institutionCode](http://rs.tdwg.org/dwc/terms/#institutionCode) |
-[datasetName](http://rs.tdwg.org/dwc/terms/#datasetName) |
+[license](http://rs.tdwg.org/dwc/terms/#dcterms:license) |
+[rightsHolder](http://rs.tdwg.org/dwc/terms/#dcterms:rightsHolder) |
+[accessRights](http://rs.tdwg.org/dwc/terms/#dcterms:accessRights) |
+[datasetID](http://rs.tdwg.org/dwc/terms/#dcterms:datasetID) |
+[institutionCode](http://rs.tdwg.org/dwc/terms/#dcterms:institutionCode) |
+[datasetName](http://rs.tdwg.org/dwc/terms/#dcterms:datasetName) |
 
 
 
