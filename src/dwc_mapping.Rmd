@@ -122,7 +122,7 @@ To link taxa with information in the extension(s), each taxon needs a unique and
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
 input_data %<>% mutate(input_taxon_id = paste(
-  "my_dataset_shortname", # Update with your dataset shortname
+  "my_dataset_shortname", # Update with your dataset shortname, e.g. "alien-fishes-checklist"
   "taxon",
   vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
   sep = ":"
@@ -166,43 +166,42 @@ Start with record-level terms which contain metadata about the dataset (which is
 ### language
 
 ```{r}
-taxon %<>% mutate(language = "my_language")
+taxon %<>% mutate(language = "my_language") # e.g. "en"
 ```
 
 ### license
 
 ```{r}
-taxon %<>% mutate(license = "my_license")
+taxon %<>% mutate(license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
 ```
 
 ### rightsHolder
 
 ```{r}
-taxon %<>% mutate(rightsHolder = "my_rightsHolder")
-```
 
 ### accessRights
 
 ```{r}
 taxon %<>% mutate(accessRights = "my_accessRights")
+taxon %<>% mutate(rightsHolder = "my_rightsHolder") # e.g. "INBO"
 ```
 
 ### datasetID
 
 ```{r}
-taxon %<>% mutate(datasetID = "my_datasetID")
+taxon %<>% mutate(datasetID = "my_datasetID") # e.g. "https://doi.org/10.15468/xvuzfh"
 ```
 
 ### institutionCode
 
 ```{r}
-taxon %<>% mutate(institutionCode = "my_institutionCode")
+taxon %<>% mutate(institutionCode = "my_institutionCode") # e.g. "INBO"
 ```
 
 ### datasetName
 
 ```{r}
-taxon %<>% mutate(datasetName = "my_datasetName")
+taxon %<>% mutate(datasetName = "my_datasetName") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
 ```
 
 The following terms contain information about the taxon:
