@@ -179,12 +179,6 @@ taxon %<>% mutate(license = "my_license")
 taxon %<>% mutate(rightsHolder = "my_rightsHolder")
 ```
 
-### accessRights
-
-```{r}
-taxon %<>% mutate(accessRights = "my_accessRights")
-```
-
 ### datasetID
 
 ```{r}
