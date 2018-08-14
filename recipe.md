@@ -17,6 +17,41 @@ output:
 
 # Data transformation utensils
 
+The mapping process to Darwin Core Archive is sequential: 
+
+1. We copy the input data to a new dataframe `taxon` or `distribution`
+2. We add the Darwin Core terms to the data frame one by one. In comparison with the input data fields, the Darwin Core terms could be:
+a. Static: the value of this Darwin Core is independent of the record, i.e. it remains unchanged. This mostly concerns metadata fields in the taxon core 
+b. Unalterd: Darwin Core terms for which the content is an exact copy of the corresponding field in the input data
+c. Altered: Altered values are used for Darwin Core terms for which the content in `input data` is used as a basis, but it needs to be standardized
+3. We remove the input data columns after all Darwin Core terms have been mapped.
+
+
+To add the Darwin Core terms to the input data, we need (a combination of) three basic data transformation utensils provided by the package tidyverse: 
+
+1. mutate()
+2. recode()
+3. case_when()
+
+
+## mutate()
+
+For each of the three types of Darwin Core mapping, we use the `mutate()` function. `mutate()` adds new variables to the dataset. In its most basic application here, `mutate()` adds a new Darwin Core terms to the checklist that remains unchanged over the whole checklist, i.e. it remains unchanged. This mostly concerns record-level terms (metadata) in the taxon core.
+
+Some examples:
+
+```
+taxon %<>% mutate(language = "en")
+```
+
+```
+taxon %<>% mutate(rightsHolder = "Ghent University Aquatic Ecology")
+```
+
+
+
+
+
 # Data preparation
 
 The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we use Excel here as this format is often used to manage datasets. To import Excel files, you can use the `read_excel()` function from the package readxl(), where you specify the path to the xlsx file. **maybe some more information about how to define the path here**. The raw data file is imported as the dataframe `input_data`.
