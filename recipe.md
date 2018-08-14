@@ -165,13 +165,22 @@ We suggest to use the following record-level terms:
 
 record-level term | defenition | example
 --- | --- | ---
-[language](http://rs.tdwg.org/dwc/terms/#dcterms:language) |
-[license](http://rs.tdwg.org/dwc/terms/#dcterms:license) |
-[rightsHolder](http://rs.tdwg.org/dwc/terms/#dcterms:rightsHolder) |
-[datasetID](http://rs.tdwg.org/dwc/terms/#datasetID) |
-[institutionCode](http://rs.tdwg.org/dwc/terms/#institutionCode) |
-[datasetName](http://rs.tdwg.org/dwc/terms/#datasetName) |
+[language](http://rs.tdwg.org/dwc/terms/#dcterms:language) | The language of the resource | English 
+[license](http://rs.tdwg.org/dwc/terms/#dcterms:license) | A legal document giving official permission to do something with the resource | http://creativecommons.org/publicdomain/zero/1.0/ 
+[rightsHolder](http://rs.tdwg.org/dwc/terms/#dcterms:rightsHolder) | A person or organization owning or managing rights over the resource | INBO
+[datasetID](http://rs.tdwg.org/dwc/terms/#datasetID) | A (unique) identifier for the set of data | https://doi.org/10.15468/wtda1m
+[institutionCode](http://rs.tdwg.org/dwc/terms/#institutionCode) | The name of the institution having ownership of the object(s) or information | INBO
+[datasetName](http://rs.tdwg.org/dwc/terms/#datasetName) | The name identifying the data set |  Checklist of non-native freshwater fishes in Flanders, Belgium
 
+After this, we add the specific taxonomic information to the checklist. Depending on the content of the raw data, We suggest to use the following terms:
+ 
+taxon core term | defenition | example
+--- | --- | ---
+[taxonID](http://rs.tdwg.org/dwc/terms/index.htm#taxonID) | An identifier for the set of taxon information (data associated with the Taxon class)
+[scientificName](http://rs.tdwg.org/dwc/terms/index.htm#scientificName) | An identifier for the set of taxon information (data associated with the Taxon class)
+[kingdom](http://rs.tdwg.org/dwc/terms/index.htm#kingdom) | The full scientific name of the kingdom in which the taxon is classified
+[taxonRank](http://rs.tdwg.org/dwc/terms/index.htm#taxonRank) | The taxonomic rank of the most specific name in the scientificName
+[nomenclaturalCode](http://rs.tdwg.org/dwc/terms/index.htm#nomenclaturalCode) | The nomenclatural code under which the scientificName is constructed.
 
 
 
