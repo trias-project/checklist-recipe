@@ -13,43 +13,11 @@ output:
     number_sections: true
 ---
 
-# Getting started
+# Ingredients
 
-- First, click on this [invitation link](https://classroom.github.com/a/eXxaGERa) in order to copy _checklist-recipe_  on your account as *checklist-recipe-your_github_username*. You will be automatically redirected to the home page of this repository. 
-- Open RStudio
-- Click on tab `File` -> `New Project`
-- Choose `Version Control` -> `Git`
-- Fill `Repository URL` in with the URL of the just created repository. It should be something like this `https://github.com/username/checklist-username` where `username` stays for your GitHub username. The `Project directory name` will be authomatically filled in as `checklist-yourusername` 
-- Choose the folder where you would like to create the subfolder containing the project's folder
+# Data transformation utensils
 
-![Setup a new RStudio project linked to GitHub repository](http://wiesmann.codiferes.net/share/bitmaps/test_pattern.svg)
-
-# Exercise vs working mapping template
-
-There are two RMarkdown files in `./src`:
-
-1. an exercise, `exercise.Rmd`
-2. a working mapping template, `dwc_mapping.Rmd`
-
-You can use the template as a kind of _cheatsheet_ to solve the exercise. Eventually you can run the entire `dwc_mapping.Rmd` to go through all mapping steps at once (`Ctrl` + `Alt` + `R`) or one by one (`Ctrl`+ `Shift` + `Enter`).
-
-# Mapping steps
-
-## Setup
-
-Install packages:
-
-```r
-install.packages("tidyverse")
-```
-
-Load packages:
-
-```r
-library(tidyverse)
-```
-
-# Read source data
+# Data preparation
 
 The checklist template is an Excel file (`./data/raw/checklist.xlsx`). The import specifications for Excel files are more limited than those for delimited files (`csv`, `tsv`, `txt`). However, we use Excel here as this format is often used to manage datasets. To import Excel files, you can use the `read_excel()` function from the package readxl(), where you specify the path to the xlsx file. **maybe some more information about how to define the path here**. The raw data file is imported as the dataframe `input_data`.
 
@@ -73,7 +41,7 @@ Befor we start mapping to Darwin Core, `input_data` needs to be cleaned and tran
 - Add taxonRank information
 - Generate taxonID
 
-## Rows and columns
+## Tidy data
 
 Your checklist should be tidy. Concretely, this implies that:
 
@@ -92,7 +60,7 @@ LR: refer to some good tutorials/websites here?
 
 During the mapping, we will sequentially add new Darwin Core terms (see further). To avoid name clashes between the original columns in raw_data and the added Darwin Core columns, we add the prefix `input_` to the column names of raw_data (LR: integrate link)
 
-### Retrieve nomenclatural information
+### Scientific names
 
 The full scientific name of a species could be lengthy (e.g. `Bassia laniflora (S.G. Gmel.) A.J. Scott`). Mistakes could easily be made when entering the names in the template. One way to screen for potential errors is by using the [GBIF nameparser](https://www.gbif.org/tools/name-parser). It disects the scientific name in its different components and checks them against the taxonomic backbone used by GBIF. 
 
@@ -137,12 +105,12 @@ input_data %<>% mutate(variable = recode(variable,
 
 In this example, the variable is `input_scientific_name`, the scientific_name_before_cleaning is `"AseroÙ rubra"`, the scientific_name_before_cleaning is `"Asero rubra"`.
 
-### Add taxonRank information
+### Taxon ranks
 
 Another advantage of the nameparser function is that it provides the [taxonRank](http://rs.tdwg.org/dwc/terms/#taxonRank) information for the taxa listed in the checklist (link). We can retrieve this information and attach it to `input_data` (link to code). 
 This field needs some recoding though, which will be specified under the taxonRank mapping in the taxon core.
 
-### Generate taxonID
+### Taxon ID
 
 taxonID is a required field in both the taxon core and the distribution extension. Because we need this in both processed files, we add it here to `input_data`. TaxonID is defined as an _identifier for the set of taxon information (data associated with the Taxon class)_. We strongly advise to use a global unique identifier or an identifier specific to the data set. SUch a unique identifier can be generated in R by applying a hash function (using the digest() function provided by the digest package). Essentially, this function generates a randomized code of fixed size, linked to the scientific name. When the scientific names remains the same, the taxonID will remain unchanged as well. 
 
@@ -182,6 +150,7 @@ taxon core term | defenition | example
 [taxonRank](http://rs.tdwg.org/dwc/terms/index.htm#taxonRank) | The taxonomic rank of the most specific name in the scientificName
 [nomenclaturalCode](http://rs.tdwg.org/dwc/terms/index.htm#nomenclaturalCode) | The nomenclatural code under which the scientificName is constructed.
 
+For the mapping of the taxon core, we use **define specific approach**
 
 
 ## Create distribution extension
