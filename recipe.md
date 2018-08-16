@@ -15,28 +15,51 @@ output:
 
 # Ingredients
 
+# Recipe core principle
+
+We want to map our input data to a Darwin Core core or extension file. 
+Mapping = assigning content to the Darwin Core terms. This content could be:
+
+a. Static: the value of this Darwin Core is independent of the record, i.e. the content remains unchanged over the whole dataset. This mostly concerns metadata fields in the taxon core; or, wi
+b. Unalterd (relative to the input data): Darwin Core terms for which the content is an exact copy of the corresponding field in the input data
+c. Altered (relative to the input data): Altered values are used for Darwin Core terms for which the content in `input data` is used as a basis, but it needs to be standardized
+
+
+The mapping process to Darwin Core Archive is a sequential process. In each step, we map one specific Darwin Core term. For this, we use the following workflow:
+
+1. We always make a copy of the original input dataframe when we generate a core or extension file. This is good practise as you leave the original dataframe untouched and allows you to always return to the orginal data when needed
+2. We copy the input data to a new dataframe `taxon` or `distribution`. We do this as `input_data` is the basis for both the  `taxon` core and the `distribution` extension. For each of these files, input_data is the starting point. We never start mapping from the original file as we want to keep this during the whole process. 
+2. We add the Darwin Core terms to the input data frame one by one, using the `mutate()` function from the package dplyr. In this way, the generated core or extension file is prolongued with one Darwin Core term in each mapping step. In this stage, the core or extension is a combination of the input data and the newly mapped Darwin Core terms.
+3. We remove the input data columns after all Darwin Core terms have been mapped. 
+
+
 # Data transformation utensils
 
-The mapping process to Darwin Core Archive is sequential: 
-
-1. We copy the input data to a new dataframe `taxon` or `distribution`
-2. We add the Darwin Core terms to the data frame one by one. In comparison with the input data fields, the Darwin Core terms could be:
-a. Static: the value of this Darwin Core is independent of the record, i.e. it remains unchanged. This mostly concerns metadata fields in the taxon core 
-b. Unalterd: Darwin Core terms for which the content is an exact copy of the corresponding field in the input data
-c. Altered: Altered values are used for Darwin Core terms for which the content in `input data` is used as a basis, but it needs to be standardized
-3. We remove the input data columns after all Darwin Core terms have been mapped.
-
-
-To add the Darwin Core terms to the input data, we need (a combination of) three basic data transformation utensils provided by the package tidyverse: 
+To add the Darwin Core terms to the input data, we need (a combination of) three basic data transformation utensils provided by the tidyverse package: 
 
 1. mutate()
 2. recode()
 3. case_when()
 
-
 ## mutate()
 
-For each of the three types of Darwin Core mapping, we use the `mutate()` function. `mutate()` adds new variables to the dataset. In its most basic application here, `mutate()` adds a new Darwin Core terms to the checklist that remains unchanged over the whole checklist, i.e. it remains unchanged. This mostly concerns record-level terms (metadata) in the taxon core.
+For **each of the three** abovementioned types of Darwin Core mapping, we use the `mutate()` function. `mutate()` adds new variables to the dataset and preserves the existing ones. This function is essential in our sequential mapping process, where we add Darwin Core terms to the input data frame, .
+
+The basic code for each of three mappings using `mutate()` looks like this:
+
+```
+input_dataframe %<>% mutate(new_column_name = ... )
+```
+
+- `input_dataframe`: the dataframe containing the input data
+- `%<>% mutate()`: indicating the addition of a new variable to the input data using `mutate()`
+- `new_column_name`: name of the new column, in our case a Darwin Core term
+
+In its most basic application here, `mutate()` adds a new Darwin Core terms to the checklist that remains unchanged over the whole checklist, i.e. the terms are **static**. This mostly concerns record-level terms (metadata) in the taxon core. This is how you use the function in our recipe:
+
+```
+input_dataframe %<>% mutate(darwin_core_term = "static value" )
+```
 
 Some examples:
 
@@ -45,12 +68,141 @@ taxon %<>% mutate(language = "en")
 ```
 
 ```
-taxon %<>% mutate(rightsHolder = "Ghent University Aquatic Ecology")
+taxon %<>% mutate(rightsHolder = "Research Institute for Nature and Forest")
 ```
 
+```
+taxon %<>% mutate(license = "http://creativecommons.org/publicdomain/zero/1.0/")
+```
+
+We can also use this function for other, non-metadata fields:
+
+```
+taxon %<>% mutate(kingdom = "Animalia")
+```
+
+```
+taxon %<>% mutate(nomenclaturalCode = "ICZN")
+```
+
+In our mapping recipe, we use this approach for the following Darwin Core terms: `language`, `license`, `rightsHolder`, `datasetID`, `institutionCode` and `datasetName`(see Table x)
 
 
+Another way to use `mutate()` is to map **unaltered** Darwin Core terms. In this case, the content of the Darwin Core term is an exact copy of the content of one input variable. To code is very similar to the code for mapping static variables, with the only difference that the second part of the expression refers to the column name of the input dataframe you want to map:
 
+```
+input_dataframe %<>% mutate(darwin_core_term = input_variable)
+```
+
+We 
+
+Some examples
+
+```
+taxon %<>% mutate(taxonID = input_taxon_id)
+```
+
+```
+taxon %<>% mutate(scientificName = input_scientific_name)
+```
+
+In our mapping recipe, we use this approach for the following Darwin Core terms:`taxonID`, `scientificName`, `kingdom`, `countryCode` and `occurrenceStatus`.
+
+Next to mapping static and unaltered fields, we here show you how to map **altered** Darwin COre fields. Altered values are used for Darwin Core terms for which the content in the input dataset is used as a basis, but it needs to be standardized. This applies to Darwin Core terms for which we use a vocabulary or where we want to transform for clarity or to correct obvious mistakes. FOr the mapping of these fields, we need to introduce two new functions, both used in combination with `mutate()`: `recode()` and `case_when`.
+
+## recode()
+
+This function replaces an originial value of the input variable with a values in the Darwin Core field. This is a one-to-one mapping, i.e. one specified value of the input variable is replaced by one new value in the newly generated Darwin Core field. This is especially interesting for the following cases:
+
+- Correction of typo's in the original content
+- Change abbreviations to full names or vice versa.
+
+In the mapping process, we always combine this function with mutate(), as we want to keep the original variables and add the altered Darwin Core field to the input dataset. 
+
+The code for this function looks like this:
+
+```
+input_dataframe %<>% mutate(darwin_core_term = recode(input_variable,
+    "inutput_value_1" = "dwc_value_1",
+    "old_value_2" = "dwc_value_2"))
+```
+
+In this case, you specify the specific value of the input variable between quotes in the left-hand side of the equation, and the specific value of the mapped Darwin Core (dwc) value in the right-hand side of the equation. We use this approach for 
+
+An example using our checklist recipe:
+
+```
+taxon %<>% mutate(taxonRank = recode(input_rankmarker,
+  "infrasp."  = "infraspecificname",
+  "sp."       = "species",
+  "var."      = "variety",
+  .missing    = ""
+))
+```
+
+In this example, the abbreviations in the input variable `input_rankmarker` are recoded to their full names in the Darwin Core field `taxonRank`. In the statement `.missing`, we specify that all missing values from `input_rankmarker`(in this case the abbreviation `agg.`) will be mapped to empty values in the Darwin Core field `taxonRank`. This specifciation is optional and could be omitted. 
+
+SOme other examples:
+
+```
+taxon %<>%  mutate(order = recode(input_order, "Veneroidea" = "Venerida")) # Correct typo: Veneroida --> Venerida
+```
+
+```
+taxon %<>% mutate (phylum = recode(input_phylum, "Crustacea" = "Arthropoda")) # Crustacea is not a phylum; recoded to Arthropoda
+```
+
+```
+distribution %<>% mutate(description = recode(input_description,
+  "Ext.?"     = "Ext.",
+  "Ext./Cas." = "Cas.",
+  "Cas.?"     = "Cas.",
+  "Nat.?"     = "Nat.",
+  .missing = ""))
+```
+
+## case_when()
+
+This function allows you to map a Darwin Core terms which values are based on (multipele) conditional statements using the input variable(s). This is the case when multipele values in the input variable are mapped to one single value in the Darwin COre field (many-to-one mapping), or when the mapped value depends on the values of multipele input variables. In these cases, the one-to-one mapping using recode() can not be applied. `case_when()` can thus be applied to more complex cases.
+
+The code for this function looks like this:
+
+```
+input_dataframe %<>% mutate(darwin_core_term = case_when(
+    conditional_statement_1 ~ "dwc_value_1",
+    conditional_statement_2 ~ "dwc_value_2"))
+```
+
+You can read this as following: if `conditional_statement_1` is true, then map the darwin core term to `dwc_value_1`. If `conditional_statement_2` is true, then map the darwin core term to `dwc_value_2`.
+These conditional statement can be very diverse. Some examples:
+
+1. The mapped value depends on the value of multipele input variables:
+
+```
+input_dataframe %<>% mutate(darwin_core_term = case_when(
+`input_variable_1 == "a" & `input_variable_2 == "b  ~"dwc_value_1"))   # IF the value of input_variable_1 equals "a" AND `input_variable_2` equals "b" THEN map dwc_value_1
+```
+
+2. The multipele values in the input variable are mapped to one single value in the Darwin COre field (many-to-one mapping):
+
+
+In the checklist recipe, we use the `case_when()` function in several examples:
+
+```
+distribution %<>% mutate(locality = case_when(
+  !is.na(input_locality) ~ input_locality,   # !is.na selects all rows for which `input_locality` is not empty
+  input_country_code == "BE" ~ "Belgium",
+  input_country_code == "GB" ~ "United Kingdom",
+  input_country_code == "MK" ~ "Macedonia",
+  input_country_code == "NL" ~ "The Netherlands",
+  TRUE ~ "" # In other cases leave empty
+))
+```
+
+In this case, we specify that `locality` can be mapped to:
+
+- values from the variable `input_locality`, _only when_ this a value is given for this variable (i.e. `input_locality` is not empty)
+- Countries `Belgium`, `United Kingdom`, `Macedonia` OR `The Netherlands` when `input_locality` is empty and `input_country_code` equals (respectively) `BE`, `GB`, `MK` OR `NL`.
 
 # Data preparation
 
