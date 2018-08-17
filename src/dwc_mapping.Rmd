@@ -64,8 +64,6 @@ colnames(input_data) <- paste0("input_", colnames(input_data))
 
 ## Scientific names
 
-### Retrieve nomenclatural information
-
 Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
 
 ```{r}
@@ -102,7 +100,7 @@ parsed_names %>%
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
 ```
 
-### Taxon ranks
+## Taxon ranks
 
 The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
 
@@ -113,7 +111,7 @@ input_data %<>% left_join(
   rename(input_rankmarker = rankmarker)
 ```
 
-### Taxon IDs
+## Taxon IDs
 
 To link taxa with information in the extension(s), each taxon needs a unique and relatively stable taxonID. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
 
@@ -147,15 +145,15 @@ input_data %>%
 input_data %>% head()
 ```
 
-# Create taxon core
+# Mapping
+
+## Taxon core
 
 Create a dataframe with unique taxa only (ignoring multiple distribution rows):
 
 ```{r}
 taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
 ```
-
-## Term mapping
 
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
@@ -263,7 +261,7 @@ taxon %>%
 taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode")
 ```
 
-## Post-processing
+### post-processing
 
 Remove the original columns:
 
@@ -283,15 +281,13 @@ Save to CSV:
 write.csv(taxon, file = here("data", "processed", "taxon.csv"), na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
 
-# Create distribution extension
+## Distribution extension
 
 Create a dataframe with all data:
 
 ```{r}
 distribution <- input_data
 ```
-
-## Term mapping 
 
 Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
 
@@ -425,7 +421,7 @@ Map values:
 distribution %<>% mutate(occurrenceRemarks = input_remarks) 
 ```
 
-## Post-processing
+### post-processing
 
 Remove the original columns:
 
