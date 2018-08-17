@@ -29,21 +29,21 @@ This repository contains the functionality to standardize the data of <!-- Title
 The repository structure is based on [Cookiecutter Data Science](http://drivendata.github.io/cookiecutter-data-science/) and the [Checklist recipe](https://github.com/trias-project/checklist-recipe). Files and directories indicated with `GENERATED` should not be edited manually.
 
 ```
-├── README.md           : Description of this repository
-├── LICENSE             : Repository license
-├── project_name.Rproj  : RStudio project file
-├── .gitignore          : Files and directories to be ignored by git
+├── README.md              : Description of this repository
+├── LICENSE                : Repository license
+├── checklist-recipe.Rproj : RStudio project file
+├── .gitignore             : Files and directories to be ignored by git
 │
 ├── data
-│   ├── raw             : Source data, input for mapping script
-│   └── processed       : Darwin Core output of mapping script GENERATED
+│   ├── raw                : Source data, input for mapping script
+│   └── processed          : Darwin Core output of mapping script GENERATED
 │
-├── docs                : Repository website GENERATED
+├── docs                   : Repository website GENERATED
 │
 └── src
-    ├── dwc_mapping.Rmd : Darwin Core mapping script, core functionality of this repository
-    ├── _site.yml       : Settings to build website in /docs
-    └── index.Rmd       : Template for website homepage
+    ├── dwc_mapping.Rmd    : Darwin Core mapping script, core functionality of this repository
+    ├── _site.yml          : Settings to build website in /docs
+    └── index.Rmd          : Template for website homepage
 ```
 
 ## Installation
