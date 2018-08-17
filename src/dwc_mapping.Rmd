@@ -48,7 +48,7 @@ input_data %>% head(n = 5)
 
 # Process source data
 
-## Rows and columns
+## Tidy data
 
 Clean data somewhat:
 
@@ -102,7 +102,7 @@ parsed_names %>%
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
 ```
 
-### Add taxonRank information
+### Taxon ranks
 
 The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
 
@@ -113,7 +113,7 @@ input_data %<>% left_join(
   rename(input_rankmarker = rankmarker)
 ```
 
-### Generate taxonID
+### Taxon IDs
 
 To link taxa with information in the extension(s), each taxon needs a unique and relatively stable taxonID. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
 
