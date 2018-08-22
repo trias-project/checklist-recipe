@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="author_1" />
+<meta name="author" content="author_2" />
+
+<meta name="date" content="2018-08-10" />
+
+<title>Darwin Core mapping</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">my_dataset_shortname</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="dwc_mapping.html">Darwin Core mapping</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="my_dataset_repository">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Darwin Core mapping</h1>
+<h3 class="subtitle"><em>For: my_dataset_title</em></h3>
+<h4 class="author"><em>author_1</em></h4>
+<h4 class="author"><em>author_2</em></h4>
+<h4 class="date"><em>2018-08-10</em></h4>
+
+</div>
+
+
+<div id="setup" class="section level1">
+<h1><span class="header-section-number">1</span> Setup</h1>
+<p>Load libraries:</p>
+<pre class="r"><code>library(tidyverse)      # To transform data
+library(magrittr)       # To use %&lt;&gt;% pipes
+library(here)           # To find files
+library(janitor)        # To clean input data
+library(readxl)         # To read Excel files
+library(digest)         # To generate hashes
+library(rgbif)          # To use GBIF services</code></pre>
+</div>
+<div id="read-source-data" class="section level1">
+<h1><span class="header-section-number">2</span> Read source data</h1>
+<p>Create a data frame <code>input_data</code> from the source data:</p>
+<pre class="r"><code>input_data &lt;- read_excel(path = here(&quot;data&quot;, &quot;raw&quot;, &quot;checklist.xlsx&quot;)) </code></pre>
+<p>Preview data:</p>
+<pre class="r"><code>input_data %&gt;% head(n = 5)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["scientific_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["kingdom"],"name":[2],"type":["chr"],"align":["left"]},{"label":["country_code"],"name":[3],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[4],"type":["chr"],"align":["left"]},{"label":["occurrence_status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["establishment_means"],"name":[6],"type":["chr"],"align":["left"]},{"label":["threat_status"],"name":[7],"type":["chr"],"align":["left"]},{"label":["source"],"name":[8],"type":["chr"],"align":["left"]},{"label":["remarks"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"Bassia laniflora (S.G. Gmel.) A.J. Scott","2":"Plantae","3":"BE","4":"Flanders","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"Walloon region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"French region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA"},{"1":"Euphorbia x pseudovirgata (Schur)","2":"Plantae","3":"FR","4":"NA","5":"present","6":"introduced","7":"NA","8":"https://doi.org/10.1007/s10530-016-1278-z","9":"NA"},{"1":"Alytes obstetricans","2":"Animalia","3":"BE","4":"NA","5":"present","6":"native","7":"endangered","8":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","9":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="process-source-data" class="section level1">
+<h1><span class="header-section-number">3</span> Process source data</h1>
+<div id="rows-and-columns" class="section level2">
+<h2><span class="header-section-number">3.1</span> Rows and columns</h2>
+<p>Clean data somewhat:</p>
+<pre class="r"><code>input_data %&lt;&gt;%
+  remove_empty(&quot;rows&quot;) %&gt;%  # Remove empty rows
+  clean_names()             # Have sensible (lowercase) column names</code></pre>
+<p>Add prefix <code>input_</code> to all column names to avoid name clashes with Darwin Core terms:</p>
+<pre class="r"><code>colnames(input_data) &lt;- paste0(&quot;input_&quot;, colnames(input_data))</code></pre>
+</div>
+<div id="scientific-names" class="section level2">
+<h2><span class="header-section-number">3.2</span> Scientific names</h2>
+<div id="retrieve-nomenclatural-information" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Retrieve nomenclatural information</h3>
+<p>Use the <a href="https://www.gbif.org/tools/name-parser">GBIF nameparser</a> to retrieve nomenclatural information for the scientific names in the checklist:</p>
+<pre class="r"><code>parsed_names &lt;- input_data %&gt;%
+  distinct(input_scientific_name) %&gt;%
+  pull() %&gt;% # Create vector from dataframe
+  parsenames() # An rgbif function</code></pre>
+<p>Show scientific names with nomenclatural issues, i.e. not of <code>type = SCIENTIFIC</code> or that could not be fully parsed. Note: these are not necessarily incorrect.</p>
+<pre class="r"><code>parsed_names %&gt;%
+  select(scientificname, type, parsed, parsedpartially, rankmarker) %&gt;%
+  filter(!(type == &quot;SCIENTIFIC&quot; &amp; parsed == &quot;TRUE&quot; &amp; parsedpartially == &quot;FALSE&quot;))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["scientificname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["parsed"],"name":[3],"type":["lgl"],"align":["right"]},{"label":["parsedpartially"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["rankmarker"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"Cotoneaster x 'Hybridus pendulus'","2":"HYBRID","3":"FALSE","4":"FALSE","5":"NA"},{"1":"Acmella agg.","2":"INFORMAL","3":"TRUE","4":"FALSE","5":"agg."},{"1":"AseroÙ rubra","2":"SCIENTIFIC","3":"TRUE","4":"TRUE","5":"NA"},{"1":"Triticosecale x","2":"SCIENTIFIC","3":"TRUE","4":"TRUE","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Correct names and reparse:</p>
+<pre class="r"><code>input_data %&lt;&gt;% mutate(input_scientific_name = recode(input_scientific_name,
+  &quot;AseroÙ rubra&quot; = &quot;Asero rubra&quot;
+))
+
+# Redo parsing
+parsed_names &lt;- input_data %&gt;%
+  distinct(input_scientific_name) %&gt;%
+  pull() %&gt;%
+  parsenames()
+
+# Show names with nomenclatural issues again
+parsed_names %&gt;%
+  select(scientificname, type, parsed, parsedpartially, rankmarker) %&gt;%
+  filter(!(type == &quot;SCIENTIFIC&quot; &amp; parsed == &quot;TRUE&quot; &amp; parsedpartially == &quot;FALSE&quot;))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["scientificname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["parsed"],"name":[3],"type":["lgl"],"align":["right"]},{"label":["parsedpartially"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["rankmarker"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"Cotoneaster x 'Hybridus pendulus'","2":"HYBRID","3":"FALSE","4":"FALSE","5":"NA"},{"1":"Acmella agg.","2":"INFORMAL","3":"TRUE","4":"FALSE","5":"agg."},{"1":"Triticosecale x","2":"SCIENTIFIC","3":"TRUE","4":"TRUE","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="add-taxonrank-information" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Add taxonRank information</h3>
+<p>The nameparser function also provides information about the rank of the taxon (in <code>rankmarker</code>). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:</p>
+<pre class="r"><code>input_data %&lt;&gt;% left_join(
+  select(parsed_names, scientificname, rankmarker),
+  by = c(&quot;input_scientific_name&quot; = &quot;scientificname&quot;)) %&gt;%
+  rename(input_rankmarker = rankmarker)</code></pre>
+</div>
+<div id="generate-taxonid" class="section level3">
+<h3><span class="header-section-number">3.2.3</span> Generate taxonID</h3>
+<p>To link taxa with information in the extension(s), each taxon needs a unique and relatively stable taxonID. Here we create one in the form of <code>dataset_shortname:taxon:hash</code>, where <code>hash</code> is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):</p>
+<pre class="r"><code>vdigest &lt;- Vectorize(digest) # Vectorize digest function to work with vectors
+input_data %&lt;&gt;% mutate(input_taxon_id = paste(
+  &quot;my_dataset_shortname&quot;, # e.g. &quot;alien-fishes-checklist&quot;
+  &quot;taxon&quot;,
+  vdigest(paste(input_scientific_name, input_kingdom), algo = &quot;md5&quot;),
+  sep = &quot;:&quot;
+))</code></pre>
+</div>
+<div id="show-summary" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> Show summary</h3>
+<p>Show the number of taxa and distributions per kingdom and rank:</p>
+<pre class="r"><code>input_data %&gt;%
+  group_by(input_kingdom, input_rankmarker) %&gt;%
+  summarize(
+    `# taxa` = n_distinct(input_taxon_id),
+    `# distributions` = n()
+  ) %&gt;%
+  adorn_totals(&quot;row&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["input_kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_rankmarker"],"name":[2],"type":["chr"],"align":["left"]},{"label":["# taxa"],"name":[3],"type":["int"],"align":["right"]},{"label":["# distributions"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"sp.","3":"2","4":"2","_rn_":"1"},{"1":"Fungi","2":"sp.","3":"1","4":"1","_rn_":"2"},{"1":"Plantae","2":"agg.","3":"1","4":"1","_rn_":"3"},{"1":"Plantae","2":"infrasp.","3":"1","4":"1","_rn_":"4"},{"1":"Plantae","2":"sp.","3":"2","4":"2","_rn_":"5"},{"1":"Plantae","2":"var.","3":"1","4":"2","_rn_":"6"},{"1":"Plantae","2":"NA","3":"2","4":"2","_rn_":"7"},{"1":"Total","2":"-","3":"10","4":"11","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="preview-data" class="section level2">
+<h2><span class="header-section-number">3.3</span> Preview data</h2>
+<pre class="r"><code>input_data %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_scientific_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_kingdom"],"name":[2],"type":["chr"],"align":["left"]},{"label":["input_country_code"],"name":[3],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[4],"type":["chr"],"align":["left"]},{"label":["input_occurrence_status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["input_establishment_means"],"name":[6],"type":["chr"],"align":["left"]},{"label":["input_threat_status"],"name":[7],"type":["chr"],"align":["left"]},{"label":["input_source"],"name":[8],"type":["chr"],"align":["left"]},{"label":["input_remarks"],"name":[9],"type":["chr"],"align":["left"]},{"label":["input_rankmarker"],"name":[10],"type":["chr"],"align":["left"]},{"label":["input_taxon_id"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"Bassia laniflora (S.G. Gmel.) A.J. Scott","2":"Plantae","3":"BE","4":"Flanders","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:6c17452b1e85e24150e742cd5c32f353"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"Walloon region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"French region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Euphorbia x pseudovirgata (Schur)","2":"Plantae","3":"FR","4":"NA","5":"present","6":"introduced","7":"NA","8":"https://doi.org/10.1007/s10530-016-1278-z","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:8c1b5d2f1230258c8aab8080de58adc8"},{"1":"Alytes obstetricans","2":"Animalia","3":"BE","4":"NA","5":"present","6":"native","7":"endangered","8":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:1e76cf83153eacf1bd350d2555445b1e"},{"1":"Plebejus dardanus","2":"Animalia","3":"MK","4":"NA","5":"present","6":"native","7":"vulnerable","8":"NA","9":"Absent according to Rudi Verovnik","10":"sp.","11":"my_dataset_shortname:taxon:1e68c6f279e725acadb669262525a333"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="create-taxon-core" class="section level1">
+<h1><span class="header-section-number">4</span> Create taxon core</h1>
+<p>Create a dataframe with unique taxa only (ignoring multiple distribution rows):</p>
+<pre class="r"><code>taxon &lt;- input_data %&gt;% distinct(input_taxon_id, .keep_all = TRUE)</code></pre>
+<div id="term-mapping" class="section level2">
+<h2><span class="header-section-number">4.1</span> Term mapping</h2>
+<p>Map the data to <a href="http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml">Darwin Core Taxon</a>.</p>
+<p>Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).</p>
+<div id="language" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> language</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(language = &quot;my_language&quot;) # e.g. &quot;en&quot;</code></pre>
+</div>
+<div id="license" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> license</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(license = &quot;my_license&quot;) # e.g. &quot;http://creativecommons.org/publicdomain/zero/1.0/&quot;</code></pre>
+</div>
+<div id="rightsholder" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> rightsHolder</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(rightsHolder = &quot;my_rights_holder&quot;) # e.g. &quot;INBO&quot;</code></pre>
+</div>
+<div id="datasetid" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> datasetID</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(datasetID = &quot;my_dataset_doi&quot;) # e.g. &quot;https://doi.org/10.15468/xvuzfh&quot;</code></pre>
+</div>
+<div id="institutioncode" class="section level3">
+<h3><span class="header-section-number">4.1.5</span> institutionCode</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(institutionCode = &quot;my_institution_code&quot;) # e.g. &quot;INBO&quot;</code></pre>
+</div>
+<div id="datasetname" class="section level3">
+<h3><span class="header-section-number">4.1.6</span> datasetName</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(datasetName = &quot;my_dataset_title&quot;) # e.g. &quot;Checklist of non-native freshwater fishes in Flanders, Belgium&quot;</code></pre>
+<p>The following terms contain information about the taxon:</p>
+</div>
+<div id="taxonid" class="section level3">
+<h3><span class="header-section-number">4.1.7</span> taxonID</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(taxonID = input_taxon_id)</code></pre>
+</div>
+<div id="scientificname" class="section level3">
+<h3><span class="header-section-number">4.1.8</span> scientificName</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(scientificName = input_scientific_name)</code></pre>
+</div>
+<div id="kingdom" class="section level3">
+<h3><span class="header-section-number">4.1.9</span> kingdom</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>taxon %&gt;%
+  group_by(input_kingdom) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"2"},{"1":"Fungi","2":"1"},{"1":"Plantae","2":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values:</p>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(kingdom = input_kingdom)</code></pre>
+</div>
+<div id="taxonrank" class="section level3">
+<h3><span class="header-section-number">4.1.10</span> taxonRank</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>taxon %&gt;%
+  group_by(input_rankmarker) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"1"},{"1":"infrasp.","2":"1"},{"1":"sp.","2":"5"},{"1":"var.","2":"1"},{"1":"NA","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml">GBIF rank vocabulary</a>:</p>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(taxonRank = recode(input_rankmarker,
+  &quot;agg.&quot;      = &quot;speciesAggregate&quot;,
+  &quot;infrasp.&quot;  = &quot;infraspecificname&quot;,
+  &quot;sp.&quot;       = &quot;species&quot;,
+  &quot;var.&quot;      = &quot;variety&quot;,
+  .missing    = &quot;&quot;
+))</code></pre>
+<p>Inspect mapped values:</p>
+<pre class="r"><code>taxon %&gt;%
+  group_by(input_rankmarker, taxonRank) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["taxonRank"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"speciesAggregate","3":"1"},{"1":"infrasp.","2":"infraspecificname","3":"1"},{"1":"sp.","2":"species","3":"5"},{"1":"var.","2":"variety","3":"1"},{"1":"NA","2":"","3":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="nomenclaturalcode" class="section level3">
+<h3><span class="header-section-number">4.1.11</span> nomenclaturalCode</h3>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(nomenclaturalCode = &quot;my_nomenclaturalCode&quot;)</code></pre>
+</div>
+</div>
+<div id="post-processing" class="section level2">
+<h2><span class="header-section-number">4.2</span> Post-processing</h2>
+<p>Remove the original columns:</p>
+<pre class="r"><code>taxon %&lt;&gt;% select(-starts_with(&quot;input_&quot;))</code></pre>
+<p>Preview data:</p>
+<pre class="r"><code>taxon %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["language"],"name":[1],"type":["chr"],"align":["left"]},{"label":["license"],"name":[2],"type":["chr"],"align":["left"]},{"label":["rightsHolder"],"name":[3],"type":["chr"],"align":["left"]},{"label":["datasetID"],"name":[4],"type":["chr"],"align":["left"]},{"label":["institutionCode"],"name":[5],"type":["chr"],"align":["left"]},{"label":["datasetName"],"name":[6],"type":["chr"],"align":["left"]},{"label":["taxonID"],"name":[7],"type":["chr"],"align":["left"]},{"label":["scientificName"],"name":[8],"type":["chr"],"align":["left"]},{"label":["kingdom"],"name":[9],"type":["chr"],"align":["left"]},{"label":["taxonRank"],"name":[10],"type":["chr"],"align":["left"]},{"label":["nomenclaturalCode"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:6c17452b1e85e24150e742cd5c32f353","8":"Bassia laniflora (S.G. Gmel.) A.J. Scott","9":"Plantae","10":"species","11":"my_nomenclaturalCode"},{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530","8":"Amaranthus macrocarpus Benth. var. pallidus Benth.","9":"Plantae","10":"variety","11":"my_nomenclaturalCode"},{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:8c1b5d2f1230258c8aab8080de58adc8","8":"Euphorbia x pseudovirgata (Schur)","9":"Plantae","10":"species","11":"my_nomenclaturalCode"},{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:1e76cf83153eacf1bd350d2555445b1e","8":"Alytes obstetricans","9":"Animalia","10":"species","11":"my_nomenclaturalCode"},{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:1e68c6f279e725acadb669262525a333","8":"Plebejus dardanus","9":"Animalia","10":"species","11":"my_nomenclaturalCode"},{"1":"my_language","2":"my_license","3":"my_rights_holder","4":"my_dataset_doi","5":"my_institution_code","6":"my_dataset_title","7":"my_dataset_shortname:taxon:25241f6eaceeae8e160df3d5faeba4fc","8":"Calamintha nepeta glandulosa","9":"Plantae","10":"infraspecificname","11":"my_nomenclaturalCode"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Save to CSV:</p>
+<pre class="r"><code>write.csv(taxon, file = here(&quot;data&quot;, &quot;processed&quot;, &quot;taxon.csv&quot;), na = &quot;&quot;, row.names = FALSE, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+</div>
+</div>
+<div id="create-distribution-extension" class="section level1">
+<h1><span class="header-section-number">5</span> Create distribution extension</h1>
+<p>Create a dataframe with all data:</p>
+<pre class="r"><code>distribution &lt;- input_data</code></pre>
+<div id="term-mapping-1" class="section level2">
+<h2><span class="header-section-number">5.1</span> Term mapping</h2>
+<p>Map the data to <a href="http://rs.gbif.org/extension/gbif/1.0/distribution.xml">Species Distribution</a>.</p>
+<div id="taxonid-1" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> taxonID</h3>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(taxonID = input_taxon_id)</code></pre>
+</div>
+<div id="locality" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> locality</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_country_code, input_locality) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"1"},{"1":"BE","2":"French region","3":"1"},{"1":"BE","2":"Walloon region","3":"1"},{"1":"BE","2":"NA","3":"2"},{"1":"FR","2":"NA","3":"1"},{"1":"GB","2":"NA","3":"3"},{"1":"MK","2":"NA","3":"1"},{"1":"NL","2":"NA","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values to <code>input_locality</code> if provided, otherwise use the country name:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(locality = case_when(
+  !is.na(input_locality) ~ input_locality,
+  input_country_code == &quot;BE&quot; ~ &quot;Belgium&quot;,
+  input_country_code == &quot;GB&quot; ~ &quot;United Kingdom&quot;,
+  input_country_code == &quot;MK&quot; ~ &quot;Macedonia&quot;,
+  input_country_code == &quot;NL&quot; ~ &quot;The Netherlands&quot;,
+  TRUE ~ &quot;&quot; # In other cases leave empty
+))</code></pre>
+<p>Inspect mapped values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_country_code, input_locality, locality) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"Flanders","4":"1"},{"1":"BE","2":"French region","3":"French region","4":"1"},{"1":"BE","2":"Walloon region","3":"Walloon region","4":"1"},{"1":"BE","2":"NA","3":"Belgium","4":"2"},{"1":"FR","2":"NA","3":"","4":"1"},{"1":"GB","2":"NA","3":"United Kingdom","4":"3"},{"1":"MK","2":"NA","3":"Macedonia","4":"1"},{"1":"NL","2":"NA","3":"The Netherlands","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="countrycode" class="section level3">
+<h3><span class="header-section-number">5.1.3</span> countryCode</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_country_code) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"5"},{"1":"FR","2":"1"},{"1":"GB","2":"3"},{"1":"MK","2":"1"},{"1":"NL","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(countryCode = input_country_code) </code></pre>
+</div>
+<div id="occurrencestatus" class="section level3">
+<h3><span class="header-section-number">5.1.4</span> occurrenceStatus</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_occurrence_status) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_occurrence_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"doubtful","2":"1"},{"1":"present","2":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(occurrenceStatus = input_occurrence_status) </code></pre>
+</div>
+<div id="threatstatus" class="section level3">
+<h3><span class="header-section-number">5.1.5</span> threatStatus</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_threat_status) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"1"},{"1":"vulnerable","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/iucn/threat_status.xml">IUCN threat status vocabulary</a>:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(threatStatus = recode(input_threat_status,
+  &quot;endangered&quot; = &quot;EN&quot;,
+  &quot;vulnerable&quot; = &quot;VU&quot;
+))</code></pre>
+<p>Inspect mapped values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_threat_status, threatStatus) %&gt;%
+  count()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["threatStatus"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"EN","3":"1"},{"1":"vulnerable","2":"VU","3":"1"},{"1":"NA","2":"NA","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="source" class="section level3">
+<h3><span class="header-section-number">5.1.6</span> source</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_source) %&gt;%
+  count() %&gt;%
+  head() # Remove to show all values</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_source"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","2":"1"},{"1":"https://doi.org/10.1007/s10530-016-1278-z","2":"1"},{"1":"https://doi.org/10.3897/neobiota.23.5665","2":"1"},{"1":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","2":"3"},{"1":"NA","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(source = input_source) </code></pre>
+</div>
+<div id="occurrenceremarks" class="section level3">
+<h3><span class="header-section-number">5.1.7</span> occurrenceRemarks</h3>
+<p>Inspect values:</p>
+<pre class="r"><code>distribution %&gt;%
+  group_by(input_remarks) %&gt;%
+  count() %&gt;%
+  head() # Remove to show all values</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["input_remarks"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Absent according to Rudi Verovnik","2":"1"},{"1":"data based solely on DAISIE portal","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Map values:</p>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(occurrenceRemarks = input_remarks) </code></pre>
+</div>
+</div>
+<div id="post-processing-1" class="section level2">
+<h2><span class="header-section-number">5.2</span> Post-processing</h2>
+<p>Remove the original columns:</p>
+<pre class="r"><code>distribution %&lt;&gt;% select(-starts_with(&quot;input_&quot;))</code></pre>
+<p>Preview data:</p>
+<pre class="r"><code>distribution %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["taxonID"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["countryCode"],"name":[3],"type":["chr"],"align":["left"]},{"label":["occurrenceStatus"],"name":[4],"type":["chr"],"align":["left"]},{"label":["threatStatus"],"name":[5],"type":["chr"],"align":["left"]},{"label":["source"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occurrenceRemarks"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"my_dataset_shortname:taxon:6c17452b1e85e24150e742cd5c32f353","2":"Flanders","3":"BE","4":"present","5":"NA","6":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","7":"NA"},{"1":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530","2":"Walloon region","3":"BE","4":"present","5":"NA","6":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","7":"NA"},{"1":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530","2":"French region","3":"BE","4":"present","5":"NA","6":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","7":"NA"},{"1":"my_dataset_shortname:taxon:8c1b5d2f1230258c8aab8080de58adc8","2":"","3":"FR","4":"present","5":"NA","6":"https://doi.org/10.1007/s10530-016-1278-z","7":"NA"},{"1":"my_dataset_shortname:taxon:1e76cf83153eacf1bd350d2555445b1e","2":"Belgium","3":"BE","4":"present","5":"EN","6":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","7":"NA"},{"1":"my_dataset_shortname:taxon:1e68c6f279e725acadb669262525a333","2":"Macedonia","3":"MK","4":"present","5":"VU","6":"NA","7":"Absent according to Rudi Verovnik"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Save to CSV:</p>
+<pre class="r"><code>write.csv(distribution, file = here(&quot;data&quot;, &quot;processed&quot;, &quot;distribution.csv&quot;), na = &quot;&quot;, row.names = FALSE, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
