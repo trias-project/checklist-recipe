@@ -252,6 +252,7 @@ taxon %<>% mutate(taxonRank = recode(input_rankmarker,
   "infrasp."  = "infraspecificname",
   "sp."       = "species",
   "var."      = "variety",
+  .default    = "",
   .missing    = ""
 ))
 ```
