@@ -1,17 +1,22 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "For: my_datasetName"
+subtitle: "For: my_dataset_title"
 author:
 - author_1
 - author_2
 date: "`r Sys.Date()`"
 output:
   html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true
-    number_sections: true
     df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    df_print: kable
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
 ---
 
 # Setup 
@@ -118,7 +123,7 @@ To link taxa with information in the extension(s), each taxon needs a unique and
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
 input_data %<>% mutate(input_taxon_id = paste(
-  "my_dataset_shortname", # Update with your dataset shortname
+  "my_dataset_shortname", # e.g. "alien-fishes-checklist"
   "taxon",
   vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
   sep = ":"
@@ -162,37 +167,37 @@ Start with record-level terms which contain metadata about the dataset (which is
 ### language
 
 ```{r}
-taxon %<>% mutate(language = "my_language")
+taxon %<>% mutate(language = "my_language") # e.g. "en"
 ```
 
 ### license
 
 ```{r}
-taxon %<>% mutate(license = "my_license")
+taxon %<>% mutate(license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
 ```
 
 ### rightsHolder
 
 ```{r}
-taxon %<>% mutate(rightsHolder = "my_rightsHolder")
+taxon %<>% mutate(rightsHolder = "my_rights_holder") # e.g. "INBO"
 ```
 
 ### datasetID
 
 ```{r}
-taxon %<>% mutate(datasetID = "my_datasetID")
+taxon %<>% mutate(datasetID = "my_dataset_doi") # e.g. "https://doi.org/10.15468/xvuzfh"
 ```
 
 ### institutionCode
 
 ```{r}
-taxon %<>% mutate(institutionCode = "my_institutionCode")
+taxon %<>% mutate(institutionCode = "my_institution_code") # e.g. "INBO"
 ```
 
 ### datasetName
 
 ```{r}
-taxon %<>% mutate(datasetName = "my_datasetName")
+taxon %<>% mutate(datasetName = "my_dataset_title") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
 ```
 
 The following terms contain information about the taxon:
@@ -243,6 +248,7 @@ taxon %<>% mutate(taxonRank = recode(input_rankmarker,
   "infrasp."  = "infraspecificname",
   "sp."       = "species",
   "var."      = "variety",
+  .default    = "",
   .missing    = ""
 ))
 ```
