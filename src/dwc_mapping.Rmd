@@ -264,7 +264,7 @@ taxon %>%
 ### nomenclaturalCode
 
 ```{r}
-taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode")
+taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
 ```
 
 ### post-processing
