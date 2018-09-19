@@ -118,7 +118,7 @@ input_data %<>% left_join(
 
 ## Taxon IDs
 
-To link taxa with information in the extension(s), each taxon needs a unique and relatively stable taxonID. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
+To link taxa with information in the extension(s), each taxon needs a unique and relatively stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
 
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
@@ -267,7 +267,7 @@ taxon %>%
 taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
 ```
 
-### post-processing
+## Post-processing
 
 Remove the original columns:
 
