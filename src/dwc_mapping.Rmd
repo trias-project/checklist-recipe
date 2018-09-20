@@ -130,7 +130,7 @@ input_data %<>% mutate(input_taxon_id = paste(
 ))
 ```
 
-### Show summary
+## Preview data
 
 Show the number of taxa and distributions per kingdom and rank:
 
@@ -144,21 +144,23 @@ input_data %>%
   adorn_totals("row")
 ```
 
-## Preview data
+Preview data:
 
 ```{r}
 input_data %>% head()
 ```
 
-# Mapping
+# Taxon core
 
-## Taxon core
+## Pre-processing
 
 Create a dataframe with unique taxa only (ignoring multiple distribution rows):
 
 ```{r}
 taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
 ```
+
+## Term mapping
 
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
@@ -287,7 +289,9 @@ Save to CSV:
 write.csv(taxon, file = here("data", "processed", "taxon.csv"), na = "", row.names = FALSE, fileEncoding = "UTF-8")
 ```
 
-## Distribution extension
+# Distribution extension
+
+## Pre-processing
 
 Create a dataframe with all data:
 
@@ -296,6 +300,8 @@ distribution <- input_data
 ```
 
 Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
+
+## Term mapping
 
 ### taxonID
 
@@ -427,7 +433,7 @@ Map values:
 distribution %<>% mutate(occurrenceRemarks = input_remarks) 
 ```
 
-### post-processing
+## Post-processing
 
 Remove the original columns:
 
