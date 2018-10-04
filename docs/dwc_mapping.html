@@ -12,7 +12,7 @@
 <meta name="author" content="author_1" />
 <meta name="author" content="author_2" />
 
-<meta name="date" content="2018-09-20" />
+<meta name="date" content="2018-10-04" />
 
 <title>Darwin Core mapping</title>
 
@@ -30,7 +30,9 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -98,6 +100,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -305,7 +310,7 @@ div.tocify {
 <h3 class="subtitle"><em>For: my_dataset_title</em></h3>
 <h4 class="author"><em>author_1</em></h4>
 <h4 class="author"><em>author_2</em></h4>
-<h4 class="date"><em>2018-09-20</em></h4>
+<h4 class="date"><em>2018-10-04</em></h4>
 
 </div>
 
@@ -313,7 +318,7 @@ div.tocify {
 <div id="setup" class="section level1">
 <h1><span class="header-section-number">1</span> Setup</h1>
 <p>Load libraries:</p>
-<pre class="r"><code>library(tidyverse)      # To transform data
+<pre class="r"><code>library(tidyverse)      # To do data science
 library(magrittr)       # To use %&lt;&gt;% pipes
 library(here)           # To find files
 library(janitor)        # To clean input data
@@ -527,7 +532,7 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
   </script>
 </div>
 <p>Save to CSV:</p>
-<pre class="r"><code>write.csv(taxon, file = here(&quot;data&quot;, &quot;processed&quot;, &quot;taxon.csv&quot;), na = &quot;&quot;, row.names = FALSE, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+<pre class="r"><code>write_csv(taxon, here(&quot;data&quot;, &quot;processed&quot;, &quot;taxon.csv&quot;), na = &quot;&quot;)</code></pre>
 </div>
 </div>
 <div id="distribution-extension" class="section level1">
@@ -671,7 +676,7 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
   </script>
 </div>
 <p>Save to CSV:</p>
-<pre class="r"><code>write.csv(distribution, file = here(&quot;data&quot;, &quot;processed&quot;, &quot;distribution.csv&quot;), na = &quot;&quot;, row.names = FALSE, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+<pre class="r"><code>write_csv(distribution, here(&quot;data&quot;, &quot;processed&quot;, &quot;distribution.csv&quot;), na = &quot;&quot;)</code></pre>
 </div>
 </div>
 
