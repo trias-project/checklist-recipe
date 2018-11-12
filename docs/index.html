@@ -24,7 +24,9 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -92,6 +94,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -209,7 +214,7 @@ $(document).ready(function () {
 <h1>Checklist recipe<!-- Replace this with the title of your checklist dataset --></h1>
 <!-- Delete the following text -->
 <blockquote>
-<p>👩🏻‍🍳 This is a template repository for <strong>standardizing thematic species checklist data to Darwin Core using R</strong>. As a result, the rest of the README is a template as well. To use this repository for your own checklist data, <a href="https://github.com/trias-project/checklist-recipe/blob/master/recipe.md">read the recipe</a>. Happy cooking!</p>
+<p>👩🏻‍🍳 This is a template repository for <strong>standardizing thematic species checklist data to Darwin Core using R</strong>. As a result, the rest of the README is a template as well. To use this repository for your own checklist data, <a href="https://github.com/trias-project/checklist-recipe/wiki">read the recipe</a>. Happy cooking!</p>
 </blockquote>
 <div id="rationale" class="section level2">
 <h2>Rationale</h2>
@@ -233,19 +238,21 @@ $(document).ready(function () {
 <h2>Repo structure</h2>
 <!-- This section helps users (and probably you!) to find their way around this repository. You can leave it as is, unless you're starting to adapt the structure a lot. -->
 <p>The repository structure is based on <a href="http://drivendata.github.io/cookiecutter-data-science/">Cookiecutter Data Science</a> and the <a href="https://github.com/trias-project/checklist-recipe">Checklist recipe</a>. Files and directories indicated with <code>GENERATED</code> should not be edited manually.</p>
-<pre><code>├── README.md           : Description of this repository
-├── LICENSE             : Repository license
-├── .gitignore          : Files and directories to be ignored by git
+<pre><code>├── README.md              : Description of this repository
+├── LICENSE                : Repository license
+├── checklist-recipe.Rproj : RStudio project file
+├── .gitignore             : Files and directories to be ignored by git
 │
 ├── data
-│   ├── raw             : Source data, input for mapping script
-│   └── processed       : Darwin Core output of mapping script GENERATED
+│   ├── raw                : Source data, input for mapping script
+│   └── processed          : Darwin Core output of mapping script GENERATED
 │
-├── docs                : Repository website GENERATED
+├── docs                   : Repository website GENERATED
 │
 └── src
-    ├── dwc_mapping.Rmd : Darwin Core mapping script, core functionality of this repository
-    └── src.Rproj       : RStudio project file</code></pre>
+    ├── dwc_mapping.Rmd    : Darwin Core mapping script, core functionality of this repository
+    ├── _site.yml          : Settings to build website in docs/
+    └── index.Rmd          : Template for website homepage</code></pre>
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
@@ -256,7 +263,7 @@ $(document).ready(function () {
 <li>Open the <code>dwc_mapping.Rmd</code> <a href="https://rmarkdown.rstudio.com/">R Markdown file</a> in RStudio</li>
 <li>Install any required packages</li>
 <li>Click <code>Run &gt; Run All</code> to generate the processed data</li>
-<li>Alternatively, click <code>Build &gt; Build website</code> to generate the processed data and build the website in <code>/docs</code></li>
+<li>Alternatively, click <code>Build &gt; Build website</code> to generate the processed data and build the website in <code>docs/</code> (advanced)</li>
 </ol>
 </div>
 <div id="contributors" class="section level2">
