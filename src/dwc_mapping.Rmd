@@ -298,9 +298,9 @@ Create a dataframe with all data:
 distribution <- input_data
 ```
 
-Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
-
 ## Term mapping
+
+Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
 
 ### taxonID
 
