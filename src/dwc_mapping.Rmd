@@ -270,7 +270,7 @@ Only keep the Darwin Core columns:
 taxon %<>% select(starts_with("dwc_"))
 ```
 
-Drop `dwc_` prefix:
+Drop the `dwc_` prefix:
 
 ```{r}
 colnames(taxon) <- str_replace(colnames(taxon), "dwc_", "")
@@ -440,7 +440,7 @@ Only keep the Darwin Core columns:
 distribution %<>% select(starts_with("dwc_"))
 ```
 
-Drop `dwc_` prefix:
+Drop the `dwc_` prefix:
 
 ```{r}
 colnames(distribution) <- str_replace(colnames(distribution), "dwc_", "")
