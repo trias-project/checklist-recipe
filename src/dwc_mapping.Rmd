@@ -61,19 +61,13 @@ Clean data somewhat:
 input_data %<>% remove_empty("rows")
 ```
 
-Add prefix `input_` to all column names to avoid name clashes with Darwin Core terms:
-
-```{r}
-colnames(input_data) <- paste0("input_", colnames(input_data))
-```
-
 ## Scientific names
 
 Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
 
 ```{r}
 parsed_names <- input_data %>%
-  distinct(input_scientific_name) %>%
+  distinct(scientific_name) %>%
   pull() %>% # Create vector from dataframe
   parsenames() # An rgbif function
 ```
@@ -89,13 +83,13 @@ parsed_names %>%
 Correct names and reparse:
 
 ```{r correct and reparse}
-input_data %<>% mutate(input_scientific_name = recode(input_scientific_name,
+input_data %<>% mutate(scientific_name = recode(scientific_name,
   "AseroÙ rubra" = "Asero rubra"
 ))
 
 # Redo parsing
 parsed_names <- input_data %>%
-  distinct(input_scientific_name) %>%
+  distinct(scientific_name) %>%
   pull() %>%
   parsenames()
 
@@ -112,8 +106,7 @@ The nameparser function also provides information about the rank of the taxon (i
 ```{r}
 input_data %<>% left_join(
   select(parsed_names, scientificname, rankmarker),
-  by = c("input_scientific_name" = "scientificname")) %>%
-  rename(input_rankmarker = rankmarker)
+  by = c("scientific_name" = "scientificname"))
 ```
 
 ## Taxon IDs
@@ -122,10 +115,10 @@ To link taxa with information in the extension(s), each taxon needs a unique and
 
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
-input_data %<>% mutate(input_taxon_id = paste(
+input_data %<>% mutate(taxon_id = paste(
   "my_dataset_shortname", # e.g. "alien-fishes-checklist"
   "taxon",
-  vdigest(paste(input_scientific_name, input_kingdom), algo = "md5"),
+  vdigest(paste(scientific_name, kingdom), algo = "md5"),
   sep = ":"
 ))
 ```
@@ -136,9 +129,9 @@ Show the number of taxa and distributions per kingdom and rank:
 
 ```{r}
 input_data %>%
-  group_by(input_kingdom, input_rankmarker) %>%
+  group_by(kingdom, rankmarker) %>%
   summarize(
-    `# taxa` = n_distinct(input_taxon_id),
+    `# taxa` = n_distinct(taxon_id),
     `# distributions` = n()
   ) %>%
   adorn_totals("row")
@@ -157,7 +150,7 @@ input_data %>% head()
 Create a dataframe with unique taxa only (ignoring multiple distribution rows):
 
 ```{r}
-taxon <- input_data %>% distinct(input_taxon_id, .keep_all = TRUE)
+taxon <- input_data %>% distinct(taxon_id, .keep_all = TRUE)
 ```
 
 ## Term mapping
@@ -169,37 +162,37 @@ Start with record-level terms which contain metadata about the dataset (which is
 ### language
 
 ```{r}
-taxon %<>% mutate(language = "my_language") # e.g. "en"
+taxon %<>% mutate(dwc_language = "my_language") # e.g. "en"
 ```
 
 ### license
 
 ```{r}
-taxon %<>% mutate(license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
+taxon %<>% mutate(dwc_license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
 ```
 
 ### rightsHolder
 
 ```{r}
-taxon %<>% mutate(rightsHolder = "my_rights_holder") # e.g. "INBO"
+taxon %<>% mutate(dwc_rightsHolder = "my_rights_holder") # e.g. "INBO"
 ```
 
 ### datasetID
 
 ```{r}
-taxon %<>% mutate(datasetID = "my_dataset_doi") # e.g. "https://doi.org/10.15468/xvuzfh"
+taxon %<>% mutate(dwc_datasetID = "my_dataset_doi") # e.g. "https://doi.org/10.15468/xvuzfh"
 ```
 
 ### institutionCode
 
 ```{r}
-taxon %<>% mutate(institutionCode = "my_institution_code") # e.g. "INBO"
+taxon %<>% mutate(dwc_institutionCode = "my_institution_code") # e.g. "INBO"
 ```
 
 ### datasetName
 
 ```{r}
-taxon %<>% mutate(datasetName = "my_dataset_title") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
+taxon %<>% mutate(dwc_datasetName = "my_dataset_title") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
 ```
 
 The following terms contain information about the taxon:
@@ -207,13 +200,13 @@ The following terms contain information about the taxon:
 ### taxonID
 
 ```{r}
-taxon %<>% mutate(taxonID = input_taxon_id)
+taxon %<>% mutate(dwc_taxonID = taxon_id)
 ```
 
 ### scientificName
 
 ```{r}
-taxon %<>% mutate(scientificName = input_scientific_name)
+taxon %<>% mutate(dwc_scientificName = scientific_name)
 ```
 
 ### kingdom
@@ -222,14 +215,14 @@ Inspect values:
 
 ```{r}
 taxon %>%
-  group_by(input_kingdom) %>%
+  group_by(kingdom) %>%
   count()
 ```
 
 Map values:
 
 ```{r}
-taxon %<>% mutate(kingdom = input_kingdom)
+taxon %<>% mutate(dwc_kingdom = kingdom)
 ```
 
 ### taxonRank
@@ -238,14 +231,14 @@ Inspect values:
 
 ```{r}
 taxon %>%
-  group_by(input_rankmarker) %>%
+  group_by(rankmarker) %>%
   count()
 ```
 
 Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
 
 ```{r}
-taxon %<>% mutate(taxonRank = recode(input_rankmarker,
+taxon %<>% mutate(dwc_taxonRank = recode(rankmarker,
   "agg."      = "speciesAggregate",
   "infrasp."  = "infraspecificname",
   "sp."       = "species",
@@ -259,22 +252,28 @@ Inspect mapped values:
 
 ```{r}
 taxon %>%
-  group_by(input_rankmarker, taxonRank) %>%
+  group_by(rankmarker, dwc_taxonRank) %>%
   count()
 ```
 
 ### nomenclaturalCode
 
 ```{r}
-taxon %<>% mutate(nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
+taxon %<>% mutate(dwc_nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
 ```
 
 ## Post-processing
 
-Remove the original columns:
+Only keep the Darwin Core columns:
 
 ```{r}
-taxon %<>% select(-starts_with("input_"))
+taxon %<>% select(starts_with("dwc_"))
+```
+
+Drop the `dwc_` prefix:
+
+```{r}
+colnames(taxon) <- str_replace(colnames(taxon), "dwc_", "")
 ```
 
 Preview data:
@@ -299,14 +298,14 @@ Create a dataframe with all data:
 distribution <- input_data
 ```
 
-Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
-
 ## Term mapping
+
+Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
 
 ### taxonID
 
 ```{r}
-distribution %<>% mutate(taxonID = input_taxon_id)
+distribution %<>% mutate(dwc_taxonID = taxon_id)
 ```
 
 ### locality
@@ -315,19 +314,19 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_country_code, input_locality) %>%
+  group_by(country_code, locality) %>%
   count()
 ```
 
 Map values to `input_locality` if provided, otherwise use the country name:
 
 ```{r}
-distribution %<>% mutate(locality = case_when(
-  !is.na(input_locality) ~ input_locality,
-  input_country_code == "BE" ~ "Belgium",
-  input_country_code == "GB" ~ "United Kingdom",
-  input_country_code == "MK" ~ "Macedonia",
-  input_country_code == "NL" ~ "The Netherlands",
+distribution %<>% mutate(dwc_locality = case_when(
+  !is.na(locality) ~ locality,
+  country_code == "BE" ~ "Belgium",
+  country_code == "GB" ~ "United Kingdom",
+  country_code == "MK" ~ "Macedonia",
+  country_code == "NL" ~ "The Netherlands",
   TRUE ~ "" # In other cases leave empty
 ))
 ```
@@ -336,7 +335,7 @@ Inspect mapped values:
 
 ```{r}
 distribution %>%
-  group_by(input_country_code, input_locality, locality) %>%
+  group_by(country_code, locality, dwc_locality) %>%
   count()
 ```
 
@@ -346,14 +345,14 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_country_code) %>%
+  group_by(country_code) %>%
   count()
 ```
 
 Map values:
 
 ```{r}
-distribution %<>% mutate(countryCode = input_country_code) 
+distribution %<>% mutate(dwc_countryCode = country_code) 
 ```
 
 ### occurrenceStatus
@@ -362,14 +361,14 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_occurrence_status) %>%
+  group_by(occurrence_status) %>%
   count()
 ```
 
 Map values:
 
 ```{r}
-distribution %<>% mutate(occurrenceStatus = input_occurrence_status) 
+distribution %<>% mutate(dwc_occurrenceStatus = occurrence_status) 
 ```
 
 ### threatStatus
@@ -378,14 +377,14 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_threat_status) %>%
+  group_by(threat_status) %>%
   count()
 ```
 
 Map values by recoding to the [IUCN threat status vocabulary](http://rs.gbif.org/vocabulary/iucn/threat_status.xml):
 
 ```{r}
-distribution %<>% mutate(threatStatus = recode(input_threat_status,
+distribution %<>% mutate(dwc_threatStatus = recode(threat_status,
   "endangered" = "EN",
   "vulnerable" = "VU"
 ))
@@ -395,7 +394,7 @@ Inspect mapped values:
 
 ```{r}
 distribution %>%
-  group_by(input_threat_status, threatStatus) %>%
+  group_by(threat_status, dwc_threatStatus) %>%
   count()
 ```
 
@@ -405,7 +404,7 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_source) %>%
+  group_by(source) %>%
   count() %>%
   head() # Remove to show all values
 ```
@@ -413,7 +412,7 @@ distribution %>%
 Map values:
 
 ```{r}
-distribution %<>% mutate(source = input_source) 
+distribution %<>% mutate(dwc_source = source) 
 ```
 
 ### occurrenceRemarks
@@ -422,7 +421,7 @@ Inspect values:
 
 ```{r}
 distribution %>%
-  group_by(input_remarks) %>%
+  group_by(remarks) %>%
   count() %>%
   head() # Remove to show all values
 ```
@@ -430,15 +429,21 @@ distribution %>%
 Map values:
 
 ```{r}
-distribution %<>% mutate(occurrenceRemarks = input_remarks) 
+distribution %<>% mutate(dwc_occurrenceRemarks = remarks) 
 ```
 
 ## Post-processing
 
-Remove the original columns:
+Only keep the Darwin Core columns:
 
 ```{r}
-distribution %<>% select(-starts_with("input_"))
+distribution %<>% select(starts_with("dwc_"))
+```
+
+Drop the `dwc_` prefix:
+
+```{r}
+colnames(distribution) <- str_replace(colnames(distribution), "dwc_", "")
 ```
 
 Preview data:

@@ -12,7 +12,7 @@
 <meta name="author" content="author_1" />
 <meta name="author" content="author_2" />
 
-<meta name="date" content="2018-11-12" />
+<meta name="date" content="2019-01-30" />
 
 <title>Darwin Core mapping</title>
 
@@ -30,9 +30,8 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -107,6 +106,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -121,7 +123,6 @@ body {
   padding-top: 50px;
   margin-top: -50px;
 }
-
 .section h2 {
   padding-top: 50px;
   margin-top: -50px;
@@ -141,6 +142,43 @@ body {
 .section h6 {
   padding-top: 50px;
   margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -162,18 +200,77 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -310,7 +407,7 @@ div.tocify {
 <h3 class="subtitle"><em>For: my_dataset_title</em></h3>
 <h4 class="author"><em>author_1</em></h4>
 <h4 class="author"><em>author_2</em></h4>
-<h4 class="date"><em>2018-11-12</em></h4>
+<h4 class="date"><em>2019-01-30</em></h4>
 
 </div>
 
@@ -344,14 +441,12 @@ library(rgbif)          # To use GBIF services</code></pre>
 <h2><span class="header-section-number">3.1</span> Tidy data</h2>
 <p>Clean data somewhat:</p>
 <pre class="r"><code>input_data %&lt;&gt;% remove_empty(&quot;rows&quot;)</code></pre>
-<p>Add prefix <code>input_</code> to all column names to avoid name clashes with Darwin Core terms:</p>
-<pre class="r"><code>colnames(input_data) &lt;- paste0(&quot;input_&quot;, colnames(input_data))</code></pre>
 </div>
 <div id="scientific-names" class="section level2">
 <h2><span class="header-section-number">3.2</span> Scientific names</h2>
 <p>Use the <a href="https://www.gbif.org/tools/name-parser">GBIF nameparser</a> to retrieve nomenclatural information for the scientific names in the checklist:</p>
 <pre class="r"><code>parsed_names &lt;- input_data %&gt;%
-  distinct(input_scientific_name) %&gt;%
+  distinct(scientific_name) %&gt;%
   pull() %&gt;% # Create vector from dataframe
   parsenames() # An rgbif function</code></pre>
 <p>Show scientific names with nomenclatural issues, i.e. not of <code>type = SCIENTIFIC</code> or that could not be fully parsed. Note: these are not necessarily incorrect.</p>
@@ -364,13 +459,13 @@ library(rgbif)          # To use GBIF services</code></pre>
   </script>
 </div>
 <p>Correct names and reparse:</p>
-<pre class="r"><code>input_data %&lt;&gt;% mutate(input_scientific_name = recode(input_scientific_name,
+<pre class="r"><code>input_data %&lt;&gt;% mutate(scientific_name = recode(scientific_name,
   &quot;AseroÙ rubra&quot; = &quot;Asero rubra&quot;
 ))
 
 # Redo parsing
 parsed_names &lt;- input_data %&gt;%
-  distinct(input_scientific_name) %&gt;%
+  distinct(scientific_name) %&gt;%
   pull() %&gt;%
   parsenames()
 
@@ -389,17 +484,16 @@ parsed_names %&gt;%
 <p>The nameparser function also provides information about the rank of the taxon (in <code>rankmarker</code>). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:</p>
 <pre class="r"><code>input_data %&lt;&gt;% left_join(
   select(parsed_names, scientificname, rankmarker),
-  by = c(&quot;input_scientific_name&quot; = &quot;scientificname&quot;)) %&gt;%
-  rename(input_rankmarker = rankmarker)</code></pre>
+  by = c(&quot;scientific_name&quot; = &quot;scientificname&quot;))</code></pre>
 </div>
 <div id="taxon-ids" class="section level2">
 <h2><span class="header-section-number">3.4</span> Taxon IDs</h2>
 <p>To link taxa with information in the extension(s), each taxon needs a unique and relatively stable <code>taxonID</code>. Here we create one in the form of <code>dataset_shortname:taxon:hash</code>, where <code>hash</code> is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):</p>
 <pre class="r"><code>vdigest &lt;- Vectorize(digest) # Vectorize digest function to work with vectors
-input_data %&lt;&gt;% mutate(input_taxon_id = paste(
+input_data %&lt;&gt;% mutate(taxon_id = paste(
   &quot;my_dataset_shortname&quot;, # e.g. &quot;alien-fishes-checklist&quot;
   &quot;taxon&quot;,
-  vdigest(paste(input_scientific_name, input_kingdom), algo = &quot;md5&quot;),
+  vdigest(paste(scientific_name, kingdom), algo = &quot;md5&quot;),
   sep = &quot;:&quot;
 ))</code></pre>
 </div>
@@ -407,22 +501,22 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <h2><span class="header-section-number">3.5</span> Preview data</h2>
 <p>Show the number of taxa and distributions per kingdom and rank:</p>
 <pre class="r"><code>input_data %&gt;%
-  group_by(input_kingdom, input_rankmarker) %&gt;%
+  group_by(kingdom, rankmarker) %&gt;%
   summarize(
-    `# taxa` = n_distinct(input_taxon_id),
+    `# taxa` = n_distinct(taxon_id),
     `# distributions` = n()
   ) %&gt;%
   adorn_totals(&quot;row&quot;)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["input_kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_rankmarker"],"name":[2],"type":["chr"],"align":["left"]},{"label":["# taxa"],"name":[3],"type":["int"],"align":["right"]},{"label":["# distributions"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"sp.","3":"2","4":"2","_rn_":"1"},{"1":"Fungi","2":"sp.","3":"1","4":"1","_rn_":"2"},{"1":"Plantae","2":"agg.","3":"1","4":"1","_rn_":"3"},{"1":"Plantae","2":"infrasp.","3":"1","4":"1","_rn_":"4"},{"1":"Plantae","2":"sp.","3":"2","4":"2","_rn_":"5"},{"1":"Plantae","2":"var.","3":"1","4":"2","_rn_":"6"},{"1":"Plantae","2":"NA","3":"2","4":"2","_rn_":"7"},{"1":"Total","2":"-","3":"10","4":"11","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["rankmarker"],"name":[2],"type":["chr"],"align":["left"]},{"label":["# taxa"],"name":[3],"type":["int"],"align":["right"]},{"label":["# distributions"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"sp.","3":"2","4":"2","_rn_":"1"},{"1":"Fungi","2":"sp.","3":"1","4":"1","_rn_":"2"},{"1":"Plantae","2":"agg.","3":"1","4":"1","_rn_":"3"},{"1":"Plantae","2":"infrasp.","3":"1","4":"1","_rn_":"4"},{"1":"Plantae","2":"sp.","3":"2","4":"2","_rn_":"5"},{"1":"Plantae","2":"var.","3":"1","4":"2","_rn_":"6"},{"1":"Plantae","2":"NA","3":"2","4":"2","_rn_":"7"},{"1":"Total","2":"-","3":"10","4":"11","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Preview data:</p>
 <pre class="r"><code>input_data %&gt;% head()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_scientific_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_kingdom"],"name":[2],"type":["chr"],"align":["left"]},{"label":["input_country_code"],"name":[3],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[4],"type":["chr"],"align":["left"]},{"label":["input_occurrence_status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["input_establishment_means"],"name":[6],"type":["chr"],"align":["left"]},{"label":["input_threat_status"],"name":[7],"type":["chr"],"align":["left"]},{"label":["input_source"],"name":[8],"type":["chr"],"align":["left"]},{"label":["input_remarks"],"name":[9],"type":["chr"],"align":["left"]},{"label":["input_rankmarker"],"name":[10],"type":["chr"],"align":["left"]},{"label":["input_taxon_id"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"Bassia laniflora (S.G. Gmel.) A.J. Scott","2":"Plantae","3":"BE","4":"Flanders","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:6c17452b1e85e24150e742cd5c32f353"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"Walloon region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"French region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Euphorbia x pseudovirgata (Schur)","2":"Plantae","3":"FR","4":"NA","5":"present","6":"introduced","7":"NA","8":"https://doi.org/10.1007/s10530-016-1278-z","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:8c1b5d2f1230258c8aab8080de58adc8"},{"1":"Alytes obstetricans","2":"Animalia","3":"BE","4":"NA","5":"present","6":"native","7":"endangered","8":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:1e76cf83153eacf1bd350d2555445b1e"},{"1":"Plebejus dardanus","2":"Animalia","3":"MK","4":"NA","5":"present","6":"native","7":"vulnerable","8":"NA","9":"Absent according to Rudi Verovnik","10":"sp.","11":"my_dataset_shortname:taxon:1e68c6f279e725acadb669262525a333"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["scientific_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["kingdom"],"name":[2],"type":["chr"],"align":["left"]},{"label":["country_code"],"name":[3],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[4],"type":["chr"],"align":["left"]},{"label":["occurrence_status"],"name":[5],"type":["chr"],"align":["left"]},{"label":["establishment_means"],"name":[6],"type":["chr"],"align":["left"]},{"label":["threat_status"],"name":[7],"type":["chr"],"align":["left"]},{"label":["source"],"name":[8],"type":["chr"],"align":["left"]},{"label":["remarks"],"name":[9],"type":["chr"],"align":["left"]},{"label":["rankmarker"],"name":[10],"type":["chr"],"align":["left"]},{"label":["taxon_id"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"Bassia laniflora (S.G. Gmel.) A.J. Scott","2":"Plantae","3":"BE","4":"Flanders","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:6c17452b1e85e24150e742cd5c32f353"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"Walloon region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Amaranthus macrocarpus Benth. var. pallidus Benth.","2":"Plantae","3":"BE","4":"French region","5":"present","6":"introduced","7":"NA","8":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","9":"NA","10":"var.","11":"my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530"},{"1":"Euphorbia x pseudovirgata (Schur)","2":"Plantae","3":"FR","4":"NA","5":"present","6":"introduced","7":"NA","8":"https://doi.org/10.1007/s10530-016-1278-z","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:8c1b5d2f1230258c8aab8080de58adc8"},{"1":"Alytes obstetricans","2":"Animalia","3":"BE","4":"NA","5":"present","6":"native","7":"endangered","8":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","9":"NA","10":"sp.","11":"my_dataset_shortname:taxon:1e76cf83153eacf1bd350d2555445b1e"},{"1":"Plebejus dardanus","2":"Animalia","3":"MK","4":"NA","5":"present","6":"native","7":"vulnerable","8":"NA","9":"Absent according to Rudi Verovnik","10":"sp.","11":"my_dataset_shortname:taxon:1e68c6f279e725acadb669262525a333"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -432,7 +526,7 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <div id="pre-processing" class="section level2">
 <h2><span class="header-section-number">4.1</span> Pre-processing</h2>
 <p>Create a dataframe with unique taxa only (ignoring multiple distribution rows):</p>
-<pre class="r"><code>taxon &lt;- input_data %&gt;% distinct(input_taxon_id, .keep_all = TRUE)</code></pre>
+<pre class="r"><code>taxon &lt;- input_data %&gt;% distinct(taxon_id, .keep_all = TRUE)</code></pre>
 </div>
 <div id="term-mapping" class="section level2">
 <h2><span class="header-section-number">4.2</span> Term mapping</h2>
@@ -440,64 +534,64 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <p>Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).</p>
 <div id="language" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> language</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(language = &quot;my_language&quot;) # e.g. &quot;en&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_language = &quot;my_language&quot;) # e.g. &quot;en&quot;</code></pre>
 </div>
 <div id="license" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> license</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(license = &quot;my_license&quot;) # e.g. &quot;http://creativecommons.org/publicdomain/zero/1.0/&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_license = &quot;my_license&quot;) # e.g. &quot;http://creativecommons.org/publicdomain/zero/1.0/&quot;</code></pre>
 </div>
 <div id="rightsholder" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> rightsHolder</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(rightsHolder = &quot;my_rights_holder&quot;) # e.g. &quot;INBO&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_rightsHolder = &quot;my_rights_holder&quot;) # e.g. &quot;INBO&quot;</code></pre>
 </div>
 <div id="datasetid" class="section level3">
 <h3><span class="header-section-number">4.2.4</span> datasetID</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(datasetID = &quot;my_dataset_doi&quot;) # e.g. &quot;https://doi.org/10.15468/xvuzfh&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_datasetID = &quot;my_dataset_doi&quot;) # e.g. &quot;https://doi.org/10.15468/xvuzfh&quot;</code></pre>
 </div>
 <div id="institutioncode" class="section level3">
 <h3><span class="header-section-number">4.2.5</span> institutionCode</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(institutionCode = &quot;my_institution_code&quot;) # e.g. &quot;INBO&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_institutionCode = &quot;my_institution_code&quot;) # e.g. &quot;INBO&quot;</code></pre>
 </div>
 <div id="datasetname" class="section level3">
 <h3><span class="header-section-number">4.2.6</span> datasetName</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(datasetName = &quot;my_dataset_title&quot;) # e.g. &quot;Checklist of non-native freshwater fishes in Flanders, Belgium&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_datasetName = &quot;my_dataset_title&quot;) # e.g. &quot;Checklist of non-native freshwater fishes in Flanders, Belgium&quot;</code></pre>
 <p>The following terms contain information about the taxon:</p>
 </div>
 <div id="taxonid" class="section level3">
 <h3><span class="header-section-number">4.2.7</span> taxonID</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(taxonID = input_taxon_id)</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_taxonID = taxon_id)</code></pre>
 </div>
 <div id="scientificname" class="section level3">
 <h3><span class="header-section-number">4.2.8</span> scientificName</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(scientificName = input_scientific_name)</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_scientificName = scientific_name)</code></pre>
 </div>
 <div id="kingdom" class="section level3">
 <h3><span class="header-section-number">4.2.9</span> kingdom</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>taxon %&gt;%
-  group_by(input_kingdom) %&gt;%
+  group_by(kingdom) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"2"},{"1":"Fungi","2":"1"},{"1":"Plantae","2":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"2"},{"1":"Fungi","2":"1"},{"1":"Plantae","2":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(kingdom = input_kingdom)</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_kingdom = kingdom)</code></pre>
 </div>
 <div id="taxonrank" class="section level3">
 <h3><span class="header-section-number">4.2.10</span> taxonRank</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>taxon %&gt;%
-  group_by(input_rankmarker) %&gt;%
+  group_by(rankmarker) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"1"},{"1":"infrasp.","2":"1"},{"1":"sp.","2":"5"},{"1":"var.","2":"1"},{"1":"NA","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"1"},{"1":"infrasp.","2":"1"},{"1":"sp.","2":"5"},{"1":"var.","2":"1"},{"1":"NA","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml">GBIF rank vocabulary</a>:</p>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(taxonRank = recode(input_rankmarker,
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_taxonRank = recode(rankmarker,
   &quot;agg.&quot;      = &quot;speciesAggregate&quot;,
   &quot;infrasp.&quot;  = &quot;infraspecificname&quot;,
   &quot;sp.&quot;       = &quot;species&quot;,
@@ -507,23 +601,25 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 ))</code></pre>
 <p>Inspect mapped values:</p>
 <pre class="r"><code>taxon %&gt;%
-  group_by(input_rankmarker, taxonRank) %&gt;%
+  group_by(rankmarker, dwc_taxonRank) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["taxonRank"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"speciesAggregate","3":"1"},{"1":"infrasp.","2":"infraspecificname","3":"1"},{"1":"sp.","2":"species","3":"5"},{"1":"var.","2":"variety","3":"1"},{"1":"NA","2":"","3":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_taxonRank"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"speciesAggregate","3":"1"},{"1":"infrasp.","2":"infraspecificname","3":"1"},{"1":"sp.","2":"species","3":"5"},{"1":"var.","2":"variety","3":"1"},{"1":"NA","2":"","3":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 <div id="nomenclaturalcode" class="section level3">
 <h3><span class="header-section-number">4.2.11</span> nomenclaturalCode</h3>
-<pre class="r"><code>taxon %&lt;&gt;% mutate(nomenclaturalCode = &quot;my_nomenclaturalCode&quot;) # e.g. &quot;ICZN&quot;</code></pre>
+<pre class="r"><code>taxon %&lt;&gt;% mutate(dwc_nomenclaturalCode = &quot;my_nomenclaturalCode&quot;) # e.g. &quot;ICZN&quot;</code></pre>
 </div>
 </div>
 <div id="post-processing" class="section level2">
 <h2><span class="header-section-number">4.3</span> Post-processing</h2>
-<p>Remove the original columns:</p>
-<pre class="r"><code>taxon %&lt;&gt;% select(-starts_with(&quot;input_&quot;))</code></pre>
+<p>Only keep the Darwin Core columns:</p>
+<pre class="r"><code>taxon %&lt;&gt;% select(starts_with(&quot;dwc_&quot;))</code></pre>
+<p>Drop the <code>dwc_</code> prefix:</p>
+<pre class="r"><code>colnames(taxon) &lt;- str_replace(colnames(taxon), &quot;dwc_&quot;, &quot;&quot;)</code></pre>
 <p>Preview data:</p>
 <pre class="r"><code>taxon %&gt;% head()</code></pre>
 <div data-pagedtable="false">
@@ -541,41 +637,41 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <h2><span class="header-section-number">5.1</span> Pre-processing</h2>
 <p>Create a dataframe with all data:</p>
 <pre class="r"><code>distribution &lt;- input_data</code></pre>
-<p>Map the data to <a href="http://rs.gbif.org/extension/gbif/1.0/distribution.xml">Species Distribution</a>.</p>
 </div>
 <div id="term-mapping-1" class="section level2">
 <h2><span class="header-section-number">5.2</span> Term mapping</h2>
+<p>Map the data to <a href="http://rs.gbif.org/extension/gbif/1.0/distribution.xml">Species Distribution</a>.</p>
 <div id="taxonid-1" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> taxonID</h3>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(taxonID = input_taxon_id)</code></pre>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_taxonID = taxon_id)</code></pre>
 </div>
 <div id="locality" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> locality</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_country_code, input_locality) %&gt;%
+  group_by(country_code, locality) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"1"},{"1":"BE","2":"French region","3":"1"},{"1":"BE","2":"Walloon region","3":"1"},{"1":"BE","2":"NA","3":"2"},{"1":"FR","2":"NA","3":"1"},{"1":"GB","2":"NA","3":"3"},{"1":"MK","2":"NA","3":"1"},{"1":"NL","2":"NA","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"1"},{"1":"BE","2":"French region","3":"1"},{"1":"BE","2":"Walloon region","3":"1"},{"1":"BE","2":"NA","3":"2"},{"1":"FR","2":"NA","3":"1"},{"1":"GB","2":"NA","3":"3"},{"1":"MK","2":"NA","3":"1"},{"1":"NL","2":"NA","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values to <code>input_locality</code> if provided, otherwise use the country name:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(locality = case_when(
-  !is.na(input_locality) ~ input_locality,
-  input_country_code == &quot;BE&quot; ~ &quot;Belgium&quot;,
-  input_country_code == &quot;GB&quot; ~ &quot;United Kingdom&quot;,
-  input_country_code == &quot;MK&quot; ~ &quot;Macedonia&quot;,
-  input_country_code == &quot;NL&quot; ~ &quot;The Netherlands&quot;,
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_locality = case_when(
+  !is.na(locality) ~ locality,
+  country_code == &quot;BE&quot; ~ &quot;Belgium&quot;,
+  country_code == &quot;GB&quot; ~ &quot;United Kingdom&quot;,
+  country_code == &quot;MK&quot; ~ &quot;Macedonia&quot;,
+  country_code == &quot;NL&quot; ~ &quot;The Netherlands&quot;,
   TRUE ~ &quot;&quot; # In other cases leave empty
 ))</code></pre>
 <p>Inspect mapped values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_country_code, input_locality, locality) %&gt;%
+  group_by(country_code, locality, dwc_locality) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["input_locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"Flanders","4":"1"},{"1":"BE","2":"French region","3":"French region","4":"1"},{"1":"BE","2":"Walloon region","3":"Walloon region","4":"1"},{"1":"BE","2":"NA","3":"Belgium","4":"2"},{"1":"FR","2":"NA","3":"","4":"1"},{"1":"GB","2":"NA","3":"United Kingdom","4":"3"},{"1":"MK","2":"NA","3":"Macedonia","4":"1"},{"1":"NL","2":"NA","3":"The Netherlands","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["dwc_locality"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"Flanders","4":"1"},{"1":"BE","2":"French region","3":"French region","4":"1"},{"1":"BE","2":"Walloon region","3":"Walloon region","4":"1"},{"1":"BE","2":"NA","3":"Belgium","4":"2"},{"1":"FR","2":"NA","3":"","4":"1"},{"1":"GB","2":"NA","3":"United Kingdom","4":"3"},{"1":"MK","2":"NA","3":"Macedonia","4":"1"},{"1":"NL","2":"NA","3":"The Netherlands","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -583,53 +679,53 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <h3><span class="header-section-number">5.2.3</span> countryCode</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_country_code) %&gt;%
+  group_by(country_code) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"5"},{"1":"FR","2":"1"},{"1":"GB","2":"3"},{"1":"MK","2":"1"},{"1":"NL","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"5"},{"1":"FR","2":"1"},{"1":"GB","2":"3"},{"1":"MK","2":"1"},{"1":"NL","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(countryCode = input_country_code) </code></pre>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_countryCode = country_code) </code></pre>
 </div>
 <div id="occurrencestatus" class="section level3">
 <h3><span class="header-section-number">5.2.4</span> occurrenceStatus</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_occurrence_status) %&gt;%
+  group_by(occurrence_status) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_occurrence_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"doubtful","2":"1"},{"1":"present","2":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["occurrence_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"doubtful","2":"1"},{"1":"present","2":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(occurrenceStatus = input_occurrence_status) </code></pre>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_occurrenceStatus = occurrence_status) </code></pre>
 </div>
 <div id="threatstatus" class="section level3">
 <h3><span class="header-section-number">5.2.5</span> threatStatus</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_threat_status) %&gt;%
+  group_by(threat_status) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"1"},{"1":"vulnerable","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"1"},{"1":"vulnerable","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/iucn/threat_status.xml">IUCN threat status vocabulary</a>:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(threatStatus = recode(input_threat_status,
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_threatStatus = recode(threat_status,
   &quot;endangered&quot; = &quot;EN&quot;,
   &quot;vulnerable&quot; = &quot;VU&quot;
 ))</code></pre>
 <p>Inspect mapped values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_threat_status, threatStatus) %&gt;%
+  group_by(threat_status, dwc_threatStatus) %&gt;%
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["threatStatus"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"EN","3":"1"},{"1":"vulnerable","2":"VU","3":"1"},{"1":"NA","2":"NA","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_threatStatus"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"EN","3":"1"},{"1":"vulnerable","2":"VU","3":"1"},{"1":"NA","2":"NA","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -637,37 +733,39 @@ input_data %&lt;&gt;% mutate(input_taxon_id = paste(
 <h3><span class="header-section-number">5.2.6</span> source</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_source) %&gt;%
+  group_by(source) %&gt;%
   count() %&gt;%
   head() # Remove to show all values</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_source"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","2":"1"},{"1":"https://doi.org/10.1007/s10530-016-1278-z","2":"1"},{"1":"https://doi.org/10.3897/neobiota.23.5665","2":"1"},{"1":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","2":"3"},{"1":"NA","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["source"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","2":"1"},{"1":"https://doi.org/10.1007/s10530-016-1278-z","2":"1"},{"1":"https://doi.org/10.3897/neobiota.23.5665","2":"1"},{"1":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","2":"3"},{"1":"NA","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(source = input_source) </code></pre>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_source = source) </code></pre>
 </div>
 <div id="occurrenceremarks" class="section level3">
 <h3><span class="header-section-number">5.2.7</span> occurrenceRemarks</h3>
 <p>Inspect values:</p>
 <pre class="r"><code>distribution %&gt;%
-  group_by(input_remarks) %&gt;%
+  group_by(remarks) %&gt;%
   count() %&gt;%
   head() # Remove to show all values</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["input_remarks"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Absent according to Rudi Verovnik","2":"1"},{"1":"data based solely on DAISIE portal","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["remarks"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Absent according to Rudi Verovnik","2":"1"},{"1":"data based solely on DAISIE portal","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
-<pre class="r"><code>distribution %&lt;&gt;% mutate(occurrenceRemarks = input_remarks) </code></pre>
+<pre class="r"><code>distribution %&lt;&gt;% mutate(dwc_occurrenceRemarks = remarks) </code></pre>
 </div>
 </div>
 <div id="post-processing-1" class="section level2">
 <h2><span class="header-section-number">5.3</span> Post-processing</h2>
-<p>Remove the original columns:</p>
-<pre class="r"><code>distribution %&lt;&gt;% select(-starts_with(&quot;input_&quot;))</code></pre>
+<p>Only keep the Darwin Core columns:</p>
+<pre class="r"><code>distribution %&lt;&gt;% select(starts_with(&quot;dwc_&quot;))</code></pre>
+<p>Drop the <code>dwc_</code> prefix:</p>
+<pre class="r"><code>colnames(distribution) &lt;- str_replace(colnames(distribution), &quot;dwc_&quot;, &quot;&quot;)</code></pre>
 <p>Preview data:</p>
 <pre class="r"><code>distribution %&gt;% head()</code></pre>
 <div data-pagedtable="false">
