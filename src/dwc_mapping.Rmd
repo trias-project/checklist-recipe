@@ -273,7 +273,7 @@ taxon %<>% select(starts_with("dwc_"))
 Drop the `dwc_` prefix:
 
 ```{r}
-colnames(taxon) <- str_replace(colnames(taxon), "dwc_", "")
+colnames(taxon) <- str_remove(colnames(taxon), "dwc_")
 ```
 
 Preview data:
@@ -443,7 +443,7 @@ distribution %<>% select(starts_with("dwc_"))
 Drop the `dwc_` prefix:
 
 ```{r}
-colnames(distribution) <- str_replace(colnames(distribution), "dwc_", "")
+colnames(distribution) <- str_remove(colnames(distribution), "dwc_")
 ```
 
 Preview data:

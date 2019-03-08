@@ -12,7 +12,7 @@
 <meta name="author" content="author_1" />
 <meta name="author" content="author_2" />
 
-<meta name="date" content="2019-01-30" />
+<meta name="date" content="2019-03-08" />
 
 <title>Darwin Core mapping</title>
 
@@ -407,7 +407,7 @@ div.tocify {
 <h3 class="subtitle"><em>For: my_dataset_title</em></h3>
 <h4 class="author"><em>author_1</em></h4>
 <h4 class="author"><em>author_2</em></h4>
-<h4 class="date"><em>2019-01-30</em></h4>
+<h4 class="date"><em>2019-03-08</em></h4>
 
 </div>
 
@@ -509,7 +509,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   adorn_totals(&quot;row&quot;)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["rankmarker"],"name":[2],"type":["chr"],"align":["left"]},{"label":["# taxa"],"name":[3],"type":["int"],"align":["right"]},{"label":["# distributions"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"sp.","3":"2","4":"2","_rn_":"1"},{"1":"Fungi","2":"sp.","3":"1","4":"1","_rn_":"2"},{"1":"Plantae","2":"agg.","3":"1","4":"1","_rn_":"3"},{"1":"Plantae","2":"infrasp.","3":"1","4":"1","_rn_":"4"},{"1":"Plantae","2":"sp.","3":"2","4":"2","_rn_":"5"},{"1":"Plantae","2":"var.","3":"1","4":"2","_rn_":"6"},{"1":"Plantae","2":"NA","3":"2","4":"2","_rn_":"7"},{"1":"Total","2":"-","3":"10","4":"11","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["kingdom"],"name":[1],"type":["chr"],"align":["left"]},{"label":["rankmarker"],"name":[2],"type":["chr"],"align":["left"]},{"label":["# taxa"],"name":[3],"type":["int"],"align":["right"]},{"label":["# distributions"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"Animalia","2":"sp.","3":"2","4":"2","_rn_":"1"},{"1":"Fungi","2":"sp.","3":"1","4":"1","_rn_":"2"},{"1":"Plantae","2":"NA","3":"2","4":"2","_rn_":"3"},{"1":"Plantae","2":"agg.","3":"1","4":"1","_rn_":"4"},{"1":"Plantae","2":"infrasp.","3":"1","4":"1","_rn_":"5"},{"1":"Plantae","2":"sp.","3":"2","4":"2","_rn_":"6"},{"1":"Plantae","2":"var.","3":"1","4":"2","_rn_":"7"},{"1":"Total","2":"-","3":"10","4":"11","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Preview data:</p>
@@ -587,7 +587,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"1"},{"1":"infrasp.","2":"1"},{"1":"sp.","2":"5"},{"1":"var.","2":"1"},{"1":"NA","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"2"},{"1":"agg.","2":"1"},{"1":"infrasp.","2":"1"},{"1":"sp.","2":"5"},{"1":"var.","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml">GBIF rank vocabulary</a>:</p>
@@ -605,7 +605,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_taxonRank"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"agg.","2":"speciesAggregate","3":"1"},{"1":"infrasp.","2":"infraspecificname","3":"1"},{"1":"sp.","2":"species","3":"5"},{"1":"var.","2":"variety","3":"1"},{"1":"NA","2":"","3":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["rankmarker"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_taxonRank"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"","3":"2"},{"1":"agg.","2":"speciesAggregate","3":"1"},{"1":"infrasp.","2":"infraspecificname","3":"1"},{"1":"sp.","2":"species","3":"5"},{"1":"var.","2":"variety","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -619,7 +619,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
 <p>Only keep the Darwin Core columns:</p>
 <pre class="r"><code>taxon %&lt;&gt;% select(starts_with(&quot;dwc_&quot;))</code></pre>
 <p>Drop the <code>dwc_</code> prefix:</p>
-<pre class="r"><code>colnames(taxon) &lt;- str_replace(colnames(taxon), &quot;dwc_&quot;, &quot;&quot;)</code></pre>
+<pre class="r"><code>colnames(taxon) &lt;- str_remove(colnames(taxon), &quot;dwc_&quot;)</code></pre>
 <p>Preview data:</p>
 <pre class="r"><code>taxon %&gt;% head()</code></pre>
 <div data-pagedtable="false">
@@ -653,7 +653,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"1"},{"1":"BE","2":"French region","3":"1"},{"1":"BE","2":"Walloon region","3":"1"},{"1":"BE","2":"NA","3":"2"},{"1":"FR","2":"NA","3":"1"},{"1":"GB","2":"NA","3":"3"},{"1":"MK","2":"NA","3":"1"},{"1":"NL","2":"NA","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"NA","3":"2"},{"1":"BE","2":"Flanders","3":"1"},{"1":"BE","2":"French region","3":"1"},{"1":"BE","2":"Walloon region","3":"1"},{"1":"FR","2":"NA","3":"1"},{"1":"GB","2":"NA","3":"3"},{"1":"MK","2":"NA","3":"1"},{"1":"NL","2":"NA","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values to <code>input_locality</code> if provided, otherwise use the country name:</p>
@@ -671,7 +671,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["dwc_locality"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"Flanders","3":"Flanders","4":"1"},{"1":"BE","2":"French region","3":"French region","4":"1"},{"1":"BE","2":"Walloon region","3":"Walloon region","4":"1"},{"1":"BE","2":"NA","3":"Belgium","4":"2"},{"1":"FR","2":"NA","3":"","4":"1"},{"1":"GB","2":"NA","3":"United Kingdom","4":"3"},{"1":"MK","2":"NA","3":"Macedonia","4":"1"},{"1":"NL","2":"NA","3":"The Netherlands","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["country_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["locality"],"name":[2],"type":["chr"],"align":["left"]},{"label":["dwc_locality"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"BE","2":"NA","3":"Belgium","4":"2"},{"1":"BE","2":"Flanders","3":"Flanders","4":"1"},{"1":"BE","2":"French region","3":"French region","4":"1"},{"1":"BE","2":"Walloon region","3":"Walloon region","4":"1"},{"1":"FR","2":"NA","3":"","4":"1"},{"1":"GB","2":"NA","3":"United Kingdom","4":"3"},{"1":"MK","2":"NA","3":"Macedonia","4":"1"},{"1":"NL","2":"NA","3":"The Netherlands","4":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -711,7 +711,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"1"},{"1":"vulnerable","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"9"},{"1":"endangered","2":"1"},{"1":"vulnerable","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values by recoding to the <a href="http://rs.gbif.org/vocabulary/iucn/threat_status.xml">IUCN threat status vocabulary</a>:</p>
@@ -725,7 +725,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   count()</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_threatStatus"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"endangered","2":"EN","3":"1"},{"1":"vulnerable","2":"VU","3":"1"},{"1":"NA","2":"NA","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["threat_status"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dwc_threatStatus"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"9"},{"1":"endangered","2":"EN","3":"1"},{"1":"vulnerable","2":"VU","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -738,7 +738,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   head() # Remove to show all values</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["source"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","2":"1"},{"1":"https://doi.org/10.1007/s10530-016-1278-z","2":"1"},{"1":"https://doi.org/10.3897/neobiota.23.5665","2":"1"},{"1":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","2":"3"},{"1":"NA","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["source"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"5"},{"1":"Bauwens D & Claus K (1996) Verspreiding van amfibieën en reptillen in Vlaanderen. De Wielewaal, Turnhout","2":"1"},{"1":"https://doi.org/10.1007/s10530-016-1278-z","2":"1"},{"1":"https://doi.org/10.3897/neobiota.23.5665","2":"1"},{"1":"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.","2":"3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
@@ -753,7 +753,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
   head() # Remove to show all values</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["remarks"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Absent according to Rudi Verovnik","2":"1"},{"1":"data based solely on DAISIE portal","2":"1"},{"1":"NA","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["remarks"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"NA","2":"9"},{"1":"Absent according to Rudi Verovnik","2":"1"},{"1":"data based solely on DAISIE portal","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Map values:</p>
@@ -765,7 +765,7 @@ input_data %&lt;&gt;% mutate(taxon_id = paste(
 <p>Only keep the Darwin Core columns:</p>
 <pre class="r"><code>distribution %&lt;&gt;% select(starts_with(&quot;dwc_&quot;))</code></pre>
 <p>Drop the <code>dwc_</code> prefix:</p>
-<pre class="r"><code>colnames(distribution) &lt;- str_replace(colnames(distribution), &quot;dwc_&quot;, &quot;&quot;)</code></pre>
+<pre class="r"><code>colnames(distribution) &lt;- str_remove(colnames(distribution), &quot;dwc_&quot;)</code></pre>
 <p>Preview data:</p>
 <pre class="r"><code>distribution %&gt;% head()</code></pre>
 <div data-pagedtable="false">
