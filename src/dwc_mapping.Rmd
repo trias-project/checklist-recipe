@@ -29,6 +29,7 @@ Load libraries:
 
 ```{r}
 library(tidyverse)      # To do data science
+library(tidylog)        # To provide feedback on dplyr functions
 library(magrittr)       # To use %<>% pipes
 library(here)           # To find files
 library(janitor)        # To clean input data
