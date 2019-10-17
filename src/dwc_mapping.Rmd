@@ -38,7 +38,7 @@ library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
 ```
 
-# Read source data
+# Read and explore source data
 
 Create a data frame `input_data` from the source data:
 
@@ -50,6 +50,42 @@ Preview data:
 
 ```{r}
 input_data %>% head(n = 5)
+```
+
+Number of taxa:
+
+```{r}
+nrow(input_data)
+```
+
+Proportion of taxa over kingdoms and countries, with totals:
+
+```{r}
+input_data %>%
+  tabyl(country_code, kingdom) %>%
+  adorn_totals("row") %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(rounding = "half up", digits = 0)
+```
+
+Proportion of taxa over kingdoms and occurrence status, with totals:
+
+```{r}
+input_data %>%
+  tabyl(occurrence_status, kingdom) %>%
+  adorn_totals("row") %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(rounding = "half up", digits = 0)
+```
+
+Proportion of taxa over kingdoms and estblishment means, with totals:
+
+```{r}
+input_data %>%
+  tabyl(establishment_means, kingdom) %>%
+  adorn_totals("row") %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(rounding = "half up", digits = 0)
 ```
 
 # Process source data
