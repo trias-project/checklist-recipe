@@ -50,7 +50,7 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 
 <!-- This section is for users who want to download/adapt your checklist repository. You can leave it as is. -->
 
-1. Clone this repository to your computer
+1. Click on `Use this template` to create a new repository on your account
 2. Open the RStudio project file
 3. Open the `dwc_mapping.Rmd` [R Markdown file](https://rmarkdown.rstudio.com/) in RStudio
 4. Install any required packages
