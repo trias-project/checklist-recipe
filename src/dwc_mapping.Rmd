@@ -107,7 +107,7 @@ The nameparser function also provides information about the rank of the taxon (i
 ```{r}
 input_data %<>% left_join(
   parsed_names %>%
-  select(parsed_names, scientificname, rankmarker),
+  select(scientificname, rankmarker),
   by = c("scientific_name" = "scientificname"))
 ```
 
