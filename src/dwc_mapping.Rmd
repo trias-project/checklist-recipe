@@ -22,12 +22,12 @@ output:
 # Setup 
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
 Load libraries:
 
-```{r}
+```{r message = FALSE}
 library(tidyverse)      # To do data science
 library(tidylog)        # To provide feedback on dplyr functions
 library(magrittr)       # To use %<>% pipes
