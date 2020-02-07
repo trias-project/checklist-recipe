@@ -320,7 +320,7 @@ distribution %>%
   count()
 ```
 
-Map values to `input_locality` if provided, otherwise use the country name:
+Map values to `locality` if provided, otherwise use the country name:
 
 ```{r}
 distribution %<>% mutate(dwc_locality = case_when(
