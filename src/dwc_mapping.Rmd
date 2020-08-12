@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 
 Install required libraries (only if the libraries have not been installed before):
 
-```{r eval = FALSE}
+```{r}
 installed <- rownames(installed.packages())
 required <- c("tidyverse", "tidylog", "magrittr", "here", "janitor", "readxl", "digest", "rgbif")
 if (!all(required %in% installed)) {
@@ -38,7 +38,6 @@ if (!all(required %in% installed)) {
 Load libraries:
 
 ```{r message = FALSE}
-invisible(lapply(required, library, character.only = TRUE))
 library(tidyverse)      # To do data science
 library(tidylog)        # To provide feedback on dplyr functions
 library(magrittr)       # To use %<>% pipes
