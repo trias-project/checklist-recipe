@@ -25,7 +25,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
-Install libraries (only required if the libraries have not been installed before):
+Install required libraries (only if the libraries have not been installed before):
 
 ```{r eval = FALSE}
 install.packages("tidyverse")
@@ -41,14 +41,15 @@ install.packages("rgbif")
 Load libraries:
 
 ```{r message = FALSE}
-library(tidyverse)      # To do data science
-library(tidylog)        # To provide feedback on dplyr functions
-library(magrittr)       # To use %<>% pipes
-library(here)           # To find files
-library(janitor)        # To clean input data
-library(readxl)         # To read Excel files
-library(digest)         # To generate hashes
-library(rgbif)          # To use GBIF services
+invisible(lapply(required, library, character.only = TRUE))
+library(tidyverse)      
+library(tidylog)        
+library(magrittr)       
+library(here)           
+library(janitor)        
+library(readxl)         
+library(digest)         
+library(rgbif)          
 ```
 
 # Read source data
