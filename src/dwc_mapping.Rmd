@@ -25,6 +25,19 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
+Install libraries (only required if the libraries have not been installed before):
+
+```{r eval = FALSE}
+install.packages("tidyverse")
+install.packages("tidylog")
+install.packages("magrittr")
+install.packages("here")
+install.packages("janitor")
+install.packages("readxl")
+install.packages("digest")
+install.packages("rgbif")
+```
+
 Load libraries:
 
 ```{r message = FALSE}
