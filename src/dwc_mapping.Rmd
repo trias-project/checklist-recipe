@@ -29,16 +29,7 @@ Install required libraries (only if the libraries have not been installed before
 
 ```{r eval = FALSE}
 installed <- rownames(installed.packages())
-required <- list(
-  "tidyverse", # To do data science
-  "tidylog",   # To provide feedback on dplyr functions
-  "magrittr",  # To use %<>% pipes
-  "here",      # To find files
-  "janitor",   # To clean input data
-  "readxl",    # To read Excel files
-  "digest",    # To generate hashes
-  "rgbif"      # To use GBIF services
-  )
+required <- c("tidyverse", "tidylog", "magrittr", "here", "janitor", "readxl", "digest", "rgbif")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -48,14 +39,14 @@ Load libraries:
 
 ```{r message = FALSE}
 invisible(lapply(required, library, character.only = TRUE))
-library(tidyverse)      
-library(tidylog)        
-library(magrittr)       
-library(here)           
-library(janitor)        
-library(readxl)         
-library(digest)         
-library(rgbif)          
+library(tidyverse)      # To do data science
+library(tidylog)        # To provide feedback on dplyr functions
+library(magrittr)       # To use %<>% pipes
+library(here)           # To find files
+library(janitor)        # To clean input data
+library(readxl)         # To read Excel files
+library(digest)         # To generate hashes
+library(rgbif)          # To use GBIF services
 ```
 
 # Read source data
