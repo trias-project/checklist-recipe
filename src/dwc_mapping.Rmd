@@ -25,9 +25,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
-Install libraries (only required of the libraries have not been installed before):
+Install libraries (only required if the libraries have not been installed before):
 
-```{r}
+```{r eval = FALSE}
 install.packages("tidyverse")
 install.packages("tidylog")
 install.packages("magrittr")
