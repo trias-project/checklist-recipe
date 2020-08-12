@@ -28,14 +28,20 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 Install required libraries (only if the libraries have not been installed before):
 
 ```{r eval = FALSE}
-install.packages("tidyverse")
-install.packages("tidylog")
-install.packages("magrittr")
-install.packages("here")
-install.packages("janitor")
-install.packages("readxl")
-install.packages("digest")
-install.packages("rgbif")
+installed <- rownames(installed.packages())
+required <- list(
+  "tidyverse", # To do data science
+  "tidylog",   # To provide feedback on dplyr functions
+  "magrittr",  # To use %<>% pipes
+  "here",      # To find files
+  "janitor",   # To clean input data
+  "readxl",    # To read Excel files
+  "digest",    # To generate hashes
+  "rgbif"      # To use GBIF services
+  )
+if (!all(required %in% installed)) {
+  install.packages(required[!required %in% installed])
+}
 ```
 
 Load libraries:
