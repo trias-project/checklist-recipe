@@ -25,17 +25,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
-Install libraries (only required if the libraries have not been installed before):
+Install required libraries (only if the libraries have not been installed before):
 
-```{r eval = FALSE}
-install.packages("tidyverse")
-install.packages("tidylog")
-install.packages("magrittr")
-install.packages("here")
-install.packages("janitor")
-install.packages("readxl")
-install.packages("digest")
-install.packages("rgbif")
+```{r}
+installed <- rownames(installed.packages())
+required <- c("tidyverse", "tidylog", "magrittr", "here", "janitor", "readxl", "digest", "rgbif")
+if (!all(required %in% installed)) {
+  install.packages(required[!required %in% installed])
+}
 ```
 
 Load libraries:
