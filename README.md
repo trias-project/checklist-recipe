@@ -34,16 +34,16 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 ├── checklist-recipe.Rproj : RStudio project file
 ├── .gitignore             : Files and directories to be ignored by git
 │
-├── data
-│   ├── raw                : Source data, input for mapping script
-│   └── processed          : Darwin Core output of mapping script GENERATED
+├── src
+│   ├── dwc_mapping.Rmd    : Darwin Core mapping script
+│   ├── _site.yml          : Settings to build website in docs/
+│   └── index.Rmd          : Template for website homepage
 │
 ├── docs                   : Repository website GENERATED
 │
-└── src
-    ├── dwc_mapping.Rmd    : Darwin Core mapping script, core functionality of this repository
-    ├── _site.yml          : Settings to build website in docs/
-    └── index.Rmd          : Template for website homepage
+└── data
+    ├── raw                : Source data, input for mapping script
+    └── processed          : Darwin Core output of mapping script GENERATED
 ```
 
 ## Installation
