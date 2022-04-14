@@ -7,7 +7,7 @@
 
 <!-- This section gives a quick description of what this repository is for. At least update the "... the data of (blank) ..." or edit as you see fit. -->
 
-This repository contains the functionality to standardize the data of <!-- Title of checklist data or reference to source, e.g. "[Zieritz et al. (2014)](https://doi.org/10.3897/neobiota.23.5665)" --> to a [Darwin Core checklist](https://www.gbif.org/dataset-classes) that can be harvested by [GBIF](http://www.gbif.org).
+This repository contains the functionality to standardize the data of <!-- Title of checklist data or reference to source, e.g. "[Zieritz et al. (2014)](https://doi.org/10.3897/neobiota.23.5665)" --> to a [Darwin Core Archive](https://www.gbif.org/darwin-core) that can be harvested by [GBIF](https://www.gbif.org/).
 
 ## Workflow
 
