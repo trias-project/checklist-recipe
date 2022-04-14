@@ -14,8 +14,6 @@ output:
     toc_float: yes
 ---
 
-This document describes how (and contains the code to) transform the _my_dataset_title_ data to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
-
 <!-- For examples, see https://github.com/trias-project/checklist-recipe/wiki/Examples -->
 
 # Setup 
