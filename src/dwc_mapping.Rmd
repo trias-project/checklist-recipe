@@ -14,6 +14,8 @@ output:
     toc_float: yes
 ---
 
+<!-- For examples, see https://github.com/trias-project/checklist-recipe/wiki/Examples -->
+
 # Setup 
 
 ```{r setup, include = FALSE}
