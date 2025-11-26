@@ -322,6 +322,34 @@ Preview data:
 distribution |> head()
 ```
 
+# Species profile extension
+
+In this extension we will express broad habitat characteristics of the species (e.g. `isTerrestrial`).
+
+Create a dataframe with unique taxa only (ignoring multiple distribution rows).
+Only keep records for which `terrestrial`, `marine` and `freshwater` is not empty.
+
+Map the data to [Species Profile](http://rs.gbif.org/extension/gbif/1.0/speciesprofile.xml).
+
+```{r}
+species_profile <-
+  input_data %>%
+  distinct(taxon_id, .keep_all = TRUE) %>% 
+  filter(
+    !is.na(terrestrial) |
+      !is.na(marine) |
+      !is.na(freshwater)
+  ) %>% 
+  mutate(
+    .keep = "none",
+    taxonID = taxon_id,
+    isMarine = marine,
+    isFreshwater = freshwater,
+    isTerrestrial = terrestrial
+  ) %>% 
+  arrange(taxonID)
+```
+
 Save to CSV:
 
 ```{r}
