@@ -161,21 +161,11 @@ input_data |> head()
 
 # Taxon core
 
-## Pre-processing
-
-Create a dataframe with unique taxa only (ignoring multiple distribution rows):
-
-```{r}
-taxon <- 
-  input_data |> 
-  distinct(taxon_id, .keep_all = TRUE)
-```
-
 ## Term mapping
 
 ### Record-level terms
 
-Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
+Create a dataframe with unique taxa only (ignoring multiple distribution rows). Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
 Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
 
@@ -221,8 +211,6 @@ taxon <-
     nomenclaturalCode = nomenclatural_code
   )
 ```
-
-Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
 
 ## Post-processing
 
