@@ -26,7 +26,7 @@ Install required libraries (only if the libraries have not been installed before
 
 ```{r}
 installed <- rownames(installed.packages())
-required <- c("tidyverse", "tidylog", "here", "janitor", "readxl", "digest", "rgbif")
+required <- c("tidyverse", "tidylog", "here", "janitor", "readxl", "digest", "rgbif", "stringr")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -42,6 +42,7 @@ library(janitor)        # To clean input data
 library(readxl)         # To read Excel files
 library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
+library(stringr)        # To work with strings
 ```
 
 # Read source data
@@ -49,13 +50,13 @@ library(rgbif)          # To use GBIF services
 Create a data frame `input_data` from the source data:
 
 ```{r}
-input_data <- read_excel(path = here("data", "raw", "checklist.xlsx")) 
+input_data <- read_excel(path = here("data", "raw", "checklist.xlsx"), sheet = "checklist") 
 ```
 
 Preview data:
 
 ```{r}
-input_data |> head(n = 5)
+input_data |> head()
 ```
 
 # Process source data
@@ -67,7 +68,8 @@ Clean data somewhat:
 ```{r}
 input_data <-
   input_data |>
-  remove_empty("rows")
+  remove_empty("rows") |>
+  clean_names()
 ```
 
 ## Scientific names
@@ -90,12 +92,13 @@ parsed_names |>
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
 ```
 
-Correct names and reparse:
+Correct names in the raw file and reparse.
+Here, we do the correction with code for demonstration purposes only:
 
 ```{r correct and reparse}
-input_data %<>% mutate(scientific_name = recode(scientific_name,
-  "AseroÙ rubra" = "Asero rubra"
-))
+input_data <-
+  input_data |>
+  mutate(scientific_name = recode(scientific_name, "AseroÙ rubra" = "Asero rubra"))
 
 # Redo parsing
 parsed_names <- input_data |>
@@ -107,20 +110,6 @@ parsed_names <- input_data |>
 parsed_names |>
   select(scientificname, type, parsed, parsedpartially, rankmarker) |>
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
-
-## Taxon ranks
-
-The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
-
-```{r}
-input_data <-
-  input_data |>
-  left_join(
-    parsed_names |>
-    select(scientificname, rankmarker),
-    by = c("scientific_name" = "scientificname")
-    )
 ```
 
 ## Taxon IDs
@@ -145,18 +134,12 @@ Show the number of taxa and distributions per kingdom and rank:
 
 ```{r}
 input_data |>
-  group_by(kingdom, rankmarker) |>
+  group_by(kingdom, taxon_rank) |>
   summarize(
     `# taxa` = n_distinct(taxon_id),
     `# distributions` = n()
   ) |>
   adorn_totals("row")
-```
-
-Preview data:
-
-```{r}
-input_data |> head()
 ```
 
 # Taxon core
@@ -219,12 +202,11 @@ Arrange by taxonID and only keep the Darwin Core columns:
 ```{r}
 taxon <-
   taxon |> 
-  arrange(taxonID) |> 
+  # arrange(taxonID) |> 
   select(
-    "language", "license", "rightsHolder", "accessRights", "datasetID",
-    "institutionCode", "datasetName", "taxonID", "scientificName", "kingdom", 
-    "phylum", "class", "order", "family", "genus", "taxonRank",
-    "nomenclaturalCode"
+    "language", "license", "rightsHolder", "datasetID", "institutionCode",
+    "datasetName", "taxonID", "scientificName", "kingdom", "phylum", "class",
+    "order", "family", "genus", "taxonRank", "nomenclaturalCode"
   )
 ```
 
@@ -240,7 +222,7 @@ taxon |> head()
 
 ```{r}
 input_data |>
-  group_by(country_code, locality) |>
+  group_by(country_code, location) |>
   count()
 ```
 
@@ -287,14 +269,6 @@ distribution <-
   )
 ```
 
-## Inspect mapped values: 
-
-```{r}
-distribution |>
-  group_by(country_code, locality, dwc_locality) |>
-  count()
-```
-
 ## Post-processing
 
 Only keep the Darwin Core columns and arrange by taxonID.
@@ -303,11 +277,11 @@ Only keep the Darwin Core columns and arrange by taxonID.
 distribution <-
   distribution |>
   select(
-    "taxonID", "locationID", "locality", "countryCode", "occurrenceStatus",
+    "taxonID", "locality", "countryCode", "occurrenceStatus",
     "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
-  ) |>
-  arrange(taxonID)
+  ) # |>
+  # arrange(taxonID)
 ```
 
 Preview data:
