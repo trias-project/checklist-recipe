@@ -262,17 +262,17 @@ Create a dataframe with all data (including multiple distributions). Map the dat
 
 ```{r}
 distribution <-
-  input_data %>%
+  input_data |>
   # pathway
   pivot_longer(
     names_to = "key", 
     values_to = "pathway", 
     starts_with("introduction_pathway"),
-    values_drop_na = FALSE) %>%
+    values_drop_na = FALSE) |>
   filter( # keep NA value for species with no pathway provided
     !is.na(pathway) |
       (is.na(pathway) & key == "introduction_pathway_1")
-      ) %>% 
+      ) |> 
   # other terms
   mutate(
     taxonID = taxon_id,
@@ -312,7 +312,7 @@ distribution <-
     "taxonID", "locationID", "locality", "countryCode", "occurrenceStatus",
     "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
-  ) %>%
+  ) |>
   arrange(taxonID)
 ```
 
@@ -333,20 +333,20 @@ Map the data to [Species Profile](http://rs.gbif.org/extension/gbif/1.0/speciesp
 
 ```{r}
 species_profile <-
-  input_data %>%
-  distinct(taxon_id, .keep_all = TRUE) %>% 
+  input_data |>
+  distinct(taxon_id, .keep_all = TRUE) |> 
   filter(
     !is.na(terrestrial) |
       !is.na(marine) |
       !is.na(freshwater)
-  ) %>% 
+  ) |> 
   mutate(
     .keep = "none",
     taxonID = taxon_id,
     isMarine = marine,
     isFreshwater = freshwater,
     isTerrestrial = terrestrial
-  ) %>% 
+  ) |> 
   arrange(taxonID)
 ```
 
@@ -356,20 +356,20 @@ In the description extension we want to include the native range of a species.
 
 ```{r}
 description <-
-  input_data %>% 
+  input_data |> 
   # unique taxa only (ignoring multiple distribution rows)
-  distinct(taxon_id, .keep_all = TRUE) %>% 
+  distinct(taxon_id, .keep_all = TRUE) |> 
   # Separate values on `|` 
-  mutate(native_range = strsplit(native_range, "\\|")) %>% 
-  unnest(native_range) %>% 
-  filter(!is.na(native_range)) %>% 
+  mutate(native_range = strsplit(native_range, "\\|")) |> 
+  unnest(native_range) |> 
+  filter(!is.na(native_range)) |> 
   mutate(
     .keep = "none",
     taxonID = taxon_id,
     description = str_trim(native_range),
     type = "native range",
     language = "en"
-    ) %>% 
+    ) |> 
   arrange(taxonID)
 ```
 
