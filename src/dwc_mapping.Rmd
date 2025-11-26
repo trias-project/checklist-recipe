@@ -234,12 +234,6 @@ Preview data:
 taxon |> head()
 ```
 
-Save to CSV:
-
-```{r}
-write_csv(taxon, here("data", "processed", "taxon.csv"), na = "")
-```
-
 # Create distribution extension
 
 ## Inspect values
@@ -373,9 +367,11 @@ description <-
   arrange(taxonID)
 ```
 
-
-Save to CSV:
+# Save to CSV:
 
 ```{r}
+write_csv(taxon, here("data", "processed", "taxon.csv"), na = "")
 write_csv(distribution, here("data", "processed", "distribution.csv"), na = "")
+write_csv(species_profile, here("data", "processed", "speciesprofile.csv"), na = "")
+write_csv(description, here("data", "processed", "description.csv"), na = "")
 ```
