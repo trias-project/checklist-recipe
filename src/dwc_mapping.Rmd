@@ -350,6 +350,30 @@ species_profile <-
   arrange(taxonID)
 ```
 
+## Description extension
+
+In the description extension we want to include the native range of a species.
+
+```{r}
+description <-
+  input_data %>% 
+  # unique taxa only (ignoring multiple distribution rows)
+  distinct(taxon_id, .keep_all = TRUE) %>% 
+  # Separate values on `|` 
+  mutate(native_range = strsplit(native_range, "\\|")) %>% 
+  unnest(native_range) %>% 
+  filter(!is.na(native_range)) %>% 
+  mutate(
+    .keep = "none",
+    taxonID = taxon_id,
+    description = str_trim(native_range),
+    type = "native range",
+    language = "en"
+    ) %>% 
+  arrange(taxonID)
+```
+
+
 Save to CSV:
 
 ```{r}
