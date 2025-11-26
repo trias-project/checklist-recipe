@@ -191,7 +191,7 @@ taxon <-
     family = family,
     genus = genus,
     taxonRank = taxon_rank,
-    nomenclaturalCode = "my_nomenclaturalCode"
+    nomenclaturalCode = nomenclatural_code
   )
 ```
 
@@ -205,8 +205,8 @@ taxon <-
   # arrange(taxonID) |> 
   select(
     "language", "license", "rightsHolder", "datasetID", "institutionCode",
-    "datasetName", "taxonID", "scientificName", "kingdom", # "phylum", "class",
-    #"order", "family", "genus",
+    "datasetName", "taxonID", "scientificName", "kingdom", "phylum", "class",
+    "order", "family", "genus",
     "taxonRank", "nomenclaturalCode"
   )
 ```
@@ -280,7 +280,7 @@ distribution <-
   distribution |>
   select(
     "taxonID", "locality", "countryCode", "occurrenceStatus",
-    "threatStatus", # "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
+    "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
   ) # |>
   # arrange(taxonID)
