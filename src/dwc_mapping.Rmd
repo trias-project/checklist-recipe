@@ -202,7 +202,7 @@ Arrange by taxonID and only keep the Darwin Core columns:
 ```{r}
 taxon <-
   taxon |> 
-  # arrange(taxonID) |> 
+  arrange(taxonID) |> 
   select(
     "language", "license", "rightsHolder", "datasetID", "institutionCode",
     "datasetName", "taxonID", "scientificName", "kingdom", "phylum", "class",
@@ -282,8 +282,8 @@ distribution <-
     "taxonID", "locality", "countryCode", "occurrenceStatus",
     "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
-  ) # |>
-  # arrange(taxonID)
+  ) |>
+  arrange(taxonID)
 ```
 
 Preview data:
