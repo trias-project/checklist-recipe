@@ -191,7 +191,7 @@ taxon <-
     family = family,
     genus = genus,
     taxonRank = taxon_rank,
-    nomenclaturalCode = nomenclatural_code
+    nomenclaturalCode = "my_nomenclaturalCode"
   )
 ```
 
@@ -205,8 +205,9 @@ taxon <-
   # arrange(taxonID) |> 
   select(
     "language", "license", "rightsHolder", "datasetID", "institutionCode",
-    "datasetName", "taxonID", "scientificName", "kingdom", "phylum", "class",
-    "order", "family", "genus", "taxonRank", "nomenclaturalCode"
+    "datasetName", "taxonID", "scientificName", "kingdom", # "phylum", "class",
+    #"order", "family", "genus",
+    "taxonRank", "nomenclaturalCode"
   )
 ```
 
@@ -256,6 +257,7 @@ distribution <-
     countryCode = country_code,
     occurrenceStatus = occurrence_status,
     establishmentMeans = establishment_means,
+    threatStatus = c(NA, NA, NA, NA, "EN", "VU", NA, NA, NA, NA, NA),
     degreeOfEstablishment = degree_of_establishment,
     eventDate = case_when(
       is.na(date_first_observation) & is.na(date_last_observation) ~ NA,
@@ -278,7 +280,7 @@ distribution <-
   distribution |>
   select(
     "taxonID", "locality", "countryCode", "occurrenceStatus",
-    "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
+    "threatStatus", # "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
   ) # |>
   # arrange(taxonID)
