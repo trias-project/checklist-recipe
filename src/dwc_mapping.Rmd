@@ -164,61 +164,27 @@ taxon <- input_data %>% distinct(taxon_id, .keep_all = TRUE)
 
 ## Term mapping
 
+### Record-level terms
+
 Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
 Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
 
-### language
-
 ```{r}
-taxon %<>% mutate(dwc_language = "my_language") # e.g. "en"
+taxon <-
+  input_data %>%
+  distinct(taxon_id, .keep_all = TRUE) %>%
+  mutate(
+    language = "my_language", # e.g. "en"
+    license = "my_license", # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
+    rightsHolder = "my_rights_holder", # e.g. "INBO"
+    datasetID = "my_dataset_doi", # e.g. "https://doi.org/10.15468/xvuzfh"
+    institutionCode = "my_institution_code", # e.g. "INBO"
+    datasetName = "my_dataset_title", # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
+  )
 ```
 
-### license
-
-```{r}
-taxon %<>% mutate(dwc_license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
-```
-
-### rightsHolder
-
-```{r}
-taxon %<>% mutate(dwc_rightsHolder = "my_rights_holder") # e.g. "INBO"
-```
-
-### datasetID
-
-```{r}
-taxon %<>% mutate(dwc_datasetID = "my_dataset_doi") # e.g. "https://doi.org/10.15468/xvuzfh"
-```
-
-### institutionCode
-
-```{r}
-taxon %<>% mutate(dwc_institutionCode = "my_institution_code") # e.g. "INBO"
-```
-
-### datasetName
-
-```{r}
-taxon %<>% mutate(dwc_datasetName = "my_dataset_title") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
-```
-
-The following terms contain information about the taxon:
-
-### taxonID
-
-```{r}
-taxon %<>% mutate(dwc_taxonID = taxon_id)
-```
-
-### scientificName
-
-```{r}
-taxon %<>% mutate(dwc_scientificName = scientific_name)
-```
-
-### kingdom
+### Taxon-level terms
 
 Inspect values:
 
@@ -228,61 +194,41 @@ taxon %>%
   count()
 ```
 
-Map values:
+The following terms contain information about the taxon:
 
 ```{r}
-taxon %<>% mutate(dwc_kingdom = kingdom)
-```
-
-### taxonRank
-
-Inspect values:
-
-```{r}
-taxon %>%
-  group_by(rankmarker) %>%
-  count()
+taxon <-
+  taxon %>%
+  dplyr::mutate(
+    taxonID = taxon_id,
+    scientificName = scientific_name,
+    kingdom = kingdom,
+    phylum = phylum,
+    class = class,
+    order = order,
+    family = family,
+    genus = genus,
+    taxonRank = taxon_rank,
+    nomenclaturalCode = nomenclatural_code
+  )
 ```
 
 Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
 
-```{r}
-taxon %<>% mutate(dwc_taxonRank = recode(rankmarker,
-  "agg."      = "speciesAggregate",
-  "infrasp."  = "infraspecificname",
-  "sp."       = "species",
-  "var."      = "variety",
-  .default    = "",
-  .missing    = ""
-))
-```
-
-Inspect mapped values: 
-
-```{r}
-taxon %>%
-  group_by(rankmarker, dwc_taxonRank) %>%
-  count()
-```
-
-### nomenclaturalCode
-
-```{r}
-taxon %<>% mutate(dwc_nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
-```
-
 ## Post-processing
 
-Only keep the Darwin Core columns:
+Arrange by taxonID and only keep the Darwin Core columns:
 
 ```{r}
-taxon %<>% select(starts_with("dwc_"))
-```
-
-Drop the `dwc_` prefix:
-
-```{r}
-colnames(taxon) <- str_remove(colnames(taxon), "dwc_")
+taxon <-
+  taxon %>% 
+  arrange(taxonID) %>% 
+  select(
+    "language", "license", "rightsHolder", "accessRights", "datasetID",
+    "institutionCode", "datasetName", "taxonID", "scientificName", "kingdom", 
+    "phylum", "class", "order", "family", "genus", "taxonRank",
+    "nomenclaturalCode"
+  )
 ```
 
 Preview data:
