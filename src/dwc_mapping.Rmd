@@ -148,7 +148,10 @@ input_data <-
 ```
 
 ```{r}
-print(paste0("Number of rows with missing taxon_id_hash: ", nrow(removed_rows)))
+cat(paste0(
+  "Number of rows with missing `taxon_id_hash`: ", nrow(removed_rows),
+  "\nNumbers of rows remaining in the checklist: ", nrow(input_data)
+))
 ```
 
 Next, we create the `taxon_id` column based on the `taxon_id_hash` column:
