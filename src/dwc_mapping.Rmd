@@ -114,19 +114,65 @@ parsed_names |>
 
 ## Taxon IDs
 
-To link taxa with information in the extension(s), each taxon needs a unique and relatively stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
+To link taxa with information in the extension(s), each taxon needs a unique and stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom. However, the `hash` will only remain the same as long as scientific name and kingdom remain the same. As soon as one character is changed, a new hash will be generated. Therefore, we strongly recommend to create the hash once for each taxon, and add it to the raw data file in the column `taxon_id_hash`. This way, the hash will remain stable even if scientific names change or are corrected in the future.
 
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
+taxon_id_hashes <- 
+    input_data |>
+  mutate(
+    # Only create a hash if taxon_id_hash is missing
+    taxon_id_hash = if_else(
+      is.na(taxon_id_hash),
+      vdigest(paste(scientific_name, kingdom), algo = "md5"),
+      taxon_id_hash
+      )
+  ) |>
+  select(taxon_id_hash, scientific_name)
+
+taxon_id_hashes |> view()
+```
+
+After you have filled in the `taxon_id_hash` column in the raw data file, run all code again from the beginning.
+
+In the next code chunks, we remove the rows with missing `taxon_id_hash` values:
+
+```{r}
+(removed_rows <-
+  input_data |>
+  filter(is.na(taxon_id_hash)))
+
 input_data <-
   input_data |>
-  mutate(taxon_id = paste(
-    "my_dataset_shortname", # e.g. "alien-fishes-checklist"
-    "taxon",
-    vdigest(paste(scientific_name, kingdom), algo = "md5"),
-    sep = ":"
+  filter(!is.na(taxon_id_hash))
+```
+
+```{r}
+print(paste0("Number of rows with missing taxon_id_hash: ", nrow(removed_rows)))
+```
+
+Next, we create the `taxon_id` column based on the `taxon_id_hash` column:
+
+```{r}
+input_data <-
+  input_data |>
+  mutate(
+    taxon_id = paste(
+      "my_dataset_shortname", # e.g. "alien-fishes-checklist"
+      "taxon",
+      taxon_id_hash,
+      sep = ":"
     ))
 ```
+
+## Save raw data with taxonID hashes
+
+Save the source data to the repository to keep track of changes:
+
+```{r}
+write_csv(raw_data, here("data", "raw", "checklist_dump.csv"), na = "")
+```
+
 
 ## Preview data
 
