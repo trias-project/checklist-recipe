@@ -51,12 +51,6 @@ Create a data frame `input_data` from the source data:
 raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
 ```
 
-Preview data:
-
-```{r}
-input_data |> head()
-```
-
 # Process source data
 
 ## Tidy data
@@ -174,21 +168,6 @@ Save the source data to the repository to keep track of changes:
 write_csv(raw_data, here("data", "raw", "checklist_dump.csv"), na = "")
 ```
 
-
-## Preview data
-
-Show the number of taxa and distributions per kingdom and rank:
-
-```{r}
-input_data |>
-  group_by(kingdom, taxon_rank) |>
-  summarize(
-    `# taxa` = n_distinct(taxon_id),
-    `# distributions` = n()
-  ) |>
-  adorn_totals("row")
-```
-
 # Taxon core
 
 ## Term mapping
@@ -214,14 +193,6 @@ taxon <-
 ```
 
 ### Taxon-level terms
-
-Inspect values:
-
-```{r}
-taxon |>
-  group_by(kingdom) |>
-  count()
-```
 
 The following terms contain information about the taxon:
 
@@ -258,27 +229,7 @@ taxon <-
   )
 ```
 
-Preview data:
-
-```{r}
-taxon |> head()
-```
-
 # Create distribution extension
-
-## Inspect values
-
-```{r}
-input_data |>
-  group_by(country_code, location) |>
-  count()
-```
-
-```{r}
-input_data |>
-  group_by(occurrence_status) |>
-  count()
-```
 
 ## Term mapping
 
@@ -331,12 +282,6 @@ distribution <-
     "source", "occurrenceRemarks"
   ) |>
   arrange(taxonID)
-```
-
-Preview data:
-
-```{r}
-distribution |> head()
 ```
 
 # Species profile extension
