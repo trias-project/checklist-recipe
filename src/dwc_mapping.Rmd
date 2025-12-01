@@ -26,7 +26,7 @@ Install required libraries (only if the libraries have not been installed before
 
 ```{r}
 installed <- rownames(installed.packages())
-required <- c("tidyverse", "tidylog", "here", "janitor", "readxl", "digest", "rgbif", "stringr")
+required <- c("tidyverse", "tidylog", "here", "janitor", "digest", "rgbif")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -39,10 +39,8 @@ library(tidyverse)      # To do data science
 library(tidylog)        # To provide feedback on dplyr functions
 library(here)           # To find files
 library(janitor)        # To clean input data
-library(readxl)         # To read Excel files
 library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
-library(stringr)        # To work with strings
 ```
 
 # Read source data
@@ -50,7 +48,7 @@ library(stringr)        # To work with strings
 Create a data frame `input_data` from the source data:
 
 ```{r}
-input_data <- read_excel(path = here("data", "raw", "checklist.xlsx"), sheet = "checklist") 
+raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
 ```
 
 Preview data:
@@ -67,7 +65,7 @@ Clean data somewhat:
 
 ```{r}
 input_data <-
-  input_data |>
+  raw_data |>
   remove_empty("rows") |>
   clean_names()
 ```
