@@ -50,7 +50,7 @@ Create a data frame `raw_data` from the source data:
 raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
 ```
 
-# Process source data
+# Preprocessing
 
 ## Tidy data
 
@@ -103,7 +103,7 @@ parsed_names |>
   filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
 ```
 
-## Taxon IDs
+## Generate taxon IDs
 
 To link taxa with information in the extension(s), each taxon needs a unique and stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom. However, the `hash` will only remain the same as long as scientific name and kingdom remain the same. As soon as one character is changed, a new hash will be generated. Therefore, we strongly recommend to create the hash once for each taxon, and add it to the raw data file in the column `taxon_id_hash`. This way, the hash will remain stable even if scientific names change or are corrected in the future.
 
@@ -161,7 +161,9 @@ input_data <-
     ))
 ```
 
-# Taxon core
+# Darwin Core mapping
+
+## Taxon core
 
 Create a dataframe with unique taxa only (ignoring multiple distribution rows). Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
@@ -202,7 +204,7 @@ taxon <-
   )
 ```
 
-# Distribution extension
+## Distribution extension
 
 Create a dataframe with all data (including multiple distributions). Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
 
@@ -246,7 +248,7 @@ distribution <-
   ) 
 ```
 
-# Species profile extension
+## Species profile extension
 
 In this extension we will express broad habitat characteristics of the species (e.g. `isTerrestrial`).
 
