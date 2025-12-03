@@ -44,7 +44,7 @@ library(rgbif)          # To use GBIF services
 
 # Read source data
 
-Create a data frame `input_data` from the source data:
+Create a data frame `raw_data` from the source data:
 
 ```{r}
 raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
