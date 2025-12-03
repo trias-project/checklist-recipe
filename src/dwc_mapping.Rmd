@@ -159,14 +159,6 @@ input_data <-
     ))
 ```
 
-## Save raw data with taxonID hashes
-
-Save the source data to the repository to keep track of changes:
-
-```{r}
-write_csv(raw_data, here("data", "raw", "checklist_dump.csv"), na = "")
-```
-
 # Taxon core
 
 ## Term mapping
