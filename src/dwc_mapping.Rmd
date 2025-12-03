@@ -26,7 +26,7 @@ Install required libraries (only if the libraries have not been installed before
 
 ```{r}
 installed <- rownames(installed.packages())
-required <- c("tidyverse", "tidylog", "here", "janitor", "digest", "rgbif")
+required <- c("tidyverse", "here", "janitor", "digest", "rgbif")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -36,7 +36,6 @@ Load libraries:
 
 ```{r message = FALSE}
 library(tidyverse)      # To do data science
-library(tidylog)        # To provide feedback on dplyr functions
 library(here)           # To find files
 library(janitor)        # To clean input data
 library(digest)         # To generate hashes
@@ -122,7 +121,7 @@ taxon_id_hashes <-
   ) |>
   select(taxon_id_hash, scientific_name)
 
-taxon_id_hashes |> view()
+taxon_id_hashes
 ```
 
 After you have filled in the `taxon_id_hash` column in the raw data file, run all code again from the beginning.
@@ -255,7 +254,6 @@ distribution <-
     countryCode = country_code,
     occurrenceStatus = occurrence_status,
     establishmentMeans = establishment_means,
-    threatStatus = c(NA, NA, NA, NA, "EN", "VU", NA, NA, NA, NA, NA),
     degreeOfEstablishment = degree_of_establishment,
     eventDate = case_when(
       is.na(date_first_observation) & is.na(date_last_observation) ~ NA,
