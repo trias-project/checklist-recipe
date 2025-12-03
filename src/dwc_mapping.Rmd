@@ -107,6 +107,8 @@ parsed_names |>
 
 To link taxa with information in the extension(s), each taxon needs a unique and stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom. However, the `hash` will only remain the same as long as scientific name and kingdom remain the same. As soon as one character is changed, a new hash will be generated. Therefore, we strongly recommend to create the hash once for each taxon, and add it to the raw data file in the column `taxon_id_hash`. This way, the hash will remain stable even if scientific names change or are corrected in the future.
 
+You can also provide your own id's, but make sure that if a taxon has multiple records, it has the same id in all records.
+
 ```{r}
 vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
 taxon_id_hashes <- 
@@ -161,36 +163,24 @@ input_data <-
 
 # Taxon core
 
-## Term mapping
-
-### Record-level terms
-
 Create a dataframe with unique taxa only (ignoring multiple distribution rows). Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
 
-Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
+Start with record-level terms which contain metadata about the dataset (which is generally the same for all records). Make sure to replace the dummy values with your own values.
+Then the taxon-level terms will be added in the next step.
 
 ```{r}
 taxon <-
   input_data |>
   distinct(taxon_id, .keep_all = TRUE) |>
   mutate(
+    # RECORD-LEVEL
     language = "my_language", # e.g. "en"
     license = "my_license", # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
     rightsHolder = "my_rights_holder", # e.g. "INBO"
     datasetID = "my_dataset_doi", # e.g. "https://doi.org/10.15468/xvuzfh"
     institutionCode = "my_institution_code", # e.g. "INBO"
     datasetName = "my_dataset_title", # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
-  )
-```
-
-### Taxon-level terms
-
-The following terms contain information about the taxon:
-
-```{r}
-taxon <-
-  taxon |>
-  dplyr::mutate(
+    # TAXON-LEVEL
     taxonID = taxon_id,
     scientificName = scientific_name,
     kingdom = kingdom,
@@ -201,16 +191,8 @@ taxon <-
     genus = genus,
     taxonRank = taxon_rank,
     nomenclaturalCode = nomenclatural_code
-  )
-```
-
-## Post-processing
-
-Arrange by taxonID and only keep the Darwin Core columns:
-
-```{r}
-taxon <-
-  taxon |> 
+  ) |>
+  # Arrange by taxonID and only keep the Darwin Core columns
   arrange(taxonID) |> 
   select(
     "language", "license", "rightsHolder", "datasetID", "institutionCode",
@@ -220,9 +202,7 @@ taxon <-
   )
 ```
 
-# Create distribution extension
-
-## Term mapping
+# Distribution extension
 
 Create a dataframe with all data (including multiple distributions). Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
 
@@ -256,22 +236,14 @@ distribution <-
     ),
     source = source,
     occurrenceRemarks = occurrence_remarks
-  )
-```
-
-## Post-processing
-
-Only keep the Darwin Core columns and arrange by taxonID.
-
-```{r}
-distribution <-
-  distribution |>
+  ) |>
+  # Arrange by taxonID and only keep the Darwin Core columns
+  arrange(taxonID) |>
   select(
     "taxonID", "locality", "countryCode", "occurrenceStatus",
     "establishmentMeans", "degreeOfEstablishment", "pathway", "eventDate",
     "source", "occurrenceRemarks"
-  ) |>
-  arrange(taxonID)
+  ) 
 ```
 
 # Species profile extension
