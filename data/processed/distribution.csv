@@ -4,6 +4,12 @@ my_dataset_shortname:taxon:38f13652f41c27960bcd73a290edfffc,Flanders,BE,present,
 my_dataset_shortname:taxon:3a8291f00819019004d5617b918c868a,Flanders,BE,present,introduced,casual,containerBulk,2013/2018,Vogelbescherming Vlaanderen,
 my_dataset_shortname:taxon:3a8291f00819019004d5617b918c868a,Flanders,BE,present,introduced,casual,otherTransport,2013/2018,Vogelbescherming Vlaanderen,
 my_dataset_shortname:taxon:3a8291f00819019004d5617b918c868a,Flanders,BE,present,introduced,casual,contaminantNursery,2013/2018,Vogelbescherming Vlaanderen,
+my_dataset_shortname:taxon:4a2de82bb780c9bfeee686a884cd60a0,,GB,present,introduced,,,,,
+my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530,Walloon region,BE,present,introduced,,,,"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.",
+my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530,French region,BE,present,introduced,,,,"Verloove F (2018) Manual of Alien Plants of Belgium. Botanic Garden of Meise, Belgium. At: http://alienplantsbelgium.be.",
+my_dataset_shortname:taxon:93b6e751b04f63ec59eb0b55743724c1,Flanders,BE,present,introduced,,,1976/,Van Loen et al. 2006 rode lijst,enkele wgn in De Panne (duinen)
 my_dataset_shortname:taxon:a3bfde56eee7e6b09c5248291b4951d4,Flanders,BE,present,introduced,casual,contaminantNursery,2018/2019,"Vanreusel W, Swinnen K, Gielen K, Vercayie D, Driessens G, Veraghtert W, Desmet P, Herremans M (2021). Waarnemingen.be - Non-native animal occurrences in Flanders and the Brussels Capital Region, Belgium. Version 1.25. Natuurpunt. Occurrence dataset https://doi.org/10.15468/k2aiak",
+my_dataset_shortname:taxon:c185c5613364e6a23f16670df0250ce8,,BE,present,introduced,,,,,
+my_dataset_shortname:taxon:c2a0ed4f0866a5fb9bfbc161ce4533ed,,GB,present,introduced,,,,,
 my_dataset_shortname:taxon:d9d4509efbdd5d427f9ee370d645ac02,Flanders,BE,present,introduced,widespreadInvasive,aquacultureMariculture,1601/2025,https://doi.org/10.1111/j.1095-8649.2007.01679.x,first observed in the 17th century
 my_dataset_shortname:taxon:d9d4509efbdd5d427f9ee370d645ac02,Flanders,BE,present,introduced,widespreadInvasive,otherTransport,1601/2025,https://doi.org/10.1111/j.1095-8649.2007.01679.x,first observed in the 17th century
