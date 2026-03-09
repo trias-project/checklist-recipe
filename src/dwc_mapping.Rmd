@@ -42,10 +42,10 @@ library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
 ```
 
-# Read source data
+# Read source dat
 
 Create a data frame `raw_data` from the source data.
-We strongly advise to not read your data straight from an Excel spreadsheet due to encoding issues, but export the data to CSV format first.
+We strongly advise to *not* read your data straight from an Excel spreadsheet due to encoding issues, but export the data to CSV format first.
 
 ```{r}
 raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
@@ -70,44 +70,35 @@ input_data <-
   clean_names() 
 ```
 
+## Check scientific names
 
-Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
+Match scientific names from the checklist against the GBIF Backbone Taxonomy with the optional classification provided.
+
+Column name | Description
+-- | --
+verbatim_scientific_name | The original scientific name as provided in the raw data file
+scientificName | The matching scientific name from the GBIF backbone
+rank  | The taxonomic rank of scientificName
+status | The taxonomic status of scientificName (e.g. "ACCEPTED", "SYNONYM", "DOUBTFUL")
+acceptedUsageKey | The GBIF backbone taxonKey/usageKey/nubkey of the accepted name (if scientificName is a synonym)
+acceptedScientificName | The accepted name (if scientificName is a synonym)
+matchType | The type of match (e.g. "EXACT", "FUZZY", "HIGHERRANK", "NOMATCH")
+confidence | The confidence score of the match
 
 ```{r}
-parsed_names <-
-  input_data |>
-  distinct(scientific_name) |>
-  pull() |> # Create vector from dataframe
-  parsenames() # An rgbif function
+input_data |>
+  dplyr::mutate(
+    scientificName = scientific_name,
+    rank = taxon_rank
+  ) |>
+  name_backbone_checklist() |>
+  dplyr::select(
+    verbatim_scientific_name, scientificName, rank, status, acceptedUsageKey,
+    acceptedScientificName, matchType, confidence
+  )
 ```
 
-Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
-
-```{r}
-parsed_names |>
-  select(scientificname, type, parsed, parsedpartially, rankmarker) |>
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
-
-Correct names in the raw file and reparse.
-Here, we do the correction with code for demonstration purposes only:
-
-```{r correct and reparse}
-input_data <-
-  input_data |>
-  mutate(scientific_name = recode(scientific_name, "AseroÙ rubra" = "Asero rubra"))
-
-# Redo parsing
-parsed_names <- input_data |>
-  distinct(scientific_name) |>
-  pull() |>
-  parsenames()
-
-# Show names with nomenclatural issues again
-parsed_names |>
-  select(scientificname, type, parsed, parsedpartially, rankmarker) |>
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
+Make sure to check the results of the name matching carefully, and correct any errors in the raw data file. Also consider to use the accepted taxon names instead of synonyms. After you have made corrections, run all code again from the beginning.
 
 ## Generate taxon IDs
 
