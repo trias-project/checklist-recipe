@@ -98,7 +98,13 @@ input_data |>
   )
 ```
 
-Make sure to check the results of the name matching carefully, and correct any errors in the raw data file. Also consider to use the accepted taxon names instead of synonyms. After you have made corrections, run all code again from the beginning.
+Make sure to check the results of the name matching carefully, and correct any errors in the raw data file.
+Once you upload the checklist to an IPT and register it with GBIF, the system will automatically map your scientific names as described in this table.
+The mapping is based on the scientific name including authorship, the taxon rank and the provided taxonomy (eg kingdom). While GBIF keeps your raw data accessible on the published page, names that don't find a match in the GBIF Backbone won’t have active links to taxon web pages. To ensure your checklist is fully integrated and easy to navigate, your names should match as closely as possible with the GBIF Backbone.
+
+Also consider to use the accepted taxon names instead of synonyms. GBIF automatically links synonyms with their accepted counterparts, but it’s best practice to use accepted taxon names directly in your checklist. It keeps things clean and prevents any unnecessary confusion for the users.
+
+After you have made corrections, run all code again from the beginning.
 
 ## Generate taxon IDs
 
