@@ -44,10 +44,17 @@ library(rgbif)          # To use GBIF services
 
 # Read source data
 
-Create a data frame `raw_data` from the source data:
+Create a data frame `raw_data` from the source data.
+We strongly advise to not read your data straight from an Excel spreadsheet due to encoding issues, but export the data to CSV format first.
 
 ```{r}
 raw_data <- read_csv(here("data", "raw", "checklist.csv"), show_col_types = FALSE) 
+```
+
+Another option is to manage your data online, such as in a Google Sheet, and [publish the data to the web as a CSV](https://support.google.com/docs/answer/183965?hl=en&co=GENIE.Platform%3DDesktop). This will create an URL that can be used to read the data directly into R.
+
+```{r}
+# raw_data <- read_csv("MY_URL", col_types = cols(.default = "c"))
 ```
 
 # Preprocessing
@@ -60,10 +67,9 @@ Clean data somewhat:
 input_data <-
   raw_data |>
   remove_empty("rows") |>
-  clean_names()
+  clean_names() 
 ```
 
-## Scientific names
 
 Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
 
