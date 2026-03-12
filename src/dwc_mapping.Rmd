@@ -44,7 +44,7 @@ library(rgbif)          # To use GBIF services
 
 # Read source dat
 
-Create a data frame `raw_data` from the source data.
+Create a data frame `raw_data` from the source data. Please us the template `checklist.csv` provided in the `data/raw` folder.
 We strongly advise to *not* read your data straight from an Excel spreadsheet due to encoding issues, but export the data to CSV format first.
 
 ```{r}
@@ -72,7 +72,7 @@ input_data <-
 
 ## Check scientific names
 
-Match scientific names from the checklist against the GBIF Backbone Taxonomy with the optional classification provided.
+Match the scientific names from your checklist against the GBIF Backbone Taxonomy, with the optional classification provided.
 
 Column name | Description
 -- | --
@@ -99,8 +99,9 @@ input_data |>
 ```
 
 Make sure to check the results of the name matching carefully, and correct any errors in the raw data file.
-Once you upload the checklist to an IPT and register it with GBIF, the system will automatically map your scientific names as described in this table.
-The mapping is based on the scientific name including authorship, the taxon rank and the provided taxonomy (eg kingdom). While GBIF keeps your raw data accessible on the published page, names that don't find a match in the GBIF Backbone won’t have active links to taxon web pages. To ensure your checklist is fully integrated and easy to navigate, your names should match as closely as possible with the GBIF Backbone.
+
+Once you upload your checklist to an Integrated Publishing Toolkit (IPT) and register it with GBIF, the system will automatically link the scientific names in your raw data file to the GBIF backbone taxonomy. 
+The linking is based on the raw scientific name including authorship, the taxon rank and the provided taxonomy (eg kingdom). While GBIF keeps your raw data accessible on the published page, names that don't find a match in the GBIF Backbone won’t have active links to taxon web pages. To ensure your checklist is fully integrated and easy to navigate, your names should match as closely as possible with the GBIF Backbone.
 
 Also consider to use the accepted taxon names instead of synonyms. GBIF automatically links synonyms with their accepted counterparts, but it’s best practice to use accepted taxon names directly in your checklist. It keeps things clean and prevents any unnecessary confusion for the users.
 
