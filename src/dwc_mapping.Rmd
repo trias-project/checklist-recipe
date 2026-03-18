@@ -78,12 +78,14 @@ Column name | Description
 -- | --
 verbatim_scientific_name | The original scientific name as provided in the raw data file
 scientificName | The matching scientific name from the GBIF backbone
-rank  | The taxonomic rank of scientificName
+matchType | The type of match (e.g. "EXACT", "FUZZY", "HIGHERRANK", "NOMATCH")
+confidence | The confidence score of the match
+rank | The taxonomic rank of scientificName
 status | The taxonomic status of scientificName (e.g. "ACCEPTED", "SYNONYM", "DOUBTFUL")
 acceptedUsageKey | The GBIF backbone taxonKey/usageKey/nubkey of the accepted name (if scientificName is a synonym)
 acceptedScientificName | The accepted name (if scientificName is a synonym)
-matchType | The type of match (e.g. "EXACT", "FUZZY", "HIGHERRANK", "NOMATCH")
-confidence | The confidence score of the match
+
+
 
 ```{r}
 input_data |>
@@ -92,9 +94,10 @@ input_data |>
     rank = taxon_rank
   ) |>
   name_backbone_checklist() |>
+  dplyr::rename(rawScientificName = verbatim_scientific_name) |>
   dplyr::select(
-    verbatim_scientific_name, scientificName, rank, status, acceptedUsageKey,
-    acceptedScientificName, matchType, confidence
+    rawScientificName, scientificName, matchType, confidence, rank, status, acceptedUsageKey,
+    acceptedScientificName
   )
 ```
 
