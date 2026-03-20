@@ -1,0 +1,11 @@
+taxonID,isMarine,isFreshwater,isTerrestrial
+my_dataset_shortname:taxon:08e8f90b6f9c11542d5defc37174b82e,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:38f13652f41c27960bcd73a290edfffc,TRUE,TRUE,FALSE
+my_dataset_shortname:taxon:3a8291f00819019004d5617b918c868a,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:4a2de82bb780c9bfeee686a884cd60a0,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:6c341828da8ef55771f60db2bca5d530,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:93b6e751b04f63ec59eb0b55743724c1,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:a3bfde56eee7e6b09c5248291b4951d4,FALSE,TRUE,TRUE
+my_dataset_shortname:taxon:c185c5613364e6a23f16670df0250ce8,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:c2a0ed4f0866a5fb9bfbc161ce4533ed,FALSE,FALSE,TRUE
+my_dataset_shortname:taxon:d9d4509efbdd5d427f9ee370d645ac02,FALSE,TRUE,FALSE
